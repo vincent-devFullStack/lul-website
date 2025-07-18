@@ -1,15 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
 @import "tailwindcss";
-
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #e3d4b4;
+  --foreground: #3B3B3B;
+  --active-menu-item: #6B522C;
+  --brown: #B3A279;
+  --border-brown: #7D7154;
+  --header-background: #FFF1CA;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +24,65 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "EB Garamond", serif;
+}
+
+.header-menu {
+  background-color: var(--header-background);
+  color: var(--foreground);
+  border-bottom: 1px solid var(--foreground);
+  height: 175px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-active {
+  color: var(--active-menu-item);
+  border-bottom: 2px solid var(--active-menu-item);
+}
+
+.footer {
+  background-color: var(--header-background);
+  color: var(--foreground);
+  border-top: 1px solid var(--foreground);
+  height: 175px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* width: 100%; */
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* width: 100%; */
+}
+
+.footer-nav {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
+  gap: 100px;
+  margin-bottom: 30px;
+}
+
+.footer-nav-item {
+  color: var(--foreground);
+  transition: color 0.3s ease-in-out;
+}
+
+.footer-nav-item:hover {
+  padding: 0;
+  margin: 0;
+  color: var(--active-menu-item);
+}
+
+.footer-copyrights {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
