@@ -23,7 +23,7 @@ export default function Navigation() {
         <div className="">
           {/* Logo */}
           <div className="flex justify-center mb-5">
-            <Link href="/" className="text-7xl font-bold">
+            <Link href="/" className="text-7xl sm:text-lg md:text-xl lg:text-7xl font-bold">
               L'iconodule
             </Link>
           </div>
@@ -45,6 +45,11 @@ export default function Navigation() {
                 </Link>
               ))}
             </div>
+          </div>
+          <div className="top-7 right-15 absolute text-lg">
+            <Link href="/back-office" className="hover:text-(--active-menu-item)">
+              Administration
+            </Link>
           </div>
 
           {/* Bouton menu mobile */}
