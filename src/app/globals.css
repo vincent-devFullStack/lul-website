@@ -1,18 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap");
 @import "tailwindcss";
 :root {
   --background: #e3d4b4;
-  --foreground: #3B3B3B;
-  --active-menu-item: #6B522C;
-  --brown: #B3A279;
-  --border-brown: #7D7154;
-  --header-background: #FFF1CA;
+  --foreground: #3b3b3b;
+  --active-menu-item: #6b522c;
+  --brown: #b3a279;
+  --border-brown: #7d7154;
+  --header-background: #fff1ca;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: "EB Garamond", serif;
+}
+
+body,
+html,
+#__next {
+  min-width: 1300px;
+  overflow-x: auto; /* scroll horizontal */
 }
 
 .header-menu {
@@ -73,4 +80,12 @@ body {
   flex-direction: column;
   justify-content: center;
   text-align: center;
+}
+
+.main-container {
+  max-width: 100%;
+  min-width: 1300px; /* largeur minimale tolérée */
+  margin: 0 auto;
+  padding: 0 1rem;
+  width: 100%;
 }
