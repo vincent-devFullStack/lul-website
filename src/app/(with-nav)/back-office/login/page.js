@@ -12,7 +12,7 @@ export default function BackOffice() {
           </div>
           <div className="login-form-item">
             <label htmlFor="password">Mot de passe</label>
-            <input type="password" placeholder="Password" required/>
+            <input type="password" placeholder="Mot de passe" required/>
           </div>
           <button type="submit">Se connecter</button>
         </form>
