@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap");
 @import "tailwindcss";
+
 :root {
   --background: #e3d4b4;
   --foreground: #3b3b3b;
@@ -9,6 +10,7 @@
   --header-background: #fff1ca;
 }
 
+/* Global */
 body {
   background: var(--background);
   color: var(--foreground);
@@ -19,17 +21,29 @@ body,
 html,
 #__next {
   min-width: 1300px;
-  overflow-x: auto; /* scroll horizontal */
+  overflow-x: auto; /* scroll horizontal uniquement si nécessaire */
 }
 
-.header-menu {
+/* Header */
+.header-menu,
+.footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  padding: 0 1rem;
   background-color: var(--header-background);
   color: var(--foreground);
-  border-bottom: 1px solid var(--foreground);
-  height: 175px;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1000;
+}
+
+.header-menu {
+  top: 0;
+  height: 140px;
+  border-bottom: 1px solid var(--foreground);
 }
 
 .item-active {
@@ -37,15 +51,11 @@ html,
   border-bottom: 2px solid var(--active-menu-item);
 }
 
+/* Footer */
 .footer {
-  background-color: var(--header-background);
-  color: var(--foreground);
+  bottom: 0;
+  height: 130px; /* Hauteur réduite */
   border-top: 1px solid var(--foreground);
-  height: 175px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* width: 100%; */
 }
 
 .footer-content {
@@ -53,25 +63,22 @@ html,
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  /* width: 100%; */
 }
 
 .footer-nav {
   display: flex;
   flex-direction: row;
-  /* justify-content: space-between; */
-  gap: 100px;
+  gap: 80px;
   margin-bottom: 30px;
 }
 
 .footer-nav-item {
   color: var(--foreground);
   transition: color 0.3s ease-in-out;
+  font-size: 0.8rem; /* <-- ici : le slash est une erreur */
 }
 
 .footer-nav-item:hover {
-  padding: 0;
-  margin: 0;
   color: var(--active-menu-item);
 }
 
@@ -80,12 +87,81 @@ html,
   flex-direction: column;
   justify-content: center;
   text-align: center;
+  font-size: 0.75rem; /* réduit la taille du texte */
+  line-height: 1.2; /* ajuste l'espacement */
+  margin-top: 0.5rem; /* un petit espace au-dessus */
 }
 
+/* Conteneur général */
 .main-container {
-  max-width: 100%;
-  min-width: 1300px; /* largeur minimale tolérée */
+  max-width: 1300px;
+  padding: 175px 1rem 120px 1rem; /* padding top et bottom ajustés */
   margin: 0 auto;
-  padding: 0 1rem;
   width: 100%;
+}
+
+/* Container plan - largeur fixe sur desktop, responsive sur mobile */
+.plan-container {
+  position: relative;
+  width: 100%;
+  max-width: 72rem; /* largeur fixe desktop */
+  aspect-ratio: 1152 / 600; /* ratio largeur/hauteur du plan */
+  height: auto;
+  margin: 0 auto;
+}
+
+@media (max-width: 1300px) {
+  .plan-container {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .plan-container {
+    aspect-ratio: auto; /* hauteur auto pour s’adapter au contenu */
+  }
+
+  /* Exemple pour rendre certains éléments adaptatifs en mobile */
+  .responsive-element {
+    width: 100%;
+    padding: 0 1rem;
+  }
+}
+
+/* Responsive header/footer */
+@media (max-width: 770px) {
+  body,
+  html,
+  #__next {
+    min-width: 0;
+    width: 100%;
+  }
+  .plan-container {
+    display: none; /* on cache sur mobile */
+  }
+
+  .header-menu,
+  .footer {
+    position: relative;
+    height: auto;
+    width: 100%;
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-nav {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .footer-nav-item {
+    font-size: 0.9rem;
+  }
+
+  .main-container {
+    padding: 1rem;
+  }
 }
