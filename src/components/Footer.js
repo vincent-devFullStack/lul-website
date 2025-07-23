@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+import "./Footer.css";
 const Footer = () => {
   return (
     <div className="footer bottom-0 left-0 right-0 font-medium">

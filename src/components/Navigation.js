@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import "./Navigation.css";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

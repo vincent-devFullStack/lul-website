@@ -1,0 +1,143 @@
+.about-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  /* Ombre générale du livre - effet de flottement */
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.12),
+    0 3px 10px rgba(0, 0, 0, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.06);
+  border-radius: 9px;
+  width: 80%;
+  height: auto;
+  min-height: 400px;
+  /* Petit espace entre les pages pour simuler la reliure */
+  gap: 4px;
+  position: relative;
+  /* Marge pour que l'ombre soit bien visible */
+  margin: 40px auto;
+}
+
+/* Effet de reliure centrale */
+.about-container::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1.5px;
+  background: linear-gradient(to bottom, 
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
+    rgba(0, 0, 0, 0.3) 100%);
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  background-color: #EFEBDA;
+  padding: 40px 30px;
+  border-radius: 9px;
+  width: 50%;
+  height: 700px; /* Hauteur fixe pour contrôler le débordement */
+  position: relative;
+  /* Retiré overflow: hidden pour éviter le rognage */
+}
+
+/* Page de gauche */
+.about-left {
+  /* Ombre qui simule la courbure de la page gauche */
+  box-shadow: 
+    inset -8px 0 15px rgba(0, 0, 0, 0.1),
+    inset 0 0 10px rgba(0, 0, 0, 0.05),
+    2px 0 8px rgba(0, 0, 0, 0.15);
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  overflow: hidden; /* Overflow seulement sur la page de gauche */
+}
+
+/* Page de droite */
+.about-right {
+  /* Ombre qui simule la courbure de la page droite */
+  box-shadow: 
+    inset 8px 0 15px rgba(0, 0, 0, 0.1),
+    inset 0 0 10px rgba(0, 0, 0, 0.05),
+    -2px 0 8px rgba(0, 0, 0, 0.15);
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.page-content {
+  height: 100%;
+  /* Retiré overflow: hidden du contenu interne */
+}
+
+/* Styles pour le contenu du livre */
+.book-title {
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: bold;
+  color: #111827; /* text-gray-900 */
+  margin-bottom: 1.5rem; /* mb-6 */
+  line-height: 1.2; /* Corrigé de 0.8 à 1.2 pour cohérence */
+  text-align: center;
+}
+
+.book-text {
+  font-size: 1.125rem; /* text-lg */
+  color: #4B5563; /* text-gray-600 */
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+/* Placeholder d'image */
+.image-placeholder {
+  width: 100%;
+  height: 150px;
+  background-color: #E5E7EB;
+  border: 2px dashed #9CA3AF;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+.placeholder-content {
+  color: #6B7280;
+  font-style: italic;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .about-container {
+    flex-direction: column;
+    width: 95%;
+    gap: 20px;
+  }
+  
+  .about-container::before {
+    display: none;
+  }
+  
+  .about-content {
+    width: 100%;
+    height: auto;
+    min-height: 500px;
+    border-radius: 9px;
+  }
+  
+  .about-left,
+  .about-right {
+    box-shadow: 
+      0 4px 15px rgba(0, 0, 0, 0.1),
+      inset 0 0 10px rgba(0, 0, 0, 0.05);
+    border-radius: 9px;
+  }
+} 

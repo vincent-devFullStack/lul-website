@@ -1,4 +1,6 @@
 import Link from "next/link";
+import "./login.css";
+
 
 export default function BackOffice() {
   return (
@@ -16,7 +18,7 @@ export default function BackOffice() {
           </div>
           <button type="submit">Se connecter</button>
         </form>
-          <div className="login-links text-sm text-gray-800">
+          <div className="login-links text-[15px]/5 text-gray-800">
             <p>
               <Link href="/back-office/register">Créer un compte</Link>
             </p>

@@ -1,0 +1,25 @@
+/* Header */
+.header-menu,
+.footer {
+  position: sticky;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  padding: 0 1rem;
+  background-color: var(--header-background);
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-menu {
+  top: 0;
+  height: 140px;
+  border-bottom: 1px solid var(--foreground);
+}
+
+.item-active {
+  color: var(--active-menu-item);
+  border-bottom: 2px solid var(--active-menu-item);
+}
