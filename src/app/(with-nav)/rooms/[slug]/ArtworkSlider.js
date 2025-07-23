@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import "./Artworkslider.css";
 
 export default function ArtworkSlider() {
   const artworks = [
-    { id: 1, title: "Titre de l’œuvre 1", imageUrl: "/assets/Collage.jpg" },
-    { id: 2, title: "Titre de l’œuvre 2", imageUrl: "/assets/artwork2.webp" },
-    { id: 3, title: "Titre de l’œuvre 3", imageUrl: "/assets/artwork3.webp" },
+    { id: 1, title: "Titre de l'œuvre 1", imageUrl: "/assets/Collage.jpg" },
+    { id: 2, title: "Titre de l'œuvre 2", imageUrl: "/assets/artwork2.webp" },
+    { id: 3, title: "Titre de l'œuvre 3", imageUrl: "/assets/artwork3.webp" },
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -22,47 +23,44 @@ export default function ArtworkSlider() {
     );
 
   return (
-    <div
-      className="relative w-full flex flex-col items-center"
-      style={{ height: "80vh" }}
-    >
-      <div className="max-w-3xl w-full h-full flex flex-col justify-center items-center relative">
-        <Image
-          src={artworks[currentIndex].imageUrl}
-          alt={artworks[currentIndex].title}
-          fill
-          style={{ objectFit: "contain" }}
-          className="rounded-lg"
-          priority
-        />
-        <p className="mt-4 text-center text-base font-serif text-darkbrown">
-          {artworks[currentIndex].title}
-        </p>
-
+    <div className="w-full flex flex-col justify-center items-center relative py-12">
+      {/* Container principal centré */}
+      <div className="relative flex items-center justify-center">
+        {/* Bouton précédent */}
         <button
           onClick={previous}
-          className="absolute left-[-30%] top-1/2 transform -translate-y-1/2 p-2 rounded bg-lightbrown bg-opacity-50 hover:bg-opacity-80"
+          className="previous-button"
           aria-label="Image précédente"
         >
-          <Image
-            src="/assets/left.webp"
-            alt="Précédent"
-            width={96}
-            height={96}
-          />
+          <span className="sr-only">Précédent</span>
         </button>
+
+        {/* Container de l'image */}
+        <div className="room-picture">
+          <Image
+            src={artworks[currentIndex].imageUrl}
+            alt={artworks[currentIndex].title}
+            fill
+            style={{ objectFit: "contain" }}
+            priority
+          />
+        </div>
+
+        {/* Bouton suivant */}
         <button
           onClick={next}
-          className="absolute right-[-30%] top-1/2 transform -translate-y-1/2 p-2 rounded bg-lightbrown bg-opacity-50 hover:bg-opacity-80"
+          className="next-button"
           aria-label="Image suivante"
         >
-          <Image
-            src="/assets/right.webp"
-            alt="Suivant"
-            width={96}
-            height={96}
-          />
+          <span className="sr-only">Suivant</span>
         </button>
+      </div>
+
+      {/* Titre de l'œuvre */}
+      <div className="mt-8">
+        <h2 className="text-xl font-serif text-center text-gray-800">
+          {artworks[currentIndex].title}
+        </h2>
       </div>
     </div>
   );

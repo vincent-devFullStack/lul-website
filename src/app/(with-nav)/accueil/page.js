@@ -35,7 +35,7 @@ export default function AccueilPlanInteractif() {
 
   return (
     <div
-      className="plan-container main-container"
+      className="plan-container"
       style={{ position: "relative", margin: "0 auto" }}
     >
       <Image

@@ -5,11 +5,16 @@ export default function RoomPage({ params }) {
   const { slug } = params;
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-beige p-4">
-      <h1 className="mb-8 text-2xl font-semibold">
-        Détails de la salle : {slug}
-      </h1>
-      <ArtworkSlider />
+    <div className="min-h-screen">
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-serif font-semibold text-gray-800 mb-2">
+            {slug.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+          </h1>
+        </div>
+        
+        <ArtworkSlider />
+      </div>
     </div>
   );
 }
