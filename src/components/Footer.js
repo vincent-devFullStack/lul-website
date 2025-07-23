@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const Footer = () => {
   return (
-    <div className="footer bottom-0 left-0 right-0">
+    <div className="footer bottom-0 left-0 right-0 font-medium">
         <div className="footer-content">
             <div className="footer-nav text-lg">
                 <div className="footer-nav-item">

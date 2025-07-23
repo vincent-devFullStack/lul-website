@@ -8,6 +8,11 @@
   --brown: #b3a279;
   --border-brown: #7d7154;
   --header-background: #fff1ca;
+  --login-background: #EFEBDA;
+  --login-form-input-background: #fff;
+  --login-form-input-border: #d9d9d9;
+  --login-form-button-border: #a79262;
+  --login-form-button-text-color: #f5f5f5;
 }
 
 /* Global */
@@ -21,13 +26,12 @@ body,
 html,
 #__next {
   min-width: 1300px;
-  overflow-x: auto; /* scroll horizontal uniquement si nécessaire */
 }
 
 /* Header */
 .header-menu,
 .footer {
-  position: fixed;
+  position: sticky;
   left: 0;
   right: 0;
   width: 100vw;
@@ -37,7 +41,6 @@ html,
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
 }
 
 .header-menu {
@@ -87,17 +90,92 @@ html,
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  font-size: 0.75rem; /* réduit la taille du texte */
+  font-size: 0.8rem; /* réduit la taille du texte */
   line-height: 1.2; /* ajuste l'espacement */
   margin-top: 0.5rem; /* un petit espace au-dessus */
 }
 
 /* Conteneur général */
 .main-container {
-  max-width: 1300px;
-  padding: 175px 1rem 120px 1rem; /* padding top et bottom ajustés */
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   margin: 0 auto;
+  width: auto;
+}
+
+.login-container {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--login-background);
+  justify-content: space-between;
+  height: auto; /* Donne une hauteur minimale pour que justify-content fonctionne */
+  width: 300px;
+  margin: 0 auto; /* Centre horizontalement */
+  padding: 24px; /*Ajoute un peu d'espace intérieur */
+}
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+.login-links {
+  display: flex;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-decoration: underline;
+}
+
+.login-form-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
   width: 100%;
+}
+
+.login-form-item input {
+  background-color: var(--login-form-input-background);
+  border: 1.5px solid var(--login-form-input-border);
+  border-radius: 4px;
+  padding: 8px;
+  color: #6A6A6A;
+}
+
+.login-form-item input:focus {
+  outline: none;
+  border: 1.5px solid var(--brown);
+}
+
+.login-form-item label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.login-form button {
+  background-color: var(--brown);
+  border: 1.5px solid var(--login-form-button-border);
+  border-radius: 4px;
+  padding: 8px;
+  color: var(--login-form-button-text-color);
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background-color: #ae9b79;
+  transition: background-color 0.1s ease-in-out;
+}
+
+.login-form button:active {
+  background-color: #9D8E6C;
 }
 
 /* Container plan - largeur fixe sur desktop, responsive sur mobile */

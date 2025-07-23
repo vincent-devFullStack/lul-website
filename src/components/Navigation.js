@@ -46,7 +46,7 @@ export default function Navigation() {
 
         {/* Lien administration positionné à droite */}
         <Link
-          href="/back-office"
+          href="/back-office/login"
           className="absolute top-5 right-5 text-lg hover:text-[var(--active-menu-item)]"
         >
           Administration
