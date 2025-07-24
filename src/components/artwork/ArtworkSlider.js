@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import "../styles/components/Artworkslider.css";
+import "../../styles/components/Artworkslider.css";
 
 export default function ArtworkSlider() {
   const artworks = [

@@ -1,6 +1,6 @@
 // page.js
-import ArtworkSlider from "./ArtworkSlider";
-import "../styles/components/Artworkslider.css";
+import ArtworkSlider from "../../../../components/artwork/ArtworkSlider";
+import "../../../../styles/components/Artworkslider.css";
 
 export default function RoomPage({ params }) {
   const { slug } = params;
