@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import "./Navigation.css";
+import "../../styles/layout/Navigation.css";
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,7 +47,7 @@ export default function Navigation() {
 
         {/* Lien administration positionné à droite */}
         <Link
-          href="/back-office/login"
+          href="/login"
           className="absolute top-5 right-5 text-lg hover:text-[var(--active-menu-item)]"
         >
           Administration

@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap");
 @import "tailwindcss";
+@import "./token.css";
 
 :root {
   --background: #e3d4b4;
@@ -8,14 +9,13 @@
   --brown: #b3a279;
   --border-brown: #7d7154;
   --header-background: #fff1ca;
-  --login-background: #EFEBDA;
+  --login-background: #efebda;
   --login-form-input-border: #d9d9d9;
   --login-form-button-border: #7d7154;
   --login-form-button-text-color: #f5f5f5;
   --login-form-input-background: #fff;
   --login-form-button-background: #b3a279;
   --login-form-button-background-hover: #958858;
-
 }
 
 /* Global */
@@ -31,7 +31,6 @@ html,
   min-width: 1300px;
 }
 
-
 /* Conteneur général */
 .main-container {
   overflow-x: auto;
@@ -41,7 +40,6 @@ html,
   align-items: center;
   width: 100%;
   margin: 0 auto;
-
 }
 
 /* Container plan - largeur fixe sur desktop, responsive sur mobile */
@@ -52,7 +50,7 @@ html,
   aspect-ratio: 1152 / 600; /* ratio largeur/hauteur du plan */
   height: auto;
   margin: 0 auto;
-  overflow:hidden;
+  overflow: hidden;
 }
 
 @media (max-width: 1300px) {
