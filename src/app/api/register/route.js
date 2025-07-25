@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import User from "@/lib/models/User";
-import { connectToDatabase } from "@/lib/mongoose";
+import { connectToDatabase } from "@/lib/mongodb";
 
 export async function POST(req) {
   const { email, password, confirmPassword, pin } = await req.json();
@@ -24,7 +24,9 @@ export async function POST(req) {
   try {
     await connectToDatabase();
 
-    const existingUser = await User.findOne({ email });
+    const normalizedEmail = String(email).toLowerCase().trim();
+
+    const existingUser = await User.findOne({ email: normalizedEmail });
     if (existingUser) {
       return NextResponse.json(
         { error: "Cet email est déjà utilisé." },
@@ -33,11 +35,15 @@ export async function POST(req) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    await User.create({ email, password: hashedPassword });
+    const user = new User({ email: normalizedEmail, password: hashedPassword });
+    await user.save();
 
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: "Erreur serveur." }, { status: 500 });
+    console.error("Erreur à l'enregistrement :", err);
+    return NextResponse.json(
+      { error: "Erreur serveur. Veuillez réessayer plus tard." },
+      { status: 500 }
+    );
   }
 }
