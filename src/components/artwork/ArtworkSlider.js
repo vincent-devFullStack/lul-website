@@ -4,29 +4,35 @@ import { useState } from "react";
 import Image from "next/image";
 import "../../styles/components/Artworkslider.css";
 
-export default function ArtworkSlider() {
-  const artworks = [
-    { id: 1, title: "Titre de l'œuvre 1", imageUrl: "/assets/Collage.jpg" },
-    { id: 2, title: "Titre de l'œuvre 2", imageUrl: "/assets/artwork2.webp" },
-    { id: 3, title: "Titre de l'œuvre 3", imageUrl: "/assets/artwork3.webp" },
-  ];
-
+export default function ArtworkSlider({ artworks = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  if (!artworks || artworks.length === 0) {
+    return (
+      <p className="text-center text-gray-600">Aucune œuvre à afficher.</p>
+    );
+  }
+
   const previous = () =>
-    setCurrentIndex((oldIndex) =>
-      oldIndex === 0 ? artworks.length - 1 : oldIndex - 1
-    );
+    setCurrentIndex((prev) => (prev === 0 ? artworks.length - 1 : prev - 1));
+
   const next = () =>
-    setCurrentIndex((oldIndex) =>
-      oldIndex === artworks.length - 1 ? 0 : oldIndex + 1
+    setCurrentIndex((prev) => (prev === artworks.length - 1 ? 0 : prev + 1));
+
+  const currentArtwork = artworks[currentIndex];
+
+  // Sécurité supplémentaire si les champs sont manquants
+  if (!currentArtwork?.imageUrl) {
+    return (
+      <p className="text-center text-red-600">
+        Image manquante pour cette œuvre.
+      </p>
     );
+  }
 
   return (
     <div className="w-full flex flex-col justify-center items-center relative py-12">
-      {/* Container principal centré */}
       <div className="relative flex items-center justify-center">
-        {/* Bouton précédent */}
         <button
           onClick={previous}
           className="previous-button"
@@ -35,18 +41,16 @@ export default function ArtworkSlider() {
           <span className="sr-only">Précédent</span>
         </button>
 
-        {/* Container de l'image */}
         <div className="room-picture">
           <Image
-            src={artworks[currentIndex].imageUrl}
-            alt={artworks[currentIndex].title}
+            src={currentArtwork.imageUrl || "/fallback.webp"} // fallback en cas d'erreur
+            alt={currentArtwork.title || "Œuvre sans titre"}
             fill
             style={{ objectFit: "contain" }}
             priority
           />
         </div>
 
-        {/* Bouton suivant */}
         <button
           onClick={next}
           className="next-button"
@@ -56,11 +60,15 @@ export default function ArtworkSlider() {
         </button>
       </div>
 
-      {/* Titre de l'œuvre */}
-      <div className="mt-8">
-        <h2 className="text-xl font-serif text-center text-gray-800">
-          {artworks[currentIndex].title}
+      <div className="mt-8 text-center">
+        <h2 className="text-xl font-serif text-gray-800">
+          {currentArtwork.title || "Titre inconnu"}
         </h2>
+        {currentArtwork.description && (
+          <p className="mt-2 text-gray-600 max-w-xl mx-auto">
+            {currentArtwork.description}
+          </p>
+        )}
       </div>
     </div>
   );
