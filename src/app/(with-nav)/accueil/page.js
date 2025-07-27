@@ -3,8 +3,20 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 export default function AccueilPlanInteractif() {
+  const { isAuthenticated } = useAuth();
+
+  // Affiche une alerte si l’utilisateur est sur mobile
+  useEffect(() => {
+    if (window.innerWidth < 770) {
+      alert(
+        "Ce site est conçu pour une expérience optimale sur PC.\nMerci de revenir depuis un ordinateur."
+      );
+    }
+  }, []);
+
   const salles = [
     { id: 1, top: "20%", left: "3%", width: "16%", height: "24%" },
     { id: 2, top: "22%", left: "44%", width: "17%", height: "22%" },
@@ -24,14 +36,6 @@ export default function AccueilPlanInteractif() {
     { id: 16, top: "45%", left: "85.5%", width: "5.5%", height: "14%" },
     { id: 17, top: "44%", left: "91.8%", width: "4.5%", height: "14%" },
   ];
-
-  useEffect(() => {
-    if (window.innerWidth < 770) {
-      alert(
-        "Ce site est conçu pour une expérience optimale sur PC.\nMerci de revenir depuis un ordinateur."
-      );
-    }
-  }, []);
 
   return (
     <div
@@ -65,6 +69,17 @@ export default function AccueilPlanInteractif() {
           {id === 10 ? "S. 10" : `Salle ${id}`}
         </Link>
       ))}
+
+      {isAuthenticated && (
+        <div className="absolute top-4 right-4 z-50">
+          <Link
+            href="/admin/oeuvres/edit"
+            className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition"
+          >
+            Modifier
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

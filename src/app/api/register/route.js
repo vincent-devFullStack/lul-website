@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { SignJWT } from "jose";
+import { serialize } from "cookie";
 import User from "@/lib/models/User";
 import { connectToDatabase } from "@/lib/mongodb";
+
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function POST(req) {
   const { email, password, confirmPassword, pin } = await req.json();
@@ -38,7 +42,26 @@ export async function POST(req) {
     const user = new User({ email: normalizedEmail, password: hashedPassword });
     await user.save();
 
-    return NextResponse.json({ success: true }, { status: 201 });
+    // Générer un JWT
+    const token = await new SignJWT({ email: user.email })
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setExpirationTime("7d")
+      .sign(JWT_SECRET);
+
+    // Créer un cookie sécurisé
+    const cookie = serialize("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 jours
+    });
+
+    const response = NextResponse.json({ success: true }, { status: 201 });
+    response.headers.set("Set-Cookie", cookie);
+
+    return response;
   } catch (err) {
     console.error("Erreur à l'enregistrement :", err);
     return NextResponse.json(

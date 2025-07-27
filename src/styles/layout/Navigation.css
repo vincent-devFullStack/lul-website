@@ -1,10 +1,22 @@
 /* Header */
-.header-menu,
-.footer {
+.header-menu {
   position: sticky;
+  top: 0;
   left: 0;
   right: 0;
   width: 100vw;
+  padding: 0 1rem;
+  background-color: var(--header-background);
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10; /* optionnel pour rester au-dessus du contenu */
+}
+
+/* Footer */
+.footer {
+  width: 100%;
   padding: 0 1rem;
   background-color: var(--header-background);
   color: var(--foreground);
