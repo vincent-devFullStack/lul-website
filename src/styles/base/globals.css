@@ -31,6 +31,12 @@ html,
   min-width: 1300px;
 }
 
+/* Désactive le responsive uniquement sur la page /accueil */
+body.no-responsive {
+  min-width: 1300px;
+  overflow-x: auto;
+}
+
 /* Conteneur général */
 .main-container {
   overflow-x: auto;

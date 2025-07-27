@@ -1,13 +1,8 @@
-import Navigation from "@/components/layout/Navigation";
-import Footer from "@/components/layout/Footer";
-
 export default function WithNavLayout({ children }) {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Navbar pleine largeur */}
-      <div className="w-full">
-        <Navigation />
-      </div>
+      <div className="w-full"></div>
 
       {/* Contenu principal centré avec max-width */}
       <main className="flex-1 pt-10">
@@ -19,9 +14,7 @@ export default function WithNavLayout({ children }) {
       </main>
 
       {/* Footer pleine largeur */}
-      <div className="w-full">
-        <Footer />
-      </div>
+      <div className="w-full"></div>
     </div>
   );
 }

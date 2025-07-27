@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 import "../../../../styles/pages/login.css";
 
 export default function Login() {
@@ -10,6 +11,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(null);
   const router = useRouter();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,6 +30,7 @@ export default function Login() {
       console.log("data", data);
 
       if (res.status === 200 || res.ok) {
+        login(data.token);
         setMessage("✅ Connexion réussie.");
         setTimeout(() => {
           router.push("/accueil");

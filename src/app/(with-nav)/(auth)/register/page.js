@@ -2,9 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import "../../../../styles/pages/register.css";
 
 export default function Register() {
+  const router = useRouter();
+  const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [pin, setPin] = useState("");
   const [password, setPassword] = useState("");
@@ -38,11 +43,8 @@ export default function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage("✅ Compte créé avec succès.");
-        setEmail("");
-        setPin("");
-        setPassword("");
-        setConfirm("");
+        login(); // ← on se connecte d’abord via AuthContext
+        router.push("/accueil"); // ← ensuite on redirige
       } else {
         setMessage(`❌ ${data.error || "Erreur inconnue"}`);
       }
@@ -56,6 +58,7 @@ export default function Register() {
   return (
     <div className="register-container rounded-lg">
       <h1 className="text-2xl font-bold">S'inscrire</h1>
+
       <form className="register-form" onSubmit={handleSubmit}>
         <div className="register-form-item">
           <label htmlFor="email">Adresse email</label>
