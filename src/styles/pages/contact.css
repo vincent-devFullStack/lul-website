@@ -1,0 +1,64 @@
+.contact-container {
+    display: flex;
+    gap: 24px;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--login-background);
+    justify-content: space-between;
+    height: auto; /* Donne une hauteur minimale pour que justify-content fonctionne */
+    width: 400px;
+    margin: 0 auto; /* Centre horizontalement */
+    padding: 24px; /*Ajoute un peu d'espace intérieur */
+  }
+  
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.contact-form-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+  
+  .contact-form-item input, textarea {
+    background-color: var(--login-form-input-background);
+    border: 1.5px solid var(--login-form-input-border);
+    border-radius: 4px;
+    padding: 8px;
+    color: #6A6A6A;
+  }
+  
+  .contact-form-item input:focus, textarea:focus {
+    outline: none;
+    border: 1.5px solid var(--brown);
+  }
+  
+  .contact-form-item label {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+
+  
+  .contact-form button {
+    background-color: var(--brown);
+    border: 1.5px solid var(--login-form-button-border);
+    border-radius: 4px;
+    padding: 8px;
+    color: var(--login-form-button-text-color);
+    cursor: pointer;
+  }
+  
+  .contact-form button:hover {
+    background-color: #ae9b79;
+    transition: background-color 0.1s ease-in-out;
+  }
+  
+  .contact-form button:active {
+    background-color: #9D8E6C;
+  }

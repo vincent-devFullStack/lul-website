@@ -83,9 +83,10 @@ Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed 
     <div className="about-container">
       <div className="about-content about-left" ref={leftPageRef}>
         <div className="page-content">
-          <h1 className="book-title">À propos de moi</h1>
-          
-          {/* Placeholder d'image */}
+          <h1 className="book-title" id="about-title">
+            À propos de moi
+          </h1>
+
           <div className="image-placeholder">
             <div className="placeholder-content">[Image à venir]</div>
           </div>
