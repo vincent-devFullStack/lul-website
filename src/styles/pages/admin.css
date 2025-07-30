@@ -99,8 +99,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Sidebar dans le contexte admin fullscreen */
@@ -171,7 +175,7 @@
 }
 
 .admin-page-subtitle {
-  color: #6A6A6A;
+  color: #6a6a6a;
   margin: 0;
 }
 
@@ -197,6 +201,8 @@
   padding: 24px;
   transition: all 0.2s ease;
   cursor: pointer;
+  min-width: 300px;
+  overflow: hidden; /* 🔥 Ajout essentiel */
 }
 
 .room-card:hover {
@@ -212,14 +218,16 @@
 }
 
 .room-card-meta {
-  color: #6A6A6A;
+  color: #6a6a6a;
   font-size: 0.9rem;
   margin: 0 0 16px 0;
 }
 
 .room-card-actions {
   display: flex;
+  flex-wrap: wrap; /* Permet le retour à la ligne */
   gap: 12px;
+  justify-content: flex-start;
 }
 
 .admin-btn {
@@ -242,7 +250,7 @@
 }
 
 .admin-btn:active {
-  background-color: #9D8E6C;
+  background-color: #9d8e6c;
 }
 
 .admin-btn-secondary {
@@ -274,6 +282,7 @@
 
 .artwork-item {
   display: flex;
+  align-items: flex-start;
   align-items: center;
   background: white;
   border: 1.5px solid var(--login-form-input-border);
@@ -305,17 +314,19 @@
 }
 
 .artwork-description {
-  color: #6A6A6A;
+  color: #6a6a6a;
   font-size: 0.9rem;
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: wrap;
   max-width: 400px;
+  padding-right: 3%;
 }
 
 .artwork-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -350,7 +361,7 @@
   border: 1.5px solid var(--login-form-input-border);
   border-radius: 4px;
   padding: 8px;
-  color: #6A6A6A;
+  color: #6a6a6a;
   font-size: 1rem;
 }
 
@@ -428,7 +439,7 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #6A6A6A;
+  color: #6a6a6a;
   padding: 4px;
 }
 
@@ -469,33 +480,40 @@
     height: auto;
     min-height: 100vh;
   }
-  
+
   .admin-body {
     flex-direction: column;
   }
-  
+
   .admin-sidebar {
     width: 100%;
     padding: 16px;
     border-right: none;
     border-bottom: 1px solid var(--login-form-input-border);
   }
-  
+
   .admin-content {
     padding: 16px;
   }
-  
+
   .admin-grid {
     grid-template-columns: 1fr;
   }
-  
+  .artwork-description {
+    max-width: 100%;
+  }
+
   .artwork-item {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .artwork-thumbnail {
     margin-right: 0;
     margin-bottom: 12px;
   }
-} 
+  .artwork-actions {
+    width: 100%;
+    justify-content: space-between; /* ou center */
+  }
+}

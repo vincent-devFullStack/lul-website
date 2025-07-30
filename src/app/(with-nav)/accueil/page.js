@@ -5,7 +5,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function AccueilPlanInteractif() {
-  const [tooltip, setTooltip] = useState({ show: false, content: "", x: 0, y: 0 });
+  const [tooltip, setTooltip] = useState({
+    show: false,
+    content: "",
+    x: 0,
+    y: 0,
+  });
   const [salles, setSalles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -25,14 +30,16 @@ export default function AccueilPlanInteractif() {
       try {
         setLoading(true);
         const response = await fetch("/api/salles");
-        
+
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des salles");
         }
 
         const data = await response.json();
         // Tri par displayOrder pour garantir l'ordre
-        const sortedSalles = data.sort((a, b) => a.displayOrder - b.displayOrder);
+        const sortedSalles = data.sort(
+          (a, b) => a.displayOrder - b.displayOrder
+        );
         setSalles(sortedSalles);
       } catch (err) {
         setError(err.message);
@@ -51,7 +58,7 @@ export default function AccueilPlanInteractif() {
       show: true,
       content: salle,
       x: rect.right + 10,
-      y: rect.top + (rect.height / 2)
+      y: rect.top + rect.height / 2,
     });
   };
 
@@ -76,10 +83,12 @@ export default function AccueilPlanInteractif() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Erreur de chargement</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Erreur de chargement
+          </h2>
           <p className="text-gray-600 mb-4">{error}</p>
-          <button 
-            onClick={() => window.location.reload()} 
+          <button
+            onClick={() => window.location.reload()}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Réessayer
@@ -105,8 +114,9 @@ export default function AccueilPlanInteractif() {
       {salles.map((salle) => {
         const { _id, slug, name, description, coordinates, status } = salle;
         const { top, left, width, height } = coordinates;
-        const displayText = parseFloat(width.replace('%', '')) < 5 ? slug.split('-')[1] : name.length > 15 ? `S.${slug.split('-')[1]}` : name;
-        
+        const isGeneric = /^S\.\d+$/.test(name);
+        const displayText = isGeneric ? "" : name;
+
         return (
           <Link
             key={_id}
@@ -115,7 +125,7 @@ export default function AccueilPlanInteractif() {
             role="button"
             tabIndex={0}
             className={`absolute cursor-pointer bg-transparent flex justify-center items-center text-black font-semibold text-xs transition-all duration-200 ${
-              status === 'restricted' ? 'opacity-70' : ''
+              status === "restricted" ? "opacity-70" : ""
             }`}
             style={{ top, left, width, height }}
             onMouseEnter={(e) => handleMouseEnter(salle, e)}
@@ -127,12 +137,10 @@ export default function AccueilPlanInteractif() {
               }
             }}
           >
-            {displayText}
+            {displayText && <span className="room-label">{displayText}</span>}
           </Link>
         );
       })}
-
-
 
       {/* Tooltip Component - Position fixe pour éviter les problèmes de scroll */}
       {tooltip.show && (
@@ -141,18 +149,28 @@ export default function AccueilPlanInteractif() {
           style={{
             left: `${tooltip.x}px`,
             top: `${tooltip.y - 25}px`,
-            transform: 'translateY(-50%)'
+            transform: "translateY(-50%)",
           }}
         >
-          <div className="font-semibold text-sm mb-1">{tooltip.content.name}</div>
-          <div className="text-xs text-gray-300">{tooltip.content.description}</div>
-          {tooltip.content.status === 'restricted' && (
-            <div className="text-xs text-yellow-400 mt-1">⚠️ Accès restreint</div>
+          <div className="font-semibold text-sm mb-1">
+            {tooltip.content.name}
+          </div>
+          <div className="text-xs text-gray-300">
+            {tooltip.content.description}
+          </div>
+          {tooltip.content.status === "restricted" && (
+            <div className="text-xs text-yellow-400 mt-1">
+              ⚠️ Accès restreint
+            </div>
           )}
           {/* Petite flèche */}
-          <div 
+          <div
             className="absolute w-2 h-2 bg-gray-900 border-l border-b border-gray-700 transform rotate-45"
-            style={{ left: '-4px', top: '50%', transform: 'translateY(-50%) rotate(45deg)' }}
+            style={{
+              left: "-4px",
+              top: "50%",
+              transform: "translateY(-50%) rotate(45deg)",
+            }}
           />
         </div>
       )}
