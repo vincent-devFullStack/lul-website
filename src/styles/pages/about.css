@@ -3,36 +3,41 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  /* Ombre générale du livre - effet de flottement */
-  box-shadow: 
-    0 6px 20px rgba(0, 0, 0, 0.12),
-    0 3px 10px rgba(0, 0, 0, 0.08),
-    0 1px 4px rgba(0, 0, 0, 0.06);
-  border-radius: 9px;
   width: 80%;
   height: auto;
   min-height: 400px;
-  /* Petit espace entre les pages pour simuler la reliure */
-  gap: 4px;
   position: relative;
-  /* Marge pour que l'ombre soit bien visible */
-  margin: 40px auto;
+  margin: auto;
+  
+  /* Bordure épaisse du livre entier */
+  border: 12px solid var(--brown);
+  border-radius: 20px;
+  
+  /* Ombre du livre complet */
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    0 4px 16px rgba(0, 0, 0, 0.1);
+  
+  /* Petit espace pour la reliure */
+  gap: 2px;
 }
 
-/* Effet de reliure centrale */
+
+
+/* Ligne de reliure centrale */
 .about-container::before {
   content: '';
   position: absolute;
   left: 50%;
   top: 0;
   bottom: 0;
-  width: 1.5px;
+  width: 2px;
   background: linear-gradient(to bottom, 
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.1) 50%,
-    rgba(0, 0, 0, 0.3) 100%);
+    var(--border-brown) 0%,
+    var(--brown) 50%,
+    var(--border-brown) 100%);
   transform: translateX(-50%);
-  z-index: 1;
+  z-index: 10;
 }
 
 .about-content {
@@ -40,78 +45,266 @@
   flex-direction: column;
   background-color: #EFEBDA;
   padding: 40px 30px;
-  border-radius: 9px;
   width: 50%;
-  height: 700px; /* Hauteur fixe pour contrôler le débordement */
+  height: 700px;
   position: relative;
-  /* Retiré overflow: hidden pour éviter le rognage */
+  /* Pas de bordures individuelles - le livre global les fournit */
+  border: none;
 }
 
 /* Page de gauche */
 .about-left {
-  /* Ombre qui simule la courbure de la page gauche */
+  /* Courbe intérieure vers la reliure - réaliste */
+  border-radius: 12px 4px 4px 12px;
+  
+  /* Ombre intérieure pour simuler la courbure des pages */
   box-shadow: 
     inset -8px 0 15px rgba(0, 0, 0, 0.1),
-    inset 0 0 10px rgba(0, 0, 0, 0.05),
-    2px 0 8px rgba(0, 0, 0, 0.15);
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  overflow: hidden; /* Overflow seulement sur la page de gauche */
+    inset 0 0 8px rgba(0, 0, 0, 0.05);
+    
+  overflow: hidden;
+  position: relative;
+}
+
+/* Effet de courbe au niveau de la reliure */
+.about-left::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  background: linear-gradient(to left,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.05) 50%,
+    transparent 100%);
+  z-index: 1;
 }
 
 /* Page de droite */
 .about-right {
-  /* Ombre qui simule la courbure de la page droite */
+  /* Courbe intérieure vers la reliure - réaliste */
+  border-radius: 4px 12px 12px 4px;
+  
+  /* Ombre intérieure pour simuler la courbure des pages */
   box-shadow: 
     inset 8px 0 15px rgba(0, 0, 0, 0.1),
-    inset 0 0 10px rgba(0, 0, 0, 0.05),
-    -2px 0 8px rgba(0, 0, 0, 0.15);
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+    inset 0 0 8px rgba(0, 0, 0, 0.05);
+    
+  position: relative;
+}
+
+/* Effet de courbe au niveau de la reliure */
+.about-right::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 10px;
+  background: linear-gradient(to right,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.05) 50%,
+    transparent 100%);
+  z-index: 1;
 }
 
 .page-content {
   height: 100%;
-  /* Retiré overflow: hidden du contenu interne */
+  position: relative;
+  z-index: 2;
+  /* Le contenu doit être au-dessus des effets de patine */
 }
 
 /* Styles pour le contenu du livre */
 .book-title {
   font-size: 1.875rem; /* text-3xl */
   font-weight: bold;
-  color: #111827; /* text-gray-900 */
+  color: var(--foreground);
   margin-bottom: 1.5rem; /* mb-6 */
-  line-height: 1.2; /* Corrigé de 0.8 à 1.2 pour cohérence */
+  line-height: 1.2;
   text-align: center;
+  /* Effet de lettrine doré subtil */
+  text-shadow: 0 1px 2px rgba(107, 82, 44, 0.1);
 }
 
 .book-text {
   font-size: 1.125rem; /* text-lg */
-  color: #4B5563; /* text-gray-600 */
+  color: var(--foreground);
   margin-bottom: 1rem;
-  line-height: 1.6;
+  line-height: 1.57;
   text-align: justify;
+  /* Style ancien livre */
+  text-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.05);
+  /* Préserver les retours à la ligne */
+  white-space: pre-line;
 }
 
-/* Placeholder d'image */
+/* Placeholder d'image - style grimoire */
 .image-placeholder {
   width: 100%;
   height: 150px;
-  background-color: #E5E7EB;
-  border: 2px dashed #9CA3AF;
+  background-color: rgba(107, 82, 44, 0.08);
+  border: 3px solid var(--border-brown);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 1.5rem 0;
   position: relative;
+  /* Effet ancien parchemin */
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .placeholder-content {
-  color: #6B7280;
+  color: var(--brown);
   font-style: italic;
   font-size: 1rem;
   text-align: center;
+  font-weight: 500;
+}
+
+/* Styles pour l'édition de contenu */
+.edit-container {
+  position: relative;
+  width: 100%;
+}
+
+.edit-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 20;
+}
+
+.edit-button {
+  background-color: var(--brown);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.edit-button:hover {
+  background-color: #8b6e4e;
+}
+
+.edit-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.edit-modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.edit-modal-title {
+  margin-bottom: 20px;
+  color: var(--foreground);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.edit-form-group {
+  margin-bottom: 20px;
+}
+
+.edit-form-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: var(--foreground);
+}
+
+.edit-form-input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid var(--brown);
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: inherit;
+  color: var(--foreground);
+}
+
+.edit-form-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid var(--brown);
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: inherit;
+  resize: vertical;
+  color: var(--foreground);
+}
+
+.edit-form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.edit-button-cancel {
+  padding: 10px 20px;
+  border: 2px solid var(--brown);
+  background-color: transparent;
+  color: var(--brown);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.edit-button-cancel:hover {
+  background-color: var(--brown);
+  color: white;
+}
+
+.edit-button-cancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.edit-button-save {
+  padding: 10px 20px;
+  border: none;
+  background-color: var(--brown);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.edit-button-save:hover {
+  background-color: var(--border-brown);
+}
+
+.edit-button-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 /* Responsive design */
@@ -119,7 +312,10 @@
   .about-container {
     flex-direction: column;
     width: 95%;
-    gap: 20px;
+    gap: 10px;
+    /* Bordure plus fine sur mobile */
+    border-width: 8px;
+    border-radius: 15px;
   }
   
   .about-container::before {
@@ -130,14 +326,40 @@
     width: 100%;
     height: auto;
     min-height: 500px;
-    border-radius: 9px;
   }
   
   .about-left,
   .about-right {
+    border-radius: 12px;
     box-shadow: 
-      0 4px 15px rgba(0, 0, 0, 0.1),
-      inset 0 0 10px rgba(0, 0, 0, 0.05);
-    border-radius: 9px;
+      inset 0 0 8px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* Masquer les effets de courbe sur mobile */
+  .about-left::before,
+  .about-right::before {
+    display: none;
+  }
+
+  /* Interface d'édition responsive */
+  .edit-modal-content {
+    width: 95%;
+    padding: 20px;
+    max-height: 95vh;
+  }
+
+  .edit-button {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .edit-form-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .edit-button-cancel,
+  .edit-button-save {
+    width: 100%;
   }
 } 

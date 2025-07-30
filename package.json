@@ -7,7 +7,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "seed": "node src/app/scripts/seed.js",
+    "seed:reset": "node src/app/scripts/seed.js",
+    "db:check": "node src/app/scripts/check-db.js",
+    "db:mongoose": "node src/app/scripts/check-mongoose.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
@@ -15,6 +19,7 @@
     "dotenv": "^17.2.0",
     "jose": "^6.0.12",
     "jsonwebtoken": "^9.0.2",
+    "lucide-react": "^0.534.0",
     "mongoose": "^8.16.4",
     "next": "15.4.1",
     "react": "19.1.0",

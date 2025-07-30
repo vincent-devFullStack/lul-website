@@ -19,27 +19,32 @@
 }
 
 /* Global */
+html {
+  overflow-x: hidden;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: "EB Garamond", serif;
+  overflow-x: hidden;
 }
 
 body,
 html,
 #__next {
-  min-width: 1300px;
+  min-width: 1200px;
 }
 
 /* Désactive le responsive uniquement sur la page /accueil */
 body.no-responsive {
-  min-width: 1300px;
-  overflow-x: auto;
+  min-width: 1200px;
+  overflow-x: hidden;
 }
 
 /* Conteneur général */
 .main-container {
-  overflow-x: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;

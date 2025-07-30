@@ -33,7 +33,7 @@ export default function Navigation() {
           </Link>
         </div>
 
-        <div className="flex justify-center space-x-10 mb-2">
+        <div className="flex justify-center items-center space-x-10 mb-2">
           {navItems.map((item) => (
             <Link
               key={item.name}
@@ -47,6 +47,16 @@ export default function Navigation() {
               {item.name}
             </Link>
           ))}
+          
+          {/* Bouton Administration espacé vers la droite */}
+          {isAuthenticated && (
+            <Link
+              href="/admin/salles"
+              className="ml-20 px-4 py-2 text-lg font-medium bg-[var(--active-menu-item)] text-[var(--header-background)] rounded transition-colors duration-200 hover:bg-[#5a4423] hover:text-white"
+            >
+              Administration
+            </Link>
+          )}
         </div>
 
         {isAuthenticated ? (
