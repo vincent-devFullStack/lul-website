@@ -6,13 +6,20 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true); // ✅ STATE MANQUANT AJOUTÉ
 
   useEffect(() => {
+    setLoading(true);
     fetch("/api/me")
-      .then((res) =>
-        res.ok ? setIsAuthenticated(true) : setIsAuthenticated(false)
-      )
-      .catch(() => setIsAuthenticated(false));
+      .then((res) => {
+        setIsAuthenticated(res.ok);
+      })
+      .catch(() => {
+        setIsAuthenticated(false);
+      })
+      .finally(() => {
+        setLoading(false); // ✅ LOADING GÉRÉ CORRECTEMENT
+      });
   }, []);
 
   const login = () => {
@@ -32,7 +39,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

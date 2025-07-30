@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase, getRoomBySlug, updateRoom } from "@/lib/mongodb";
+import { withAuth } from "@/lib/auth"; // ✅ SÉCURISATION IMPORTÉE
 
 export async function GET(request, { params }) {
   try {
-    const { slug } = params;
+    const { slug } = await params; // ✅ AWAIT PARAMS POUR NEXT.JS 14+
     const room = await getRoomBySlug(slug);
     
     if (!room) {
@@ -23,9 +24,9 @@ export async function GET(request, { params }) {
   }
 }
 
-export async function PUT(request, { params }) {
+export const PUT = withAuth(async (request, { params }) => {
   try {
-    const { slug } = params;
+    const { slug } = await params; // ✅ AWAIT PARAMS POUR NEXT.JS 14+
     const updateData = await request.json();
     
     // Validation des données
@@ -94,4 +95,4 @@ export async function PUT(request, { params }) {
       { status: 500 }
     );
   }
-}
+});

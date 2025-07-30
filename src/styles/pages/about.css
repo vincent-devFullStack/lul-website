@@ -1,172 +1,132 @@
+/* ✅ DESIGN MODERNE ET ÉLÉGANT - CLEAN VERSION */
+
 .about-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 80%;
-  height: auto;
-  min-height: 400px;
-  position: relative;
-  margin: auto;
-  
-  /* Bordure épaisse du livre entier */
-  border: 12px solid var(--brown);
-  border-radius: 20px;
-  
-  /* Ombre du livre complet */
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.about-modern-container {
+  background: linear-gradient(135deg, 
+    var(--login-background) 0%, 
+    var(--header-background) 100%);
+  border-radius: 16px;
+  overflow: hidden;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.15),
-    0 4px 16px rgba(0, 0, 0, 0.1);
-  
-  /* Petit espace pour la reliure */
-  gap: 2px;
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(125, 113, 84, 0.2);
 }
 
-
-
-/* Ligne de reliure centrale */
-.about-container::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(to bottom, 
-    var(--border-brown) 0%,
-    var(--brown) 50%,
-    var(--border-brown) 100%);
-  transform: translateX(-50%);
-  z-index: 10;
+.about-hero-section {
+  background: var(--header-background);
+  padding: 60px 40px 40px;
+  text-align: center;
+  border-bottom: 1px solid rgba(125, 113, 84, 0.2);
 }
 
-.about-content {
+.about-title {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 40px;
+  font-family: "EB Garamond", serif;
+  letter-spacing: -0.02em;
+}
+
+.about-image-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.about-image {
+  width: 280px;
+  height: 280px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 
+    0 12px 24px rgba(0, 0, 0, 0.15),
+    0 4px 8px rgba(0, 0, 0, 0.1);
+  border: 4px solid var(--header-background);
+  transition: transform 0.3s ease;
+}
+
+.about-image:hover {
+  transform: scale(1.02);
+}
+
+.about-image-placeholder {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: rgba(179, 162, 121, 0.1);
+  border: 3px dashed var(--brown);
   display: flex;
   flex-direction: column;
-  background-color: #EFEBDA;
-  padding: 40px 30px;
-  width: 50%;
-  height: 700px;
-  position: relative;
-  /* Pas de bordures individuelles - le livre global les fournit */
-  border: none;
-}
-
-/* Page de gauche */
-.about-left {
-  /* Courbe intérieure vers la reliure - réaliste */
-  border-radius: 12px 4px 4px 12px;
-  
-  /* Ombre intérieure pour simuler la courbure des pages */
-  box-shadow: 
-    inset -8px 0 15px rgba(0, 0, 0, 0.1),
-    inset 0 0 8px rgba(0, 0, 0, 0.05);
-    
-  overflow: hidden;
-  position: relative;
-}
-
-/* Effet de courbe au niveau de la reliure */
-.about-left::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 10px;
-  background: linear-gradient(to left,
-    rgba(0, 0, 0, 0.1) 0%,
-    rgba(0, 0, 0, 0.05) 50%,
-    transparent 100%);
-  z-index: 1;
-}
-
-/* Page de droite */
-.about-right {
-  /* Courbe intérieure vers la reliure - réaliste */
-  border-radius: 4px 12px 12px 4px;
-  
-  /* Ombre intérieure pour simuler la courbure des pages */
-  box-shadow: 
-    inset 8px 0 15px rgba(0, 0, 0, 0.1),
-    inset 0 0 8px rgba(0, 0, 0, 0.05);
-    
-  position: relative;
-}
-
-/* Effet de courbe au niveau de la reliure */
-.about-right::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 10px;
-  background: linear-gradient(to right,
-    rgba(0, 0, 0, 0.1) 0%,
-    rgba(0, 0, 0, 0.05) 50%,
-    transparent 100%);
-  z-index: 1;
-}
-
-.page-content {
-  height: 100%;
-  position: relative;
-  z-index: 2;
-  /* Le contenu doit être au-dessus des effets de patine */
-}
-
-/* Styles pour le contenu du livre */
-.book-title {
-  font-size: 1.875rem; /* text-3xl */
-  font-weight: bold;
-  color: var(--foreground);
-  margin-bottom: 1.5rem; /* mb-6 */
-  line-height: 1.2;
-  text-align: center;
-  /* Effet de lettrine doré subtil */
-  text-shadow: 0 1px 2px rgba(107, 82, 44, 0.1);
-}
-
-.book-text {
-  font-size: 1.125rem; /* text-lg */
-  color: var(--foreground);
-  margin-bottom: 1rem;
-  line-height: 1.57;
-  text-align: justify;
-  /* Style ancien livre */
-  text-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.05);
-  /* Préserver les retours à la ligne */
-  white-space: pre-line;
-}
-
-/* Placeholder d'image - style grimoire */
-.image-placeholder {
-  width: 100%;
-  height: 150px;
-  background-color: rgba(107, 82, 44, 0.08);
-  border: 3px solid var(--border-brown);
-  border-radius: 8px;
-  display: flex;
   align-items: center;
   justify-content: center;
-  margin: 1.5rem 0;
-  position: relative;
-  /* Effet ancien parchemin */
-  box-shadow: 
-    inset 0 2px 4px rgba(0, 0, 0, 0.06),
-    0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.placeholder-content {
   color: var(--brown);
   font-style: italic;
-  font-size: 1rem;
-  text-align: center;
-  font-weight: 500;
+  gap: 12px;
+  transition: all 0.3s ease;
 }
 
-/* Styles pour l'édition de contenu */
+.about-image-placeholder:hover {
+  background: rgba(179, 162, 121, 0.15);
+  border-color: var(--border-brown);
+}
+
+.about-content-section {
+  padding: 50px 60px 60px;
+}
+
+.about-text {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: var(--foreground);
+  text-align: justify;
+  font-family: "EB Garamond", serif;
+  white-space: pre-line;
+  max-width: none;
+  margin: 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-container {
+    padding: 20px 10px;
+  }
+  
+  .about-hero-section {
+    padding: 40px 20px 30px;
+  }
+  
+  .about-title {
+    font-size: 2rem;
+    margin-bottom: 30px;
+  }
+  
+  .about-image,
+  .about-image-placeholder {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .about-content-section {
+    padding: 30px 20px 40px;
+  }
+  
+  .about-text {
+    font-size: 1.125rem;
+    line-height: 1.7;
+  }
+}
+
+/* ========================================= */
+/* ÉDITION - MODAL ET BOUTONS */
+/* ========================================= */
+
 .edit-container {
   position: relative;
   width: 100%;
@@ -181,44 +141,75 @@
 }
 
 .edit-button {
-  background-color: var(--brown);
+  background: var(--brown);
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border-brown);
   cursor: pointer;
   font-size: 16px;
-  font-weight: 500;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-weight: 600;
+  font-family: "EB Garamond", serif;
+  box-shadow: 
+    0 6px 12px rgba(0, 0, 0, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  letter-spacing: 0.02em;
 }
 
 .edit-button:hover {
-  background-color: #8b6e4e;
+  box-shadow: 
+    0 8px 16px rgba(0, 0, 0, 0.2),
+    0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Modal d'édition moderne */
 .edit-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
   z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .edit-modal-content {
-  background-color: white;
-  padding: 30px;
-  border-radius: 12px;
+  background: var(--header-background);
+  padding: 40px;
+  border-radius: 16px;
   width: 90%;
-  max-width: 800px;
+  max-width: 700px;
   max-height: 90vh;
   overflow: auto;
+  box-shadow: 
+    0 24px 48px rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(125, 113, 84, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .edit-modal-title {
@@ -226,6 +217,7 @@
   color: var(--foreground);
   font-size: 1.5rem;
   font-weight: bold;
+  font-family: "EB Garamond", serif;
 }
 
 .edit-form-group {
@@ -237,43 +229,64 @@
   margin-bottom: 8px;
   font-weight: bold;
   color: var(--foreground);
+  font-family: "EB Garamond", serif;
 }
 
 .edit-form-input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 2px solid var(--brown);
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 16px;
-  font-family: inherit;
+  font-family: "EB Garamond", serif;
   color: var(--foreground);
+  background: white;
+  transition: border-color 0.3s ease;
+}
+
+.edit-form-input:focus {
+  outline: none;
+  border-color: var(--border-brown);
+  box-shadow: 0 0 0 3px rgba(179, 162, 121, 0.1);
 }
 
 .edit-form-textarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: 2px solid var(--brown);
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 16px;
-  font-family: inherit;
+  font-family: "EB Garamond", serif;
   resize: vertical;
   color: var(--foreground);
+  background: white;
+  min-height: 120px;
+  transition: border-color 0.3s ease;
+}
+
+.edit-form-textarea:focus {
+  outline: none;
+  border-color: var(--border-brown);
+  box-shadow: 0 0 0 3px rgba(179, 162, 121, 0.1);
 }
 
 .edit-form-actions {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   justify-content: flex-end;
+  margin-top: 30px;
 }
 
 .edit-button-cancel {
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: 2px solid var(--brown);
   background-color: transparent;
   color: var(--brown);
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  font-family: "EB Garamond", serif;
+  font-weight: 500;
   transition: all 0.3s ease;
 }
 
@@ -288,78 +301,98 @@
 }
 
 .edit-button-save {
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  background-color: var(--brown);
+  background: linear-gradient(135deg, var(--brown) 0%, var(--border-brown) 100%);
   color: white;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+  font-family: "EB Garamond", serif;
+  font-weight: 600;
   transition: all 0.3s ease;
 }
 
 .edit-button-save:hover {
-  background-color: var(--border-brown);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .edit-button-save:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .about-container {
-    flex-direction: column;
-    width: 95%;
-    gap: 10px;
-    /* Bordure plus fine sur mobile */
-    border-width: 8px;
-    border-radius: 15px;
-  }
-  
-  .about-container::before {
-    display: none;
-  }
-  
-  .about-content {
-    width: 100%;
-    height: auto;
-    min-height: 500px;
-  }
-  
-  .about-left,
-  .about-right {
-    border-radius: 12px;
-    box-shadow: 
-      inset 0 0 8px rgba(0, 0, 0, 0.08);
-  }
-  
-  /* Masquer les effets de courbe sur mobile */
-  .about-left::before,
-  .about-right::before {
-    display: none;
-  }
+/* Messages d'état professionnels */
+.edit-message {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid;
+  animation: slideIn 0.3s ease-out;
+  font-family: "EB Garamond", serif;
+}
 
-  /* Interface d'édition responsive */
-  .edit-modal-content {
-    width: 95%;
-    padding: 20px;
-    max-height: 95vh;
-  }
+.edit-message-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
 
-  .edit-button {
-    padding: 10px 20px;
-    font-size: 14px;
-  }
+.edit-message-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-color: #f5c6cb;
+}
 
-  .edit-form-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
+.edit-message-info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-color: #bee5eb;
+}
 
-  .edit-button-cancel,
-  .edit-button-save {
-    width: 100%;
-  }
-} 
+/* Analyseur de texte intelligent */
+.text-analysis {
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(179, 162, 121, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid var(--brown);
+}
+
+.char-counter {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  font-family: "EB Garamond", serif;
+}
+
+.char-counter-empty {
+  color: #6c757d;
+}
+
+.char-counter-short {
+  color: #0d6efd;
+}
+
+.char-counter-optimal {
+  color: #198754;
+}
+
+.char-counter-warning {
+  color: #fd7e14;
+}
+
+.char-counter-info {
+  color: var(--brown);
+}
+
+.text-distribution {
+  font-size: 11px;
+  color: #6c757d;
+  margin-top: 4px;
+  font-family: "EB Garamond", serif;
+}

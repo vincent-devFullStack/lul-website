@@ -1,21 +1,24 @@
 "use client";
 
 import "../../../styles/pages/about.css";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
+import ImageUpload from "@/components/ImageUpload"; // ✅ IMPORT DU COMPOSANT
 
 export default function About() {
   const { isAuthenticated } = useAuth();
-  const leftPageRef = useRef(null);
-  const [leftContent, setLeftContent] = useState("");
-  const [rightContent, setRightContent] = useState("");
+  // ✅ PLUS BESOIN DE SÉPARER - CSS GÈRE TOUT
   const [fullText, setFullText] = useState("");
   const [title, setTitle] = useState("À propos de moi");
+  const [imageUrl, setImageUrl] = useState(null); // ✅ STATE POUR L'IMAGE
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
+  const [editImageUrl, setEditImageUrl] = useState(null); // ✅ STATE POUR L'IMAGE EN ÉDITION
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState(null); // ✅ MESSAGES D'ÉTAT PROFESSIONNELS
+  const [textAnalysis, setTextAnalysis] = useState(null); // ✅ ANALYSE DU TEXTE
 
   // Charger le contenu depuis l'API
   useEffect(() => {
@@ -28,6 +31,7 @@ export default function About() {
           const data = await response.json();
           setTitle(data.title || "À propos de moi");
           setFullText(data.content || "Contenu à définir...");
+          setImageUrl(data.imageUrl || null); // ✅ CHARGER L'IMAGE
         } else {
           // Contenu par défaut si l'API ne répond pas
           setTitle("À propos de moi");
@@ -47,7 +51,19 @@ export default function About() {
 
   // Fonction pour sauvegarder les modifications
   const handleSave = async () => {
+    // Validation côté client
+    if (!editTitle.trim()) {
+      setMessage({ type: 'error', text: 'Le titre est requis' });
+      return;
+    }
+    if (!editContent.trim()) {
+      setMessage({ type: 'error', text: 'Le contenu est requis' });
+      return;
+    }
+
     setSaving(true);
+    setMessage({ type: 'info', text: 'Sauvegarde en cours...' });
+    
     try {
       const response = await fetch("/api/content/about-page", {
         method: "PUT",
@@ -57,6 +73,7 @@ export default function About() {
         body: JSON.stringify({
           title: editTitle.trim(),
           content: editContent.trim(),
+          imageUrl: editImageUrl, // ✅ INCLURE L'IMAGE DANS LA SAUVEGARDE
         }),
       });
 
@@ -64,15 +81,27 @@ export default function About() {
         const data = await response.json();
         setTitle(editTitle.trim());
         setFullText(editContent.trim());
-        setIsEditing(false);
-        alert("Contenu mis à jour avec succès !");
+        setImageUrl(editImageUrl);
+        setMessage({ type: 'success', text: 'Contenu mis à jour avec succès !' });
+        
+        // Fermer le modal après un délai
+        setTimeout(() => {
+          setIsEditing(false);
+          setMessage(null);
+        }, 1500);
       } else {
         const errorData = await response.json();
-        alert("Erreur lors de la sauvegarde : " + errorData.error);
+        setMessage({ 
+          type: 'error', 
+          text: `Erreur lors de la sauvegarde : ${errorData.error}` 
+        });
       }
     } catch (error) {
       console.error("Erreur lors de la sauvegarde:", error);
-      alert("Erreur lors de la sauvegarde");
+      setMessage({ 
+        type: 'error', 
+        text: 'Erreur de connexion. Vérifiez votre réseau.' 
+      });
     } finally {
       setSaving(false);
     }
@@ -82,6 +111,7 @@ export default function About() {
   const startEditing = () => {
     setEditTitle(title);
     setEditContent(fullText);
+    setEditImageUrl(imageUrl); // ✅ CHARGER L'IMAGE ACTUELLE DANS L'ÉDITION
     setIsEditing(true);
   };
 
@@ -90,114 +120,31 @@ export default function About() {
     setIsEditing(false);
     setEditTitle("");
     setEditContent("");
+    setEditImageUrl(null);
+    setMessage(null); // ✅ CLEAR MESSAGES
   };
 
-  const splitTextContent = useCallback(() => {
-    if (!leftPageRef.current || !fullText) return;
-
-    const leftPage = leftPageRef.current;
-
-    const testElement = document.createElement("div");
-    testElement.style.cssText = `
-      position: absolute;
-      visibility: hidden;
-      width: ${leftPage.offsetWidth - 60}px;
-      font-size: 1.125rem;
-      line-height: 1.57;
-      color: var(--foreground);
-      padding: 0;
-      margin: 0;
-      margin-bottom: 1rem;
-      white-space: pre-line;
-      text-align: justify;
-    `;
-    document.body.appendChild(testElement);
-
-    const availableHeight = leftPage.offsetHeight - 280;
-
-    // Diviser le texte par paragraphes pour préserver les retours à la ligne
-    const paragraphs = fullText.split('\n');
-    let leftText = "";
-    let currentParagraphIndex = 0;
-    let wordsInCurrentParagraph = 0;
-
-    while (currentParagraphIndex < paragraphs.length) {
-      const currentParagraph = paragraphs[currentParagraphIndex];
-      const words = currentParagraph.split(' ');
-      
-      // Essayer d'ajouter le paragraphe entier d'abord
-      const potentialLeftText = leftText + 
-        (leftText ? '\n' : '') + 
-        currentParagraph;
-      
-      testElement.textContent = potentialLeftText;
-
-      if (testElement.offsetHeight > availableHeight) {
-        // Si le paragraphe entier ne rentre pas, essayer mot par mot
-        if (wordsInCurrentParagraph === 0) {
-          // Premier mot du paragraphe, essayer de le diviser
-          for (let i = 0; i < words.length; i++) {
-            const testText = leftText + 
-              (leftText ? '\n' : '') + 
-              words.slice(0, i + 1).join(' ');
-            
-            testElement.textContent = testText;
-            
-            if (testElement.offsetHeight > availableHeight) {
-              if (i === 0 && leftText === "") {
-                // Même le premier mot ne rentre pas, le prendre quand même
-                leftText = words[0];
-                wordsInCurrentParagraph = 1;
-              }
-              break;
-            }
-            
-            leftText = testText;
-            wordsInCurrentParagraph = i + 1;
-          }
-        }
-        break;
-      }
-
-      leftText = potentialLeftText;
-      currentParagraphIndex++;
-      wordsInCurrentParagraph = 0;
-    }
-
-    // Construire le texte de droite avec le reste
-    let rightText = "";
+  // ✅ ANALYSE SIMPLE DU TEXTE (CSS GÈRE LA RÉPARTITION)
+  useEffect(() => {
+    if (!fullText) return;
     
-    if (currentParagraphIndex < paragraphs.length) {
-      const remainingWords = paragraphs[currentParagraphIndex]
-        .split(' ')
-        .slice(wordsInCurrentParagraph);
-      
-      if (remainingWords.length > 0 && remainingWords[0] !== '') {
-        rightText = remainingWords.join(' ');
-      }
-      
-      // Ajouter les paragraphes suivants
-      const remainingParagraphs = paragraphs.slice(currentParagraphIndex + 1);
-      if (remainingParagraphs.length > 0) {
-        rightText += (rightText ? '\n' : '') + remainingParagraphs.join('\n');
-      }
-    }
-
-    document.body.removeChild(testElement);
-
-    setLeftContent(leftText);
-    setRightContent(rightText);
+    const totalChars = fullText.length;
+    setTextAnalysis({
+      totalChars,
+      fitsInLayout: true, // CSS gère tout
+      isAdaptive: true,
+      layoutType: 'css-columns'
+    });
   }, [fullText]);
 
-  useEffect(() => {
-    const timer = setTimeout(splitTextContent, 200);
-    window.addEventListener("resize", splitTextContent);
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("resize", splitTextContent);
-    };
-  }, [splitTextContent]);
+  // ✅ CALCULER L'ÉTAT DU TEXTE SIMPLIFIÉ
+  const getTextStatus = (text) => {
+    const length = text.length;
+    if (length === 0) return { type: 'empty', message: 'Ajoutez du contenu' };
+    if (length < 300) return { type: 'short', message: `${length} caractères - Peut être plus long` };
+    if (length <= 2000) return { type: 'optimal', message: `${length} caractères - Longueur idéale` };
+    return { type: 'info', message: `${length} caractères - Texte long` };
+  };
 
   if (loading) {
     return (
@@ -240,6 +187,16 @@ export default function About() {
               Modifier le contenu de la page
             </h2>
             
+            {/* Messages d'état */}
+            {message && (
+              <div className={`edit-message edit-message-${message.type}`}>
+                {message.type === 'success' && '✅'} 
+                {message.type === 'error' && '❌'} 
+                {message.type === 'info' && 'ℹ️'} 
+                {message.text}
+              </div>
+            )}
+            
             <div className="edit-form-group">
               <label className="edit-form-label">
                 Titre :
@@ -254,15 +211,42 @@ export default function About() {
 
             <div className="edit-form-group">
               <label className="edit-form-label">
+                Image :
+              </label>
+              <ImageUpload
+                currentImageUrl={editImageUrl}
+                onImageSelected={(imageUrl) => setEditImageUrl(imageUrl)}
+                onImageRemoved={() => setEditImageUrl(null)}
+                disabled={saving}
+              />
+            </div>
+
+            <div className="edit-form-group">
+              <label className="edit-form-label">
                 Contenu :
               </label>
               <textarea
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
-                rows={15}
+                rows={12}
                 className="edit-form-textarea"
                 placeholder="Votre contenu ici..."
               />
+              
+              {/* ✅ COMPTEUR INTELLIGENT */}
+              <div className="text-analysis">
+                <div className={`char-counter char-counter-${getTextStatus(editContent).type}`}>
+                  {getTextStatus(editContent).message}
+                </div>
+                
+                {textAnalysis && fullText && (
+                  <div className="text-distribution">
+                    <small>
+                      📖 {textAnalysis.totalChars} caractères • Layout CSS automatique
+                    </small>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="edit-form-actions">
@@ -275,34 +259,47 @@ export default function About() {
               </button>
               <button
                 onClick={handleSave}
-                disabled={saving}
+                disabled={saving || !editTitle.trim() || !editContent.trim()}
                 className="edit-button-save"
               >
-                {saving ? 'Sauvegarde...' : 'Sauvegarder'}
+                {saving ? (
+                  <>⏳ Sauvegarde...</>
+                ) : (
+                  <>💾 Sauvegarder</>
+                )}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Contenu du livre */}
-      <div className="about-content about-left" ref={leftPageRef}>
-        <div className="page-content">
-          <h1 className="book-title" id="about-title">
-            {title}
-          </h1>
-
-          <div className="image-placeholder">
-            <div className="placeholder-content">[Image à venir]</div>
+      {/* Design moderne et élégant */}
+      <div className="about-modern-container">
+        <div className="about-hero-section">
+          <h1 className="about-title">{title}</h1>
+          
+          <div className="about-image-container">
+            {imageUrl ? (
+              <img 
+                src={imageUrl} 
+                alt={title}
+                className="about-image"
+              />
+            ) : (
+              <div className="about-image-placeholder">
+                <svg width="64" height="64" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V19C3 20.1 3.9 21 5 21H11V19H5V3H13V9H21Z"/>
+                </svg>
+                <span>Image à ajouter</span>
+              </div>
+            )}
           </div>
-
-          <p className="book-text">{leftContent}</p>
         </div>
-      </div>
 
-      <div className="about-content about-right">
-        <div className="page-content">
-          <p className="book-text">{rightContent}</p>
+        <div className="about-content-section">
+          <div className="about-text">
+            {fullText || "Votre présentation apparaîtra ici..."}
+          </div>
         </div>
       </div>
     </div>

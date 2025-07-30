@@ -5,6 +5,7 @@ import {
   updateArtworkInRoom, 
   deleteArtworkFromRoom 
 } from "@/lib/mongodb";
+import { withAuth } from "@/lib/auth"; // ✅ SÉCURISATION IMPORTÉE
 
 // GET /api/salles/[slug]/oeuvres - Récupérer les œuvres d'une salle
 export async function GET(request, { params }) {
@@ -36,7 +37,7 @@ export async function GET(request, { params }) {
 }
 
 // POST /api/salles/[slug]/oeuvres - Ajouter une œuvre à une salle
-export async function POST(request, { params }) {
+export const POST = withAuth(async (request, { params }) => {
   try {
     const { slug } = await params;
     const body = await request.json();
@@ -75,10 +76,10 @@ export async function POST(request, { params }) {
       { status: 500 }
     );
   }
-}
+});
 
 // PUT /api/salles/[slug]/oeuvres - Modifier une œuvre
-export async function PUT(request, { params }) {
+export const PUT = withAuth(async (request, { params }) => {
   try {
     const { slug } = await params;
     const body = await request.json();
@@ -117,10 +118,10 @@ export async function PUT(request, { params }) {
       { status: 500 }
     );
   }
-}
+});
 
 // DELETE /api/salles/[slug]/oeuvres - Supprimer une œuvre
-export async function DELETE(request, { params }) {
+export const DELETE = withAuth(async (request, { params }) => {
   try {
     const { slug } = await params;
     const { searchParams } = new URL(request.url);
@@ -152,4 +153,4 @@ export async function DELETE(request, { params }) {
       { status: 500 }
     );
   }
-} 
+}); 

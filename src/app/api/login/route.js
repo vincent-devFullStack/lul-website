@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken"; // ✅ pour signer le token
+import { SignJWT } from "jose"; // ✅ UNIFORMISATION VERS JOSE
 import User from "@/lib/models/User";
 import { connectToDatabase } from "@/lib/mongodb";
+
+const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function POST(req) {
   const { email, password } = await req.json();
@@ -33,15 +35,15 @@ export async function POST(req) {
       );
     }
 
-    // ✅ Génération du token JWT
-    const token = jwt.sign(
-      {
-        id: user._id,
-        email: user.email,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
+    // ✅ Génération du token JWT avec JOSE (uniformisé)
+    const token = await new SignJWT({
+      id: user._id,
+      email: user.email,
+    })
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setExpirationTime("1d")
+      .sign(SECRET);
 
     // ✅ Création de la réponse avec le cookie sécurisé
     const response = NextResponse.json({ success: true });

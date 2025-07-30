@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { getContentByType, createOrUpdateContent } from "@/lib/mongodb";
+import { withAuth } from "@/lib/auth"; // ✅ SÉCURISATION IMPORTÉE
 
 // GET - Récupérer le contenu par type
 export async function GET(request, { params }) {
   try {
-    const { type } = params;
+    const { type } = await params; // ✅ AWAIT PARAMS POUR NEXT.JS 14+
     
     const content = await getContentByType(type);
     
@@ -31,9 +32,9 @@ export async function GET(request, { params }) {
 }
 
 // PUT - Mettre à jour le contenu (authentification requise)
-export async function PUT(request, { params }) {
+export const PUT = withAuth(async (request, { params }) => {
   try {
-    const { type } = params;
+    const { type } = await params; // ✅ AWAIT PARAMS POUR NEXT.JS 14+
     const updateData = await request.json();
     
     // Validation des données
@@ -49,6 +50,18 @@ export async function PUT(request, { params }) {
     if (!content || typeof content !== 'string' || content.trim().length === 0) {
       return NextResponse.json(
         { error: "Le contenu est requis" },
+        { status: 400 }
+      );
+    }
+
+    // ✅ VALIDATION ADAPTATIVE : LIMITE PLUS ÉLEVÉE GRÂCE À LA HAUTEUR DYNAMIQUE
+    if (content.length > 3000) {
+      return NextResponse.json(
+        { 
+          error: `Contenu excessivement long (${content.length} caractères). Limite : 3000 caractères pour maintenir une bonne expérience utilisateur.`,
+          currentLength: content.length,
+          recommendedMax: 2000
+        },
         { status: 400 }
       );
     }
@@ -74,4 +87,4 @@ export async function PUT(request, { params }) {
       { status: 500 }
     );
   }
-}
+});

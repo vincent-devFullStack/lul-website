@@ -2,12 +2,13 @@ import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import { join } from "path";
 import { v4 as uuidv4 } from "uuid";
+import { withAuth } from "@/lib/auth"; // ✅ SÉCURISATION IMPORTÉE
 
 // Configuration
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
-export async function POST(request) {
+export const POST = withAuth(async (request) => {
   try {
     const formData = await request.formData();
     const file = formData.get("image");
@@ -74,4 +75,4 @@ export async function POST(request) {
       { status: 500 }
     );
   }
-} 
+}); 
