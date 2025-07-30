@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import { Edit, Trash2, Plus, Settings } from "lucide-react";
 
 export default function AdminOeuvresPage() {
   const params = useParams();
@@ -340,13 +341,13 @@ export default function AdminOeuvresPage() {
               onClick={openRoomModal}
               className="admin-btn admin-btn-secondary"
             >
-              ✏️ Modifier la salle
+              <Settings size={16} /> Modifier la salle
             </button>
             <button
               onClick={() => openModal("add")}
               className="admin-btn"
             >
-              ➕ Ajouter une œuvre
+              <Plus size={16} /> Ajouter une œuvre
             </button>
           </div>
         </div>
@@ -373,13 +374,13 @@ export default function AdminOeuvresPage() {
                     onClick={() => openModal("edit", artwork)}
                     className="admin-btn admin-btn-secondary"
                   >
-                    ✏️ Modifier
+                    <Edit size={16} /> Modifier
                   </button>
                   <button
                     onClick={() => handleDelete(artwork._id)}
                     className="admin-btn admin-btn-danger"
                   >
-                    🗑️ Supprimer
+                    <Trash2 size={16} /> Supprimer
                   </button>
                 </div>
               </div>

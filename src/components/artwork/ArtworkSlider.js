@@ -69,6 +69,24 @@ export default function ArtworkSlider({ artworks = [] }) {
             {currentArtwork.description}
           </p>
         )}
+        
+        {/* Indicateurs de navigation si plusieurs œuvres */}
+        {artworks.length > 1 && (
+          <div className="mt-6 flex justify-center space-x-2">
+            {artworks.map((artwork, index) => (
+              <button
+                key={artwork._id || `artwork-${index}`}
+                onClick={() => setCurrentIndex(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                  index === currentIndex 
+                    ? 'bg-gray-800' 
+                    : 'bg-gray-300 hover:bg-gray-500'
+                }`}
+                aria-label={`Aller à l'œuvre ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

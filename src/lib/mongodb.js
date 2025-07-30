@@ -81,11 +81,24 @@ function getContentModel() {
   return ContentModel;
 }
 
+// Fonction utilitaire pour convertir les objets MongoDB en objets JavaScript simples
+function serializeMongoObject(obj) {
+  if (!obj) return null;
+  
+  return JSON.parse(JSON.stringify(obj, (key, value) => {
+    if (value && typeof value === 'object' && value.constructor.name === 'ObjectId') {
+      return value.toString();
+    }
+    return value;
+  }));
+}
+
 // Fonctions existantes
 export async function getRoomBySlug(slug) {
   await connectToDatabase();
   const Room = getRoomModel();
-  return await Room.findOne({ slug }).lean();
+  const room = await Room.findOne({ slug }).lean();
+  return serializeMongoObject(room);
 }
 
 export async function getAllRoomSlugs() {
@@ -99,23 +112,26 @@ export async function getAllRoomSlugs() {
 export async function getAllRooms() {
   await connectToDatabase();
   const Room = getRoomModel();
-  return await Room.find({}).sort({ displayOrder: 1 }).lean();
+  const rooms = await Room.find({}).sort({ displayOrder: 1 }).lean();
+  return serializeMongoObject(rooms);
 }
 
 export async function getRoomWithArtworks(slug) {
   await connectToDatabase();
   const Room = getRoomModel();
-  return await Room.findOne({ slug }).lean();
+  const room = await Room.findOne({ slug }).lean();
+  return serializeMongoObject(room);
 }
 
 export async function updateRoom(slug, updateData) {
   await connectToDatabase();
   const Room = getRoomModel();
-  return await Room.findOneAndUpdate(
+  const room = await Room.findOneAndUpdate(
     { slug },
     { $set: updateData },
     { new: true, lean: true }
   );
+  return serializeMongoObject(room);
 }
 
 // Fonctions CRUD pour les œuvres
@@ -138,7 +154,7 @@ export async function addArtworkToRoom(slug, artworkData) {
   room.updatedAt = new Date();
   
   await room.save();
-  return room.artworks[room.artworks.length - 1];
+  return serializeMongoObject(room.artworks[room.artworks.length - 1]);
 }
 
 export async function updateArtworkInRoom(slug, artworkId, updatedData) {
@@ -167,7 +183,7 @@ export async function updateArtworkInRoom(slug, artworkId, updatedData) {
   room.updatedAt = new Date();
   await room.save();
   
-  return room.artworks[artworkIndex];
+  return serializeMongoObject(room.artworks[artworkIndex]);
 }
 
 export async function deleteArtworkFromRoom(slug, artworkId) {
@@ -179,15 +195,17 @@ export async function deleteArtworkFromRoom(slug, artworkId) {
     throw new Error("Salle non trouvée");
   }
 
-  const initialLength = room.artworks.length;
-  room.artworks = room.artworks.filter(
-    artwork => artwork._id.toString() !== artworkId
+  // Trouver l'index de l'œuvre à supprimer
+  const artworkIndex = room.artworks.findIndex(
+    artwork => artwork._id.toString() === artworkId.toString()
   );
   
-  if (room.artworks.length === initialLength) {
+  if (artworkIndex === -1) {
     throw new Error("Œuvre non trouvée");
   }
 
+  // Supprimer l'œuvre par son index
+  room.artworks.splice(artworkIndex, 1);
   room.updatedAt = new Date();
   await room.save();
   
@@ -198,7 +216,8 @@ export async function deleteArtworkFromRoom(slug, artworkId) {
 export async function getContentByType(type) {
   await connectToDatabase();
   const Content = getContentModel();
-  return await Content.findOne({ type }).lean();
+  const content = await Content.findOne({ type }).lean();
+  return serializeMongoObject(content);
 }
 
 export async function createOrUpdateContent(type, data) {
@@ -210,7 +229,7 @@ export async function createOrUpdateContent(type, data) {
     updatedAt: new Date()
   };
   
-  return await Content.findOneAndUpdate(
+  const content = await Content.findOneAndUpdate(
     { type },
     updateData,
     { 
@@ -220,4 +239,5 @@ export async function createOrUpdateContent(type, data) {
       lean: true
     }
   );
+  return serializeMongoObject(content);
 }
