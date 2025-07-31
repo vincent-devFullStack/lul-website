@@ -16,10 +16,7 @@ export default async function RoomPage(props) {
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h1 className="text-3xl font-serif font-semibold text-gray-800 mb-2">
-          {/^S\.\d+$/.test(room?.title)
-            ? null
-            : room?.title ||
-              slug.replace("-", " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+          {room?.name || room?.title || slug}
         </h1>
       </div>
       <ArtworkSlider artworks={room?.artworks || []} />

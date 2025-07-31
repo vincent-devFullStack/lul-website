@@ -12,7 +12,7 @@ export const POST = withAuth(async (request) => {
 
     if (!file) {
       return NextResponse.json(
-        { error: "Aucun fichier fourni" },
+        { error: "Aucun fichier envoyé" },
         { status: 400 }
       );
     }

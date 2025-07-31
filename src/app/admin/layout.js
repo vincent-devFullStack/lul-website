@@ -46,8 +46,8 @@ export default function AdminLayout({ children }) {
             <span className="admin-header-icon">🏠</span>
             Retour au site
           </Link>
-          <button 
-            onClick={handleLogout} 
+          <button
+            onClick={handleLogout}
             className="admin-header-link admin-header-logout"
           >
             <span className="admin-header-icon">🚪</span>
@@ -67,16 +67,20 @@ export default function AdminLayout({ children }) {
                   Gestion des salles
                 </Link>
               </li>
+              <li>
+                <Link href="/admin/mementos" className="admin-nav-link">
+                  <span className="admin-nav-icon">📝</span>
+                  Gestion des mementos
+                </Link>
+              </li>
             </ul>
           </nav>
         </aside>
-        
+
         <main className="admin-main">
-          <div className="admin-content">
-            {children}
-          </div>
+          <div className="admin-content">{children}</div>
         </main>
       </div>
     </div>
   );
-} 
+}

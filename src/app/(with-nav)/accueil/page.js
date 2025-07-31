@@ -117,6 +117,30 @@ export default function AccueilPlanInteractif() {
         const isGeneric = /^S\.\d+$/.test(name);
         const displayText = isGeneric ? "" : name;
 
+        // Si maintenance, pas de lien cliquable
+        if (status === "maintenance") {
+          return (
+            <div
+              key={_id}
+              aria-label={`${name} - ${description}`}
+              className="absolute flex justify-center items-center text-black font-semibold text-xs transition-all duration-200 opacity-60 cursor-not-allowed"
+              style={{ top, left, width, height }}
+              onMouseEnter={(e) => handleMouseEnter(salle, e)}
+              onMouseLeave={handleMouseLeave}
+              // Empêche le clic
+              onClick={(e) => e.preventDefault()}
+              tabIndex={-1}
+            >
+              {displayText && (
+                <span className="room-label text-center text-[#2a231a] px-2 py-1 transition-transform duration-200 scale-[0.9] break-words">
+                  {displayText}
+                </span>
+              )}
+            </div>
+          );
+        }
+
+        // Sinon, lien cliquable normal
         return (
           <Link
             key={_id}
@@ -124,9 +148,7 @@ export default function AccueilPlanInteractif() {
             aria-label={`${name} - ${description}`}
             role="button"
             tabIndex={0}
-            className={`absolute cursor-pointer bg-transparent flex justify-center items-center text-black font-semibold text-xs transition-all duration-200 ${
-              status === "restricted" ? "opacity-70" : ""
-            }`}
+            className="absolute cursor-pointer bg-transparent flex justify-center items-center text-black font-semibold text-xs transition-all duration-200"
             style={{ top, left, width, height }}
             onMouseEnter={(e) => handleMouseEnter(salle, e)}
             onMouseLeave={handleMouseLeave}
@@ -162,9 +184,9 @@ export default function AccueilPlanInteractif() {
           <div className="text-xs text-gray-300">
             {tooltip.content.description}
           </div>
-          {tooltip.content.status === "restricted" && (
-            <div className="text-xs text-yellow-400 mt-1">
-              ⚠️ Accès restreint
+          {tooltip.content.status === "maintenance" && (
+            <div className="text-xs text-orange-400 mt-1">
+              🛠️ Salle en maintenance
             </div>
           )}
           {/* Petite flèche */}

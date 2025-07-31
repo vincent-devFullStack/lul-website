@@ -39,7 +39,7 @@ export default function Navigation() {
             <Link
               key={item.name}
               href={item.href}
-              className={`px-3 py-2 text-lg font-medium transition-colors duration-200 ${
+              className={`header-link px-3 py-2 text-lg font-medium transition-colors duration-200 ${
                 isActive(item.href)
                   ? "item-active"
                   : "hover:text-[var(--active-menu-item)]"

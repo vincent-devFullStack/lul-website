@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Edit, Trash2, Plus, Settings } from "lucide-react";
@@ -16,12 +16,10 @@ export default function AdminOeuvresPage() {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
-  // Modal state
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState("add"); // "add" or "edit"
+  const [modalMode, setModalMode] = useState("add");
   const [editingArtwork, setEditingArtwork] = useState(null);
 
-  // Room edit modal state
   const [roomModalOpen, setRoomModalOpen] = useState(false);
   const [roomFormData, setRoomFormData] = useState({
     name: "",
@@ -29,7 +27,6 @@ export default function AdminOeuvresPage() {
     status: "active",
   });
 
-  // Form state
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -39,13 +36,7 @@ export default function AdminOeuvresPage() {
   const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
 
-  useEffect(() => {
-    if (slug) {
-      fetchArtworks();
-    }
-  }, [slug]);
-
-  const fetchArtworks = async () => {
+  const fetchArtworks = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/salles/${slug}/oeuvres`);
@@ -67,7 +58,13 @@ export default function AdminOeuvresPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug]);
+
+  useEffect(() => {
+    if (slug) {
+      fetchArtworks();
+    }
+  }, [slug, fetchArtworks]);
 
   const openModal = (mode, artwork = null) => {
     setModalMode(mode);
@@ -177,12 +174,12 @@ export default function AdminOeuvresPage() {
 
     try {
       setUploading(true);
-      const formData = new FormData();
-      formData.append("image", imageFile);
+      const form = new FormData();
+      form.append("image", imageFile); // "image" et non "file"
 
       const response = await fetch("/api/upload", {
         method: "POST",
-        body: formData,
+        body: form,
       });
 
       if (!response.ok) {
@@ -531,7 +528,6 @@ export default function AdminOeuvresPage() {
                   className="admin-form-select"
                 >
                   <option value="active">Active</option>
-                  <option value="restricted">Accès restreint</option>
                   <option value="maintenance">En maintenance</option>
                 </select>
               </div>

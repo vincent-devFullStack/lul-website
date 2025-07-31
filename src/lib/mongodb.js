@@ -61,8 +61,19 @@ const RoomSchema = new mongoose.Schema(
   { timestamps: true }
 ); // ✅ Ajout timestamps
 
+const MementoSchema = new mongoose.Schema(
+  {
+    quote: { type: String, required: true },
+    author: { type: String, required: true },
+    role: { type: String, required: true },
+    imageUrl: { type: String, required: true },
+  },
+  { timestamps: true }
+);
+
 let RoomModel;
 let ContentModel;
+let MementoModel;
 
 function getRoomModel() {
   if (!RoomModel) {
@@ -77,6 +88,14 @@ function getContentModel() {
       mongoose.models.Content || mongoose.model("Content", ContentSchema);
   }
   return ContentModel;
+}
+
+export function getMementoModel() {
+  if (!MementoModel) {
+    MementoModel =
+      mongoose.models.Memento || mongoose.model("Memento", MementoSchema);
+  }
+  return MementoModel;
 }
 
 function serializeMongoObject(obj) {

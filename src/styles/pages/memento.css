@@ -1,0 +1,66 @@
+.memento-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.memento-card {
+  background: var(--header-background);
+  color: var(--foreground);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px 0 rgba(42, 35, 26, 0.08);
+  width: 320px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.memento-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 32px 0 rgba(191, 167, 106, 0.18);
+}
+
+.memento-img-wrapper {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  background: #e7dfc6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.memento-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.memento-content {
+  padding: 1.2rem 1.2rem 1.5rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.memento-quote {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--active-menu-item);
+  margin: 0 0 0.5rem 0;
+}
+
+.memento-author {
+  font-weight: bold;
+  color: var(--foreground);
+}
+
+.memento-role {
+  font-size: 0.95rem;
+  color: #8a7c5b;
+}

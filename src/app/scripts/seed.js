@@ -43,24 +43,7 @@ const roomsData = [
     },
     status: "active",
     displayOrder: 1,
-    artworks: [
-      {
-        title: "Composition No. 1",
-        imageUrl: "/assets/artwork1.webp",
-        description:
-          "Une œuvre expérimentale inspirée du constructivisme. Cette pièce explore les limites entre forme et fonction.",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        title: "Déstructuration",
-        imageUrl: "/assets/artwork2.webp",
-        description:
-          "Exploration brute de la fragmentation visuelle. L'artiste déconstruit les conventions artistiques traditionnelles.",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    ],
+    artworks: [],
   },
   {
     slug: "salle-2",

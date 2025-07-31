@@ -34,4 +34,35 @@
 .item-active {
   color: var(--active-menu-item);
   border-bottom: 2px solid var(--active-menu-item);
+  /* On retire l'animation sur l'item actif */
+}
+
+.header-link {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+  padding: 0 0.5rem;
+  overflow: hidden;
+}
+
+/* Barre animée au hover UNIQUEMENT */
+.header-link:not(.item-active)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--active-menu-item);
+  opacity: 0;
+  transition:
+    width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.2s;
+}
+
+.header-link:not(.item-active):hover::after,
+.header-link:not(.item-active):focus::after {
+  width: 100%;
+  opacity: 1;
 }
