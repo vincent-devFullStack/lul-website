@@ -137,7 +137,11 @@ export default function AccueilPlanInteractif() {
               }
             }}
           >
-            {displayText && <span className="room-label">{displayText}</span>}
+            {displayText && (
+              <span className="room-label text-center text-[#2a231a] px-2 py-1 transition-transform duration-200 scale-[0.9] hover:scale-110 break-words">
+                {displayText}
+              </span>
+            )}
           </Link>
         );
       })}

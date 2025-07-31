@@ -20,20 +20,20 @@ export default function AdminOeuvresPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("add"); // "add" or "edit"
   const [editingArtwork, setEditingArtwork] = useState(null);
-  
+
   // Room edit modal state
   const [roomModalOpen, setRoomModalOpen] = useState(false);
   const [roomFormData, setRoomFormData] = useState({
     name: "",
     description: "",
-    status: "active"
+    status: "active",
   });
 
   // Form state
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    imageUrl: ""
+    imageUrl: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -49,7 +49,7 @@ export default function AdminOeuvresPage() {
     try {
       setLoading(true);
       const response = await fetch(`/api/salles/${slug}/oeuvres`);
-      
+
       if (!response.ok) {
         if (response.status === 404) {
           setError("Salle non trouvée");
@@ -72,19 +72,19 @@ export default function AdminOeuvresPage() {
   const openModal = (mode, artwork = null) => {
     setModalMode(mode);
     setEditingArtwork(artwork);
-    
+
     if (mode === "edit" && artwork) {
       setFormData({
         title: artwork.title,
         description: artwork.description,
-        imageUrl: artwork.imageUrl
+        imageUrl: artwork.imageUrl,
       });
       setImagePreview(artwork.imageUrl);
     } else {
       setFormData({ title: "", description: "", imageUrl: "" });
       setImagePreview(null);
     }
-    
+
     setImageFile(null);
     setModalOpen(true);
   };
@@ -102,7 +102,7 @@ export default function AdminOeuvresPage() {
       setRoomFormData({
         name: room.name || "",
         description: room.description || "",
-        status: room.status || "active"
+        status: room.status || "active",
       });
     }
     setRoomModalOpen(true);
@@ -113,13 +113,13 @@ export default function AdminOeuvresPage() {
     setRoomFormData({
       name: "",
       description: "",
-      status: "active"
+      status: "active",
     });
   };
 
   const handleRoomInputChange = (e) => {
     const { name, value } = e.target;
-    setRoomFormData(prev => ({ ...prev, [name]: value }));
+    setRoomFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleRoomSubmit = async (e) => {
@@ -138,19 +138,18 @@ export default function AdminOeuvresPage() {
       }
 
       const result = await response.json();
-      
+
       setMessage({
         type: "success",
-        text: "Informations de la salle mises à jour avec succès"
+        text: "Informations de la salle mises à jour avec succès",
       });
 
       // Mettre à jour les données locales
       setRoom(result.room);
       closeRoomModal();
-      
+
       // Clear message after 5 seconds
       setTimeout(() => setMessage(null), 5000);
-
     } catch (err) {
       setError(err.message);
     }
@@ -158,7 +157,7 @@ export default function AdminOeuvresPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
@@ -167,9 +166,9 @@ export default function AdminOeuvresPage() {
       setImageFile(file);
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
-      
+
       // Clear imageUrl when uploading new file
-      setFormData(prev => ({ ...prev, imageUrl: "" }));
+      setFormData((prev) => ({ ...prev, imageUrl: "" }));
     }
   };
 
@@ -219,7 +218,7 @@ export default function AdminOeuvresPage() {
       const dataToSend = {
         title: formData.title.trim(),
         description: formData.description.trim(),
-        imageUrl: imageUrl
+        imageUrl: imageUrl,
       };
 
       let response;
@@ -235,7 +234,7 @@ export default function AdminOeuvresPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             ...dataToSend,
-            artworkId: editingArtwork._id
+            artworkId: editingArtwork._id,
           }),
         });
       }
@@ -247,7 +246,10 @@ export default function AdminOeuvresPage() {
 
       setMessage({
         type: "success",
-        text: modalMode === "add" ? "Œuvre ajoutée avec succès" : "Œuvre modifiée avec succès"
+        text:
+          modalMode === "add"
+            ? "Œuvre ajoutée avec succès"
+            : "Œuvre modifiée avec succès",
       });
 
       closeModal();
@@ -255,7 +257,6 @@ export default function AdminOeuvresPage() {
 
       // Clear message after 5 seconds
       setTimeout(() => setMessage(null), 5000);
-
     } catch (err) {
       setError(err.message);
     }
@@ -267,9 +268,12 @@ export default function AdminOeuvresPage() {
     }
 
     try {
-      const response = await fetch(`/api/salles/${slug}/oeuvres?artworkId=${artworkId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `/api/salles/${slug}/oeuvres?artworkId=${artworkId}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -278,14 +282,13 @@ export default function AdminOeuvresPage() {
 
       setMessage({
         type: "success",
-        text: "Œuvre supprimée avec succès"
+        text: "Œuvre supprimée avec succès",
       });
 
       await fetchArtworks();
 
       // Clear message after 5 seconds
       setTimeout(() => setMessage(null), 5000);
-
     } catch (err) {
       setError(err.message);
     }
@@ -309,7 +312,10 @@ export default function AdminOeuvresPage() {
         <button onClick={fetchArtworks} className="admin-btn">
           Réessayer
         </button>
-        <button onClick={() => router.back()} className="admin-btn admin-btn-secondary">
+        <button
+          onClick={() => router.back()}
+          className="admin-btn admin-btn-secondary"
+        >
           Retour
         </button>
       </div>
@@ -319,22 +325,25 @@ export default function AdminOeuvresPage() {
   return (
     <div>
       <div className="admin-page-header">
-        <h1 className="admin-page-title">
-          Œuvres de {room?.title || slug}
-        </h1>
+        <h1 className="admin-page-title">Œuvres de {room?.title || slug}</h1>
         <p className="admin-page-subtitle">
           Gérez les œuvres présentes dans cette salle
         </p>
       </div>
 
       {message && (
-        <div className={`message message-${message.type}`}>
-          {message.text}
-        </div>
+        <div className={`message message-${message.type}`}>{message.text}</div>
       )}
 
       <div className="admin-card">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "24px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "24px",
+          }}
+        >
           <h3>Liste des œuvres ({artworks.length})</h3>
           <div style={{ display: "flex", gap: "12px" }}>
             <button
@@ -343,10 +352,7 @@ export default function AdminOeuvresPage() {
             >
               <Settings size={16} /> Modifier la salle
             </button>
-            <button
-              onClick={() => openModal("add")}
-              className="admin-btn"
-            >
+            <button onClick={() => openModal("add")} className="admin-btn">
               <Plus size={16} /> Ajouter une œuvre
             </button>
           </div>
@@ -396,7 +402,9 @@ export default function AdminOeuvresPage() {
               <h2 className="modal-title">
                 {modalMode === "add" ? "Ajouter une œuvre" : "Modifier l'œuvre"}
               </h2>
-              <button onClick={closeModal} className="modal-close">×</button>
+              <button onClick={closeModal} className="modal-close">
+                ×
+              </button>
             </div>
 
             <form onSubmit={handleSubmit} className="admin-form">
@@ -460,7 +468,11 @@ export default function AdminOeuvresPage() {
                   disabled={uploading}
                   className="admin-btn"
                 >
-                  {uploading ? "Upload en cours..." : modalMode === "add" ? "Ajouter" : "Modifier"}
+                  {uploading
+                    ? "Upload en cours..."
+                    : modalMode === "add"
+                      ? "Ajouter"
+                      : "Modifier"}
                 </button>
               </div>
             </form>
@@ -476,12 +488,16 @@ export default function AdminOeuvresPage() {
               <h2 className="modal-title">
                 Modifier les informations de la salle
               </h2>
-              <button onClick={closeRoomModal} className="modal-close">×</button>
+              <button onClick={closeRoomModal} className="modal-close">
+                ×
+              </button>
             </div>
 
             <form onSubmit={handleRoomSubmit} className="admin-form">
               <div className="admin-form-group">
-                <label className="admin-form-label">Nom complet de la salle</label>
+                <label className="admin-form-label">
+                  Nom complet de la salle
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -528,10 +544,7 @@ export default function AdminOeuvresPage() {
                 >
                   Annuler
                 </button>
-                <button
-                  type="submit"
-                  className="admin-btn"
-                >
+                <button type="submit" className="admin-btn">
                   Enregistrer les modifications
                 </button>
               </div>
@@ -541,4 +554,4 @@ export default function AdminOeuvresPage() {
       )}
     </div>
   );
-} 
+}

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { Settings } from "lucide-react";
 import "../../styles/layout/Navigation.css";
 
 export default function Navigation() {
@@ -47,31 +48,37 @@ export default function Navigation() {
               {item.name}
             </Link>
           ))}
-          
-          {/* Bouton Administration espacé vers la droite */}
-          {isAuthenticated && (
-            <Link
-              href="/admin/salles"
-              className="ml-20 px-4 py-2 text-lg font-medium bg-[var(--active-menu-item)] text-[var(--header-background)] rounded transition-colors duration-200 hover:bg-[#5a4423] hover:text-white"
-            >
-              Administration
-            </Link>
-          )}
         </div>
 
-        {isAuthenticated ? (
-          <button
-            onClick={handleLogout}
-            className="absolute top-5 right-5 text-lg hover:text-[var(--active-menu-item)]"
-          >
-            Se déconnecter
-          </button>
-        ) : (
+        {isAuthenticated && (
+          <div className="absolute top-5 right-5 flex items-center space-x-6">
+            <Link
+              href="/admin/salles"
+              aria-label="Administration"
+              role="button"
+              className="text-[var(--admin-button-text)] hover:text-[var(--admin-button-hover-text)] transition-colors duration-200"
+            >
+              <Settings
+                title="Administration"
+                className="w-5 h-5 transition-transform duration-300 ease-in-out hover:rotate-90"
+              />
+            </Link>
+
+            <button
+              onClick={handleLogout}
+              className="text-lg hover:text-[var(--active-menu-item)]"
+            >
+              Se déconnecter
+            </button>
+          </div>
+        )}
+
+        {!isAuthenticated && (
           <Link
             href="/login"
             className="absolute top-5 right-5 text-lg hover:text-[var(--active-menu-item)]"
           >
-            Administration
+            Se connecter
           </Link>
         )}
       </div>

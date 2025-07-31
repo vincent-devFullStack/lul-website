@@ -214,11 +214,21 @@ body.no-responsive {
 .room-label {
   position: absolute;
   text-align: center;
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: black;
-  pointer-events: none;
+  color: #2a231a;
+  padding: 0 0;
+  transition: font-size 0.2s ease;
+  font-size: 0.7rem;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: break-word;
   width: 100%;
+  max-width: 90%;
+}
+
+.room-label:hover {
+  font-size: 0.73rem;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+  color: #93692a;
 }
 
 @media (max-width: 1300px) {
