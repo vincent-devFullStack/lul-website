@@ -1,66 +1,109 @@
 .memento-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  justify-content: center;
-  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 3rem;
+  max-width: 1400px;
+  margin: 3rem auto;
+  padding: 0 2rem;
 }
 
 .memento-card {
   background: var(--header-background);
   color: var(--foreground);
-  border-radius: 16px;
-  box-shadow: 0 4px 24px 0 rgba(42, 35, 26, 0.08);
-  width: 320px;
+  border-radius: 20px;
+  box-shadow: 
+    0 4px 24px 0 rgba(42, 35, 26, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+  transition: all 0.3s ease-out;
+  position: relative;
 }
 
 .memento-card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 8px 32px 0 rgba(191, 167, 106, 0.18);
+  transform: translateY(-8px);
+  box-shadow: 
+    0 12px 40px rgba(191, 167, 106, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.1) inset;
 }
 
 .memento-img-wrapper {
   width: 100%;
-  height: 180px;
+  height: 240px;
   overflow: hidden;
-  background: #e7dfc6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: linear-gradient(45deg, #e7dfc6, #d4c9a8);
+  position: relative;
 }
 
 .memento-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.memento-card:hover .memento-img {
+  transform: scale(1.05);
 }
 
 .memento-content {
-  padding: 1.2rem 1.2rem 1.5rem 1.2rem;
+  padding: 1.8rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.8rem;
+  position: relative;
 }
 
 .memento-quote {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
+  line-height: 1.6;
   font-style: italic;
   color: var(--active-menu-item);
-  margin: 0 0 0.5rem 0;
+  margin: 0;
+  position: relative;
+  padding-left: 1.2rem;
+}
+
+.memento-quote::before {
+  content: '"';
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 2rem;
+  line-height: 1;
+  color: #bfa76a;
+  opacity: 0.5;
 }
 
 .memento-author {
-  font-weight: bold;
+  font-weight: 600;
   color: var(--foreground);
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
 }
 
 .memento-role {
   font-size: 0.95rem;
   color: #8a7c5b;
+  font-style: italic;
+}
+
+/* Animation au chargement */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.memento-card {
+  animation: fadeInUp 0.6s ease-out forwards;
 }

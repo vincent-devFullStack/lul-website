@@ -204,8 +204,8 @@ body.no-responsive {
 .plan-container {
   position: relative;
   width: 100%;
-  max-width: 72rem; /* largeur fixe desktop */
-  aspect-ratio: 1152 / 600; /* ratio largeur/hauteur du plan */
+  max-width: 72rem;
+  aspect-ratio: 1152 / 600;
   height: auto;
   margin: 0 auto;
   overflow: hidden;
@@ -216,19 +216,25 @@ body.no-responsive {
   text-align: center;
   color: #2a231a;
   padding: 0 0;
-  transition: font-size 0.2s ease;
-  font-size: 0.7rem;
+  transition:
+    font-size 0.1s ease-in-out,
+    color 0.1s ease-in-out,
+    text-shadow 0.1s ease-in-out;
+  font-size: 0.65rem;
   white-space: normal;
   word-break: break-word;
   overflow-wrap: break-word;
   width: 100%;
-  max-width: 90%;
+  max-width: 92%;
 }
 
 .room-label:hover {
-  font-size: 0.73rem;
+  font-size: 0.7rem;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
   color: #93692a;
+  max-width: 88%;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 @media (max-width: 1300px) {

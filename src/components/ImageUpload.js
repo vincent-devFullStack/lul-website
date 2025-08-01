@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 
 /**
  * Composant d'upload d'image professionnel et réutilisable
- * 
+ *
  * @param {Object} props
  * @param {string} props.currentImageUrl - URL de l'image actuelle (optionnel)
  * @param {Function} props.onImageSelected - Callback appelé quand une image est sélectionnée
@@ -12,12 +13,12 @@ import { useState, useRef } from "react";
  * @param {boolean} props.disabled - Désactiver le composant
  * @param {string} props.className - Classes CSS additionnelles
  */
-export default function ImageUpload({ 
-  currentImageUrl = null, 
-  onImageSelected, 
-  onImageRemoved, 
+export default function ImageUpload({
+  currentImageUrl = null,
+  onImageSelected,
+  onImageRemoved,
   disabled = false,
-  className = ""
+  className = "",
 }) {
   const [dragActive, setDragActive] = useState(false);
   const [preview, setPreview] = useState(currentImageUrl);
@@ -32,14 +33,14 @@ export default function ImageUpload({
 
   const validateFile = (file) => {
     const maxSize = 5 * 1024 * 1024; // 5MB
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
     if (!allowedTypes.includes(file.type)) {
-      throw new Error('Format non supporté. Utilisez JPG, PNG ou WebP.');
+      throw new Error("Format non supporté. Utilisez JPG, PNG ou WebP.");
     }
 
     if (file.size > maxSize) {
-      throw new Error('Fichier trop volumineux. Maximum 5MB.');
+      throw new Error("Fichier trop volumineux. Maximum 5MB.");
     }
 
     return true;
@@ -47,16 +48,16 @@ export default function ImageUpload({
 
   const uploadFile = async (file) => {
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append("image", file);
 
-    const response = await fetch('/api/upload', {
-      method: 'POST',
+    const response = await fetch("/api/upload", {
+      method: "POST",
       body: formData,
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.error || 'Erreur lors de l\'upload');
+      throw new Error(errorData.error || "Erreur lors de l'upload");
     }
 
     return response.json();
@@ -64,7 +65,7 @@ export default function ImageUpload({
 
   const handleFileSelect = async (file) => {
     resetStates();
-    
+
     try {
       validateFile(file);
       setUploading(true);
@@ -75,18 +76,17 @@ export default function ImageUpload({
 
       // Upload vers le serveur
       const uploadResult = await uploadFile(file);
-      
+
       // Nettoyer l'URL temporaire et utiliser l'URL serveur
       URL.revokeObjectURL(previewUrl);
       setPreview(uploadResult.imageUrl);
-      
+
       // Notifier le parent
       if (onImageSelected) {
         onImageSelected(uploadResult.imageUrl, uploadResult);
       }
-
     } catch (err) {
-      console.error('Erreur upload:', err);
+      console.error("Erreur upload:", err);
       setError(err.message);
       setPreview(currentImageUrl); // Revenir à l'image précédente
     } finally {
@@ -97,7 +97,7 @@ export default function ImageUpload({
   const handleRemoveImage = () => {
     resetStates();
     setPreview(null);
-    
+
     if (onImageRemoved) {
       onImageRemoved();
     }
@@ -146,17 +146,19 @@ export default function ImageUpload({
         type="file"
         accept="image/jpeg,image/jpg,image/png,image/webp"
         onChange={handleFileInputChange}
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
         disabled={disabled || uploading}
       />
 
       {preview ? (
         // Zone avec image
         <div className="image-upload-preview">
-          <img 
-            src={preview} 
-            alt="Aperçu" 
+          <Image
+            src={preview}
+            alt="Aperçu"
             className="image-upload-image"
+            width={500} // spécifiez une largeur
+            height={300} // spécifiez une hauteur
           />
           <div className="image-upload-overlay">
             <button
@@ -165,7 +167,7 @@ export default function ImageUpload({
               disabled={disabled || uploading}
               className="image-upload-btn image-upload-btn-change"
             >
-              {uploading ? '⏳' : '📷'} {uploading ? 'Upload...' : 'Changer'}
+              {uploading ? "⏳" : "📷"} {uploading ? "Upload..." : "Changer"}
             </button>
             <button
               type="button"
@@ -180,7 +182,7 @@ export default function ImageUpload({
       ) : (
         // Zone de drop/upload
         <div
-          className={`image-upload-dropzone ${dragActive ? 'active' : ''} ${disabled ? 'disabled' : ''}`}
+          className={`image-upload-dropzone ${dragActive ? "active" : ""} ${disabled ? "disabled" : ""}`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
@@ -204,11 +206,7 @@ export default function ImageUpload({
         </div>
       )}
 
-      {error && (
-        <div className="image-upload-error">
-          ⚠️ {error}
-        </div>
-      )}
+      {error && <div className="image-upload-error">⚠️ {error}</div>}
 
       <style jsx>{`
         .image-upload-container {
@@ -257,8 +255,12 @@ export default function ImageUpload({
         }
 
         @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
         }
 
         .image-upload-preview {

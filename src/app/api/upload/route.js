@@ -4,15 +4,25 @@ import cloudinary from "@/lib/cloudinary";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
+const ALLOWED_FOLDERS = ["artworks", "mementos"];
 
 export const POST = withAuth(async (request) => {
   try {
     const formData = await request.formData();
     const file = formData.get("image");
+    const folder = formData.get("folder") || "artworks"; // Par défaut "artworks"
 
+    // Vérifications de base
     if (!file) {
       return NextResponse.json(
         { error: "Aucun fichier envoyé" },
+        { status: 400 }
+      );
+    }
+
+    if (!ALLOWED_FOLDERS.includes(folder)) {
+      return NextResponse.json(
+        { error: "Dossier non autorisé" },
         { status: 400 }
       );
     }
@@ -39,7 +49,7 @@ export const POST = withAuth(async (request) => {
     const dataURI = `data:${file.type};base64,${base64String}`;
 
     const result = await cloudinary.uploader.upload(dataURI, {
-      folder: "artworks",
+      folder, // Utilise le dossier spécifié
     });
 
     return NextResponse.json({

@@ -71,9 +71,12 @@ const MementoSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+export function getMementoModel() {
+  return mongoose.models.Memento || mongoose.model("Memento", MementoSchema);
+}
+
 let RoomModel;
 let ContentModel;
-let MementoModel;
 
 function getRoomModel() {
   if (!RoomModel) {
@@ -88,14 +91,6 @@ function getContentModel() {
       mongoose.models.Content || mongoose.model("Content", ContentSchema);
   }
   return ContentModel;
-}
-
-export function getMementoModel() {
-  if (!MementoModel) {
-    MementoModel =
-      mongoose.models.Memento || mongoose.model("Memento", MementoSchema);
-  }
-  return MementoModel;
 }
 
 function serializeMongoObject(obj) {

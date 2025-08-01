@@ -8,7 +8,7 @@ export default function Memento() {
   const [mementos, setMementos] = useState([]);
 
   useEffect(() => {
-    fetch("/api/mementos")
+    fetch("/api/memento") // Modifié ici : retiré le 's'
       .then((res) => res.json())
       .then(setMementos);
   }, []);

@@ -2,30 +2,21 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import "@/styles/pages/memento.css";
 
-export default function AdminMementosPage() {
+export default function Memento() {
   const [mementos, setMementos] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState("add"); // "add" ou "edit"
+  const [modalMode, setModalMode] = useState("add");
   const [formData, setFormData] = useState({
     quote: "",
     author: "",
     role: "",
     imageUrl: "",
   });
-  const [selectedId, setSelectedId] = useState(null);
-  const [imageFile, setImageFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState(null);
 
-  // Charger les mementos
-  useEffect(() => {
-    fetch("/api/memento")
-      .then((res) => res.json())
-      .then(setMementos);
-  }, []);
-
-  // Ouvre le modal pour ajouter ou éditer
   const openModal = (mode, memento = null) => {
     setModalMode(mode);
     setModalOpen(true);
@@ -36,23 +27,23 @@ export default function AdminMementosPage() {
         role: memento.role,
         imageUrl: memento.imageUrl,
       });
-      setSelectedId(memento._id);
     } else {
       setFormData({ quote: "", author: "", role: "", imageUrl: "" });
-      setSelectedId(null);
     }
-    setImageFile(null);
   };
 
   const closeModal = () => {
     setModalOpen(false);
     setFormData({ quote: "", author: "", role: "", imageUrl: "" });
-    setSelectedId(null);
-    setImageFile(null);
     setMessage(null);
   };
 
-  // Gestion du formulaire
+  useEffect(() => {
+    fetch("/api/memento") // Changé de "/api/mementos" à "/api/memento"
+      .then((res) => res.json())
+      .then(setMementos);
+  }, []);
+
   const handleInputChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -60,61 +51,67 @@ export default function AdminMementosPage() {
     }));
   };
 
-  // Upload image sur Cloudinary via /api/upload
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
     setUploading(true);
     const form = new FormData();
-    form.append("file", file);
-    const res = await fetch("/api/upload", { method: "POST", body: form });
-    const data = await res.json();
-    setUploading(false);
-    if (data.url) {
-      setFormData((prev) => ({ ...prev, imageUrl: data.url }));
-      setImageFile(file);
-    } else {
-      setMessage({ type: "error", text: "Erreur upload image" });
+    form.append("image", file);
+    form.append("folder", "mementos");
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: form,
+      });
+      const data = await res.json();
+
+      if (res.ok && data.imageUrl) {
+        setFormData((prev) => ({
+          ...prev,
+          imageUrl: data.imageUrl,
+        }));
+      } else {
+        setMessage({
+          type: "error",
+          text: data.error || "Erreur upload image",
+        });
+      }
+    } catch (error) {
+      setMessage({ type: "error", text: "Erreur lors de l'upload" });
+    } finally {
+      setUploading(false);
     }
   };
 
-  // Soumission du formulaire (add/edit)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
-    const method = modalMode === "add" ? "POST" : "PUT";
-    const url = "/api/memento";
-    const body =
-      modalMode === "add" ? formData : { ...formData, id: selectedId };
-    const res = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    const data = await res.json();
-    setUploading(false);
-    if (res.ok) {
-      setMessage({ type: "success", text: "Memento enregistré !" });
-      // Refresh la liste
-      fetch("/api/memento")
-        .then((res) => res.json())
-        .then(setMementos);
-      closeModal();
-    } else {
-      setMessage({ type: "error", text: data.error || "Erreur" });
-    }
-  };
 
-  // Suppression
-  const handleDelete = async (id) => {
-    if (!window.confirm("Supprimer ce memento ?")) return;
-    const res = await fetch("/api/memento", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-    if (res.ok) {
-      setMementos((prev) => prev.filter((m) => m._id !== id));
+    try {
+      const res = await fetch("/api/memento", {
+        method: modalMode === "add" ? "POST" : "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      if (res.ok) {
+        closeModal();
+        // Rafraîchir la liste
+        const updatedMementos = await fetch("/api/memento").then((r) =>
+          r.json()
+        );
+        setMementos(updatedMementos);
+        setMessage({ type: "success", text: "Memento enregistré !" });
+      } else {
+        const data = await res.json();
+        setMessage({ type: "error", text: data.error || "Erreur" });
+      }
+    } catch (error) {
+      setMessage({ type: "error", text: "Erreur lors de l'enregistrement" });
+    } finally {
+      setUploading(false);
     }
   };
 

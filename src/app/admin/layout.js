@@ -62,16 +62,10 @@ export default function AdminLayout({ children }) {
           <nav className="admin-nav">
             <ul>
               <li>
-                <Link href="/admin/salles" className="admin-nav-link">
-                  <span className="admin-nav-icon">🏛️</span>
-                  Gestion des salles
-                </Link>
+                <Link href="/admin/salles">Gestion des salles</Link>
               </li>
               <li>
-                <Link href="/admin/mementos" className="admin-nav-link">
-                  <span className="admin-nav-icon">📝</span>
-                  Gestion des mementos
-                </Link>
+                <Link href="/admin/mementos">Gestion des mementos</Link>
               </li>
             </ul>
           </nav>

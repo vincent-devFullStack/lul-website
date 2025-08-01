@@ -10,29 +10,24 @@ export async function GET() {
   return NextResponse.json(mementos);
 }
 
-// POST new memento (admin)
+// POST, PUT, DELETE by ID
+export const dynamic = "force-dynamic"; // Pour Next.js App Router
+
 export const POST = withAuth(async (req) => {
   await connectToDatabase();
   const Memento = getMementoModel();
   const body = await req.json();
+
   if (!body.quote || !body.author || !body.role || !body.imageUrl) {
     return NextResponse.json(
       { error: "Tous les champs sont requis" },
       { status: 400 }
     );
   }
-  if (!body.imageUrl.startsWith("https://")) {
-    return NextResponse.json(
-      { error: "L'image n'a pas été correctement uploadée." },
-      { status: 400 }
-    );
-  }
+
   const memento = await Memento.create(body);
   return NextResponse.json(memento, { status: 201 });
 });
-
-// PUT and DELETE by ID
-export const dynamic = "force-dynamic"; // Pour Next.js App Router
 
 export const PUT = withAuth(async (req) => {
   await connectToDatabase();
