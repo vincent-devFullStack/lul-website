@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,7 +13,8 @@ export default function AccueilPlanInteractif() {
   });
   const [salles, setSalles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // Ajout d'un état pour le cache
+  const [initialized, setInitialized] = useState(false);
 
   // Affiche une alerte si l’utilisateur est sur mobile
   useEffect(() => {
@@ -24,33 +25,37 @@ export default function AccueilPlanInteractif() {
     }
   }, []);
 
-  // Charge les données des salles depuis l'API
+  // Optimisation du chargement des salles
   useEffect(() => {
     const fetchSalles = async () => {
+      if (initialized) return; // Évite les doubles chargements
+
       try {
         setLoading(true);
-        const response = await fetch("/api/salles");
+        const response = await fetch("/api/salles", {
+          cache: "force-cache", // Met en cache la réponse
+          next: { revalidate: 3600 }, // Revalide toutes les heures
+        });
 
         if (!response.ok) {
           throw new Error("Erreur lors de la récupération des salles");
         }
 
         const data = await response.json();
-        // Tri par displayOrder pour garantir l'ordre
         const sortedSalles = data.sort(
           (a, b) => a.displayOrder - b.displayOrder
         );
         setSalles(sortedSalles);
+        setInitialized(true);
       } catch (err) {
-        setError(err.message);
-        console.error("Erreur lors du chargement des salles:", err);
+        console.error("Erreur:", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchSalles();
-  }, []);
+  }, [initialized]);
 
   const handleMouseEnter = (salle, event) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -66,6 +71,19 @@ export default function AccueilPlanInteractif() {
     setTooltip({ show: false, content: "", x: 0, y: 0 });
   };
 
+  // Dans le même fichier
+  const sortedAndFilteredSalles = useMemo(() => {
+    return salles.map((salle) => {
+      const { _id, slug, name, description, coordinates, status } = salle;
+      const isGeneric = /^S\.\d+$/.test(name);
+      return {
+        ...salle,
+        displayText: isGeneric ? "" : name,
+        isGeneric,
+      };
+    });
+  }, [salles]);
+
   // Gestion des états de chargement et d'erreur
   if (loading) {
     return (
@@ -73,26 +91,6 @@ export default function AccueilPlanInteractif() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto"></div>
           <p className="mt-4 text-gray-600">Chargement du plan du musée...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Erreur de chargement
-          </h2>
-          <p className="text-gray-600 mb-4">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Réessayer
-          </button>
         </div>
       </div>
     );
@@ -109,13 +107,22 @@ export default function AccueilPlanInteractif() {
         fill
         style={{ objectFit: "contain" }}
         priority
+        loading="eager"
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
       />
 
-      {salles.map((salle) => {
-        const { _id, slug, name, description, coordinates, status } = salle;
+      {sortedAndFilteredSalles.map((salle) => {
+        const {
+          _id,
+          slug,
+          name,
+          description,
+          coordinates,
+          status,
+          displayText,
+        } = salle;
         const { top, left, width, height } = coordinates;
         const isGeneric = /^S\.\d+$/.test(name);
-        const displayText = isGeneric ? "" : name;
 
         // Si maintenance, pas de lien cliquable
         if (status === "maintenance") {

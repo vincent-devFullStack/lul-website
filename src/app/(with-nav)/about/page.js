@@ -20,35 +20,36 @@ export default function About() {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null); // ✅ MESSAGES D'ÉTAT PROFESSIONNELS
   const [textAnalysis, setTextAnalysis] = useState(null); // ✅ ANALYSE DU TEXTE
+  // Ajoutez un état pour éviter les re-rendus inutiles
+  const [initialized, setInitialized] = useState(false);
 
   // Charger le contenu depuis l'API
   useEffect(() => {
     const fetchContent = async () => {
+      if (initialized) return; // Évite les doubles chargements
+
       try {
         setLoading(true);
-        const response = await fetch("/api/content/about-page");
+        const response = await fetch("/api/content/about-page", {
+          cache: "force-cache", // Met en cache la réponse
+        });
 
         if (response.ok) {
           const data = await response.json();
           setTitle(data.title || "À propos de moi");
           setFullText(data.content || "Contenu à définir...");
-          setImageUrl(data.imageUrl || null); // ✅ CHARGER L'IMAGE
-        } else {
-          // Contenu par défaut si l'API ne répond pas
-          setTitle("À propos de moi");
-          setFullText("Contenu à définir...");
+          setImageUrl(data.imageUrl || null);
+          setInitialized(true);
         }
       } catch (error) {
-        console.error("Erreur lors du chargement du contenu:", error);
-        setTitle("À propos de moi");
-        setFullText("Contenu à définir...");
+        console.error("Erreur:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchContent();
-  }, []);
+  }, [initialized]);
 
   // Fonction pour sauvegarder les modifications
   const handleSave = async () => {

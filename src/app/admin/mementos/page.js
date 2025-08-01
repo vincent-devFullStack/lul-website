@@ -22,6 +22,7 @@ export default function Memento() {
     setModalOpen(true);
     if (mode === "edit" && memento) {
       setFormData({
+        _id: memento._id, // Ajout de cette ligne
         quote: memento.quote,
         author: memento.author,
         role: memento.role,
@@ -93,7 +94,14 @@ export default function Memento() {
       const res = await fetch("/api/memento", {
         method: modalMode === "add" ? "POST" : "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          // Ajouter l'ID si on est en mode édition
+          ...(modalMode === "edit" && { id: formData._id }), // Ajout de cette ligne
+          quote: formData.quote,
+          author: formData.author,
+          role: formData.role,
+          imageUrl: formData.imageUrl,
+        }),
       });
 
       if (res.ok) {

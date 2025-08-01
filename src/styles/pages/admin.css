@@ -48,13 +48,9 @@
 .admin-header-link {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: white;
-  text-decoration: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  transition: background-color 0.2s ease;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease;
 }
 
 .admin-header-link:hover {

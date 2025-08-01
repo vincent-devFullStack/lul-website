@@ -31,19 +31,16 @@ export default function ArtworkSlider({ artworks = [] }) {
   }
 
   return (
-    <div className="w-full flex flex-col justify-center items-center relative py-12">
+    <div className="w-full flex flex-col items-center justify-center relative py-12">
+      {/* Section image avec flèches */}
       <div className="relative flex items-center justify-center">
-        <button
-          onClick={previous}
-          className="previous-button"
-          aria-label="Image précédente"
-        >
+        <button className="previous-button" onClick={previous}>
           <span className="sr-only">Précédent</span>
         </button>
 
         <div className="room-picture">
           <Image
-            src={currentArtwork.imageUrl || "/fallback.webp"} // fallback en cas d'erreur
+            src={currentArtwork.imageUrl || "/fallback.webp"}
             alt={currentArtwork.title || "Œuvre sans titre"}
             fill
             style={{ objectFit: "contain" }}
@@ -51,42 +48,15 @@ export default function ArtworkSlider({ artworks = [] }) {
           />
         </div>
 
-        <button
-          onClick={next}
-          className="next-button"
-          aria-label="Image suivante"
-        >
+        <button className="next-button" onClick={next}>
           <span className="sr-only">Suivant</span>
         </button>
       </div>
 
-      <div className="mt-8 text-center">
-        <h2 className="text-xl font-serif text-gray-800">
-          {currentArtwork.title || "Titre inconnu"}
-        </h2>
-        {currentArtwork.description && (
-          <p className="mt-2 text-gray-600 max-w-xl mx-auto">
-            {currentArtwork.description}
-          </p>
-        )}
-        
-        {/* Indicateurs de navigation si plusieurs œuvres */}
-        {artworks.length > 1 && (
-          <div className="mt-6 flex justify-center space-x-2">
-            {artworks.map((artwork, index) => (
-              <button
-                key={artwork._id || `artwork-${index}`}
-                onClick={() => setCurrentIndex(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                  index === currentIndex 
-                    ? 'bg-gray-800' 
-                    : 'bg-gray-300 hover:bg-gray-500'
-                }`}
-                aria-label={`Aller à l'œuvre ${index + 1}`}
-              />
-            ))}
-          </div>
-        )}
+      {/* Section information */}
+      <div className="artwork-info">
+        <h2 className="artwork-title">{currentArtwork.title}</h2>
+        <div className="artwork-description">{currentArtwork.description}</div>
       </div>
     </div>
   );
