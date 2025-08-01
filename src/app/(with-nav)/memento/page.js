@@ -58,6 +58,18 @@ export default function Memento() {
               </blockquote>
               <div className="memento-author">{m.author}</div>
               <div className="memento-role">{m.role}</div>
+              {m.link && (
+                <div className="memento-link">
+                  <a
+                    href={m.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="memento-author-link"
+                  >
+                    🔗 Lien vers le site
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         ))}

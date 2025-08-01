@@ -12,6 +12,7 @@ export default function Memento() {
     quote: "",
     author: "",
     role: "",
+    link: "", // Nouveau champ
     imageUrl: "",
   });
   const [uploading, setUploading] = useState(false);
@@ -22,20 +23,21 @@ export default function Memento() {
     setModalOpen(true);
     if (mode === "edit" && memento) {
       setFormData({
-        _id: memento._id, // Ajout de cette ligne
+        _id: memento._id,
         quote: memento.quote,
         author: memento.author,
         role: memento.role,
+        link: memento.link || "", // ✅ Fallback si pas de link
         imageUrl: memento.imageUrl,
       });
     } else {
-      setFormData({ quote: "", author: "", role: "", imageUrl: "" });
+      setFormData({ quote: "", author: "", role: "", link: "", imageUrl: "" });
     }
   };
 
   const closeModal = () => {
     setModalOpen(false);
-    setFormData({ quote: "", author: "", role: "", imageUrl: "" });
+    setFormData({ quote: "", author: "", role: "", link: "", imageUrl: "" });
     setMessage(null);
   };
 
@@ -90,18 +92,22 @@ export default function Memento() {
     e.preventDefault();
     setUploading(true);
 
+    const dataToSend = {
+      ...(modalMode === "edit" && { id: formData._id }),
+      quote: formData.quote,
+      author: formData.author,
+      role: formData.role,
+      link: formData.link,
+      imageUrl: formData.imageUrl,
+    };
+
+    console.log("Données envoyées:", dataToSend); // ✅ Debug
+
     try {
       const res = await fetch("/api/memento", {
         method: modalMode === "add" ? "POST" : "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          // Ajouter l'ID si on est en mode édition
-          ...(modalMode === "edit" && { id: formData._id }), // Ajout de cette ligne
-          quote: formData.quote,
-          author: formData.author,
-          role: formData.role,
-          imageUrl: formData.imageUrl,
-        }),
+        body: JSON.stringify(dataToSend),
       });
 
       if (res.ok) {
@@ -120,6 +126,38 @@ export default function Memento() {
       setMessage({ type: "error", text: "Erreur lors de l'enregistrement" });
     } finally {
       setUploading(false);
+    }
+  };
+
+  // ✅ AJOUTER CETTE FONCTION MANQUANTE
+  const handleDelete = async (id) => {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce memento ?")) {
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/memento", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+
+      if (res.ok) {
+        // Rafraîchir la liste
+        const updatedMementos = await fetch("/api/memento").then((r) =>
+          r.json()
+        );
+        setMementos(updatedMementos);
+        setMessage({ type: "success", text: "Memento supprimé avec succès !" });
+      } else {
+        const data = await res.json();
+        setMessage({
+          type: "error",
+          text: data.error || "Erreur lors de la suppression",
+        });
+      }
+    } catch (error) {
+      setMessage({ type: "error", text: "Erreur lors de la suppression" });
     }
   };
 
@@ -143,26 +181,41 @@ export default function Memento() {
           <p>Aucun memento pour le moment.</p>
         </div>
       ) : (
-        <div className="admin-grid">
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {mementos.map((m) => (
-            <div key={m._id} className="admin-card">
-              <div style={{ marginBottom: 12 }}>
+            <div key={m._id} className="admin-memento-card">
+              <div className="memento-image">
                 <Image
                   src={m.imageUrl}
                   alt={m.author}
                   width={120}
                   height={80}
-                  style={{ objectFit: "cover", borderRadius: 8 }}
+                  style={{
+                    objectFit: "contain",
+                    width: "100%",
+                    height: "100%",
+                    objectPosition: "center",
+                  }}
                 />
               </div>
-              <blockquote style={{ fontStyle: "italic", color: "#bfa76a" }}>
-                "{m.quote}"
-              </blockquote>
-              <div style={{ fontWeight: "bold", marginTop: 8 }}>{m.author}</div>
-              <div style={{ color: "#8a7c5b", fontSize: "0.95rem" }}>
-                {m.role}
+              <div className="memento-content">
+                <blockquote className="memento-quote">"{m.quote}"</blockquote>
+                <div className="memento-author">{m.author}</div>
+                <div className="memento-role">{m.role}</div>
+                {m.link && (
+                  <div className="memento-link">
+                    <a
+                      href={m.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="memento-author-link"
+                    >
+                      🔗 Lien vers le site
+                    </a>
+                  </div>
+                )}
               </div>
-              <div style={{ marginTop: 16, display: "flex", gap: 8 }}>
+              <div className="memento-actions">
                 <button
                   className="admin-btn admin-btn-secondary"
                   onClick={() => openModal("edit", m)}
@@ -232,15 +285,44 @@ export default function Memento() {
                 />
               </div>
               <div className="admin-form-group">
-                <label className="admin-form-label">Image</label>
+                <label className="admin-form-label">Lien (optionnel)</label>
                 <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
+                  type="url"
+                  name="link"
+                  value={formData.link}
+                  onChange={handleInputChange}
                   className="admin-form-input"
+                  placeholder="Ex : https://fr.wikipedia.org/wiki/Pablo_Picasso"
                 />
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-form-label">Image</label>
+
+                <div className="admin-form-file-wrapper">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="admin-form-file" // Changé de admin-form-input à admin-form-file
+                    id="file-upload-button"
+                  />
+                  <label
+                    htmlFor="file-upload-button"
+                    className="admin-form-file-label"
+                  >
+                    <div className="admin-form-file-text">
+                      Cliquez pour choisir une image
+                    </div>
+                  </label>
+                </div>
                 {formData.imageUrl && (
-                  <div style={{ marginTop: 12 }}>
+                  <div
+                    style={{
+                      marginTop: 12,
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
                     <Image
                       src={formData.imageUrl}
                       alt="Aperçu"

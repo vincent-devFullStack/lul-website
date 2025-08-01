@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { Edit, Trash2, Plus, Settings } from "lucide-react";
+import { Edit, Trash2, Plus, Settings, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function AdminOeuvresPage() {
   const params = useParams();
@@ -322,7 +323,24 @@ export default function AdminOeuvresPage() {
   return (
     <div>
       <div className="admin-page-header">
-        <h1 className="admin-page-title">Œuvres de {room?.title || slug}</h1>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px", // Réduire l'écart
+            marginBottom: "8px",
+          }}
+        >
+          <Link
+            href="/admin/salles"
+            className="admin-back-button"
+            // Supprimer tout le style inline, garder juste className
+          ></Link>
+
+          <h1 className="admin-page-title" style={{ margin: 0 }}>
+            Œuvres de {room?.title || slug}
+          </h1>
+        </div>
         <p className="admin-page-subtitle">
           Gérez les œuvres présentes dans cette salle
         </p>

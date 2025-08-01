@@ -9,13 +9,13 @@ export async function generateStaticParams() {
 }
 
 export default async function RoomPage(props) {
-  const { slug } = await props.params; // ✅ destructuration asynchrone
+  const { slug } = await props.params;
   const room = await getRoomBySlug(slug);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-serif font-semibold text-gray-800 mb-2">
+    <div className="container mx-auto px-4">
+      <div className="text-center mb-4">
+        <h1 className="room-page-title text-3xl font-serif font-semibold text-gray-800 mb-2">
           {room?.name || room?.title || slug}
         </h1>
       </div>

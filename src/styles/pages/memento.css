@@ -108,6 +108,20 @@
   font-size: 1.1rem;
 }
 
+.memento-author-link {
+  color: #8a7c5b;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.memento-author-link:hover {
+  color: #2a231a;
+  border-bottom-color: #d4c4a8;
+  text-decoration: none;
+}
+
 .memento-role {
   font-size: 0.95rem;
   color: #8a7c5b;
@@ -208,7 +222,7 @@
   padding-top: 56.25%;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(45deg, #e7dfc6, #d4c9a8);
+  background: linear-gradient(45deg, #efebda, #efebda);
 }
 
 .modal-image {
@@ -248,13 +262,21 @@
   margin-top: 0.5rem;
 }
 
-@keyframes modalEnter {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+.memento-link {
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.memento-link .memento-author-link {
+  color: #8a7c5b;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.memento-link .memento-author-link:hover {
+  color: #2a231a;
+  border-bottom-color: #d4c4a8;
 }

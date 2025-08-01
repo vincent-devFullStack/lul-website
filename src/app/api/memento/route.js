@@ -18,29 +18,59 @@ export const POST = withAuth(async (req) => {
   const Memento = getMementoModel();
   const body = await req.json();
 
-  if (!body.quote || !body.author || !body.role || !body.imageUrl) {
+  if (
+    !body.quote ||
+    !body.author ||
+    !body.role ||
+    !body.imageUrl ||
+    !body.link
+  ) {
     return NextResponse.json(
       { error: "Tous les champs sont requis" },
       { status: 400 }
     );
   }
 
-  const memento = await Memento.create(body);
+  const memento = await Memento.create({
+    quote: body.quote,
+    author: body.author,
+    role: body.role,
+    link: body.link || null, // ✅ Inclure le lien
+    imageUrl: body.imageUrl,
+  });
   return NextResponse.json(memento, { status: 201 });
 });
 
 export const PUT = withAuth(async (req) => {
   await connectToDatabase();
   const Memento = getMementoModel();
-  const { id, ...body } = await req.json();
-  if (!id) {
-    return NextResponse.json({ error: "ID requis" }, { status: 400 });
+  const body = await req.json();
+
+  if (!body.id) {
+    return NextResponse.json(
+      { error: "ID du memento requis" },
+      { status: 400 }
+    );
   }
-  const memento = await Memento.findByIdAndUpdate(id, body, { new: true });
-  if (!memento) {
-    return NextResponse.json({ error: "Introuvable" }, { status: 404 });
+
+  const updatedMemento = await Memento.findByIdAndUpdate(
+    body.id,
+    {
+      quote: body.quote,
+      author: body.author,
+      role: body.role,
+      link: body.link || null, // ✅ Inclure le champ link
+      imageUrl: body.imageUrl,
+      updatedAt: new Date(),
+    },
+    { new: true }
+  );
+
+  if (!updatedMemento) {
+    return NextResponse.json({ error: "Memento non trouvé" }, { status: 404 });
   }
-  return NextResponse.json(memento);
+
+  return NextResponse.json(updatedMemento);
 });
 
 export const DELETE = withAuth(async (req) => {

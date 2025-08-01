@@ -66,6 +66,7 @@ const MementoSchema = new mongoose.Schema(
     quote: { type: String, required: true },
     author: { type: String, required: true },
     role: { type: String, required: true },
+    link: { type: String, required: false, default: null }, // ✅ Champ link avec default
     imageUrl: { type: String, required: true },
   },
   { timestamps: true }
