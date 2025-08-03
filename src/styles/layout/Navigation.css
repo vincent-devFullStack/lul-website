@@ -331,11 +331,7 @@ input:focus {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  /* ✅ Ombre sophistiquée */
-  text-shadow:
-    0 4px 8px rgba(58, 52, 42, 0.3),
-    0 2px 4px rgba(255, 255, 255, 0.1),
-    0 8px 16px rgba(0, 0, 0, 0.1);
+
   /* ✅ Animation subtile du gradient */
   animation: titleGradientShift 12s ease-in-out infinite;
   transform-style: preserve-3d;

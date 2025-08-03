@@ -1,11 +1,14 @@
+/* ✅ Wrapper principal */
 .contact-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 200px);
   padding: 2rem;
+  width: 100%;
 }
 
+/* ✅ CONTAINER PRINCIPAL - UNE SEULE DÉFINITION */
 .contact-container {
   display: flex;
   gap: 24px;
@@ -14,7 +17,9 @@
   background-color: var(--login-background);
   justify-content: space-between;
   height: auto;
-  width: 1200px; /* ✅ Augmenté pour 3 sections */
+  /* ✅ SUPPRIMÉ : width: 1200px; fixe qui causait le problème */
+  width: 100%;
+  max-width: 1200px; /* ✅ CHANGÉ en max-width */
   margin: 0 auto;
   padding: 24px;
   border-radius: 16px;
@@ -25,13 +30,119 @@
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* ✅ Nouveau wrapper pour organiser le contenu en trois colonnes */
+/* ✅ MEDIA QUERY UNIQUE ET COHÉRENTE - sous 1100px */
+@media (max-width: 1100px) {
+  .contact-wrapper {
+    width: 90%;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+
+  .contact-container {
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+  }
+
+  .contact-content {
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+    min-height: auto;
+  }
+
+  .contact-text-section {
+    order: 1;
+    width: 100%;
+    text-align: center;
+    padding: 0 10px;
+  }
+
+  .contact-form-and-image {
+    order: 2;
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .contact-form {
+    flex: 1.2;
+    order: 1;
+  }
+
+  .contact-image-wrapper {
+    flex: 0.8;
+    order: 2;
+    min-height: 300px;
+    max-width: 250px;
+  }
+
+  .contact-image {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .contact-text-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .contact-text-section p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .typewriter-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .dictionary-title {
+    font-size: 1.2rem;
+  }
+}
+
+/* ✅ SUPPRIMÉ toutes les autres media queries en double */
+/* Gardez seulement les media queries essentielles : */
+
+@media (max-width: 768px) {
+  .contact-wrapper {
+    width: 95%;
+    padding: 1rem;
+  }
+
+  .contact-container {
+    width: 100%;
+    max-width: 600px;
+    padding: 16px;
+  }
+
+  .contact-form-and-image {
+    flex-direction: column !important;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-wrapper {
+    width: 98%;
+    padding: 0.5rem;
+    min-height: auto;
+  }
+
+  .contact-container {
+    width: 100%;
+    padding: 12px;
+  }
+}
+
+/* ✅ Gardez le reste du CSS existant pour le contenu */
 .contact-content {
   display: flex;
   gap: 40px;
-  align-items: stretch; /* ✅ Changé de flex-start à stretch pour égaliser les hauteurs */
+  align-items: stretch;
   width: 100%;
-  min-height: 400px; /* ✅ Hauteur minimale pour permettre le centrage */
+  min-height: 400px;
 }
 
 /* ✅ Section texte à gauche */
@@ -280,6 +391,160 @@ textarea:focus {
   }
 }
 
+/* ✅ Responsive amélioré pour tablettes et écrans moyens */
+@media (max-width: 1100px) {
+  .contact-container {
+    width: 90%; /* ✅ CHANGÉ : 90% au lieu de 95% */
+    max-width: 900px;
+    padding: 20px;
+  }
+
+  .contact-content {
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+    min-height: auto;
+  }
+
+  /* ✅ Réorganisation pour iPad : texte en haut, puis formulaire et image côte à côte */
+  .contact-text-section {
+    order: 1;
+    width: 100%;
+    text-align: center;
+    padding: 0 10px;
+  }
+
+  .contact-form-and-image {
+    order: 2;
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .contact-form {
+    flex: 1.2; /* ✅ Formulaire prend plus d'espace */
+    order: 1;
+  }
+
+  .contact-image-wrapper {
+    flex: 0.8; /* ✅ Image prend moins d'espace */
+    order: 2;
+    min-height: 300px;
+    max-width: 250px;
+  }
+
+  .contact-image {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ✅ Réduction des tailles de police pour iPad */
+  .contact-text-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .contact-text-section p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .typewriter-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .dictionary-title {
+    font-size: 1.2rem;
+  }
+}
+
+/* ✅ Ajustement spécifique pour iPad en mode portrait */
+@media (max-width: 768px) and (orientation: portrait) {
+  .contact-container {
+    width: 95%;
+    max-width: 600px;
+    margin: 1rem auto;
+    padding: 16px;
+  }
+
+  .contact-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .contact-form-and-image {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .contact-text-section {
+    order: 1;
+  }
+
+  .contact-form {
+    order: 2;
+    flex: none;
+  }
+
+  .contact-image-wrapper {
+    order: 3;
+    flex: none;
+    min-height: 200px;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+}
+
+/* ✅ Mobile standard */
+@media (max-width: 480px) {
+  .contact-wrapper {
+    padding: 0.5rem;
+    min-height: auto;
+  }
+
+  .contact-container {
+    width: 98%;
+    max-width: none;
+    margin: 0.5rem auto;
+    padding: 12px;
+  }
+
+  .contact-content {
+    gap: 15px;
+  }
+
+  .contact-text-section h2 {
+    font-size: 1.4rem;
+  }
+
+  .contact-text-section p,
+  .typewriter-text {
+    font-size: 0.85rem;
+    line-height: 1.4;
+  }
+
+  .contact-image-wrapper {
+    min-height: 150px;
+    max-width: 150px;
+  }
+
+  .contact-form-item {
+    margin-bottom: 10px;
+  }
+
+  .contact-form-item input,
+  textarea {
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+
+  .contact-form button {
+    padding: 10px;
+    font-size: 0.95rem;
+  }
+}
+
 /* ✅ Style pour le titre "Dictionnaire :" */
 .dictionary-title {
   font-size: 1.3rem;
@@ -476,14 +741,55 @@ textarea:focus {
   transition: all 0.3s ease;
 }
 
-/* ✅ Responsive pour les effets synonymes */
-@media (max-width: 768px) {
-  .synonym {
-    padding: 1px 2px;
-    font-size: 0.95rem;
-  }
+/* ✅ Correction du main-container pour responsive */
+.main-container {
+  /* ✅ SUPPRIMÉ : width: 1104px; qui cassait le responsive */
+  width: 100%;
+  max-width: 1200px; /* ✅ CHANGÉ en max-width */
+  margin: 0 auto;
+  padding: 0 20px;
+  /* ... autres styles ... */
+}
 
-  .synonym:hover {
-    transform: none; /* Désactive le translateY sur mobile */
+/* ✅ Media query pour main-container sous 1100px */
+@media (max-width: 1100px) {
+  .main-container {
+    width: 90%; /* ✅ 90% de largeur */
+    max-width: 900px;
+    padding: 0 15px;
   }
+}
+
+@media (max-width: 768px) {
+  .main-container {
+    width: 95%;
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-container {
+    width: 98%;
+    padding: 0 5px;
+  }
+}
+
+/* ✅ Override forcé pour la page contact */
+@media (max-width: 1100px) {
+  body,
+  html,
+  main,
+  .main-container {
+    padding-inline: 0 !important;
+    width: 100% !important;
+    max-width: 900px !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* ✅ Override plus spécifique */
+.contact-wrapper {
+  padding-inline: 0 !important;
+  width: 100% !important;
+  margin: 0 auto !important;
 }
