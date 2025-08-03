@@ -173,7 +173,7 @@ export default function About() {
       {isAuthenticated && !isEditing && (
         <div className="edit-button-wrapper">
           <button onClick={startEditing} className="edit-button">
-            ✏️ Modifier le contenu de la page
+            Modifier le contenu de la page
           </button>
         </div>
       )}

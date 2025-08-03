@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect } from "react";
+import "@/styles/components/MementoModal.css"; // ✅ Importez le CSS
 
 export default function MementoModal({ memento, onClose }) {
   // Fermeture avec la touche Escape
@@ -32,6 +33,20 @@ export default function MementoModal({ memento, onClose }) {
           <blockquote className="modal-quote">"{memento.quote}"</blockquote>
           <div className="modal-author">{memento.author}</div>
           <div className="modal-role">{memento.role}</div>
+
+          {/* ✅ AJOUT : Lien vers le site */}
+          {memento.link && (
+            <div className="modal-link">
+              <a
+                href={memento.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="modal-link-button"
+              >
+                🔗 Lien vers le site
+              </a>
+            </div>
+          )}
         </div>
       </div>
     </div>

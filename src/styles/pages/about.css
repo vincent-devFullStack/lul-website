@@ -131,7 +131,7 @@
   bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
+  width: 30%;
   height: 3px;
   background: linear-gradient(
     90deg,
@@ -421,29 +421,34 @@
 }
 
 .edit-button {
+  /* ✅ COULEURS HARMONISÉES avec les autres boutons */
   background: linear-gradient(
     135deg,
-    var(--brown) 0%,
-    var(--border-brown) 100%
+    rgba(219, 191, 125, 0.404) 0%,
+    rgba(223, 204, 158, 0.329) 100%
   );
-  color: white;
-  border: none;
+  color: #8b6e4e; /* ✅ Même couleur que les autres boutons */
+  border: 2px solid rgba(191, 167, 106, 0.3); /* ✅ Bordure harmonisée */
   padding: 16px 32px;
-  border-radius: 12px;
+  border-radius: 25px; /* ✅ Plus arrondi comme les autres */
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
   font-family: "EB Garamond", serif;
+  /* ✅ Ombres harmonisées */
   box-shadow:
-    0 8px 16px rgba(191, 167, 106, 0.3),
-    0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+    0 4px 15px rgba(191, 167, 106, 0.2),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   letter-spacing: 0.02em;
   position: relative;
   overflow: hidden;
+  /* ✅ Text-shadow harmonisé */
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
-/* ✅ Effet de brillance sur le bouton */
+/* ✅ Effet de brillance harmonisé */
 .edit-button::before {
   content: "";
   position: absolute;
@@ -453,11 +458,12 @@
   height: 100%;
   background: linear-gradient(
     90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
   );
-  transition: left 0.5s ease;
+  transition: left 0.6s ease;
+  z-index: 1;
 }
 
 .edit-button:hover::before {
@@ -465,10 +471,78 @@
 }
 
 .edit-button:hover {
-  transform: translateY(-2px);
+  /* ✅ Couleurs hover harmonisées */
+  background: linear-gradient(
+    135deg,
+    rgba(191, 167, 106, 0.25) 0%,
+    rgba(212, 196, 168, 0.2) 50%,
+    rgba(191, 167, 106, 0.15) 100%
+  );
+  color: #6b5d4f; /* ✅ Même couleur hover que les autres */
+  border-color: rgba(191, 167, 106, 0.5);
+  /* ✅ Ombres hover harmonisées */
   box-shadow:
-    0 12px 24px rgba(191, 167, 106, 0.4),
-    0 6px 12px rgba(0, 0, 0, 0.15);
+    0 8px 25px rgba(191, 167, 106, 0.3),
+    0 4px 15px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+}
+
+/* ✅ Effet focus harmonisé */
+.edit-button:focus {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(191, 167, 106, 0.4),
+    0 4px 15px rgba(191, 167, 106, 0.2),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* ✅ Effet actif harmonisé */
+.edit-button:active {
+  box-shadow:
+    0 4px 15px rgba(191, 167, 106, 0.25),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* ✅ Animation de pulsation harmonisée */
+@keyframes buttonPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 4px 15px rgba(191, 167, 106, 0.2),
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 6px 20px rgba(191, 167, 106, 0.25),
+      0 3px 12px rgba(0, 0, 0, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+}
+
+/* ✅ Appliquer l'animation au focus */
+.edit-button:focus {
+  animation: buttonPulse 2s ease-in-out infinite;
+}
+
+/* ✅ Responsive harmonisé */
+@media (max-width: 768px) {
+  .edit-button {
+    padding: 14px 28px;
+    font-size: 15px;
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-button {
+    padding: 12px 24px;
+    font-size: 14px;
+    border-radius: 18px;
+  }
 }
 
 /* ✅ Modal d'édition harmonisée avec la couleur */

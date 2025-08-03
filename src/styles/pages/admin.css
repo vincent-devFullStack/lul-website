@@ -322,7 +322,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: wrap;
-  max-width: 400px;
+  max-width: 90%;
   padding-right: 3%;
 }
 

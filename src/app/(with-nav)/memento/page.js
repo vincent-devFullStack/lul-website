@@ -48,16 +48,20 @@ export default function Memento() {
               <blockquote className="memento-quote">
                 {truncateText(m.quote)}
                 {m.quote.length > 150 && (
-                  <button
-                    onClick={() => openModal(m)}
-                    className="expand-button"
-                  >
-                    Voir plus
-                  </button>
+                  <div className="expand-button-container">
+                    <button
+                      onClick={() => openModal(m)}
+                      className="expand-button"
+                    >
+                      Voir plus
+                    </button>
+                  </div>
                 )}
               </blockquote>
+
               <div className="memento-author">{m.author}</div>
               <div className="memento-role">{m.role}</div>
+
               {m.link && (
                 <div className="memento-link">
                   <a

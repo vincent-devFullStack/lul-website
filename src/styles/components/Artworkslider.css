@@ -143,8 +143,8 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: transparent;
-  border: 2px solid #e3d4b4;
+  background: transparent; /* ✅ GARDE transparent */
+  border: none; /* ✅ SUPPRIME la bordure */
   border-radius: 50%;
   cursor: pointer;
   padding: 12px;
@@ -155,10 +155,12 @@
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease;
-  backdrop-filter: blur(10px);
+  /* ✅ SUPPRIME backdrop-filter et border */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  /* ✅ SUPPRIME tout effet de fond */
+  outline: none; /* ✅ Supprime l'outline au focus */
 }
 
 .previous-button {
@@ -168,6 +170,7 @@
 
 .previous-button:hover {
   transform: translateY(-50%) translateX(-18px);
+  /* ✅ Pas d'effet de fond au hover */
 }
 
 .next-button {
@@ -177,17 +180,32 @@
 
 .next-button:hover {
   transform: translateY(-50%) translateX(18px);
+  /* ✅ Pas d'effet de fond au hover */
 }
 
-/* ✅ Animation au clic pour les boutons */
+/* ✅ SUPPRIME tous les effets de fond au focus et active */
+.previous-button:focus,
+.next-button:focus,
+.previous-button:active,
+.next-button:active {
+  background-color: transparent !important;
+  background: transparent !important;
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* ✅ Animation au clic pour les boutons - SANS FOND */
 .previous-button.clicked {
   transform: translateY(-50%) translateX(-18px) !important;
   animation: clickReturn 0.5s ease-out forwards;
+  background-color: transparent !important; /* ✅ Force transparent */
 }
 
 .next-button.clicked {
   transform: translateY(-50%) translateX(18px) !important;
   animation: clickReturn 0.5s ease-out forwards;
+  background-color: transparent !important; /* ✅ Force transparent */
 }
 
 /* ✅ Keyframes pour le retour en position initiale des boutons */
@@ -203,11 +221,12 @@
   }
 }
 
-/* ✅ État désactivé pendant l'animation */
+/* ✅ État désactivé pendant l'animation - SANS FOND */
 .previous-button:disabled,
 .next-button:disabled {
   pointer-events: none;
   opacity: 0.7;
+  background-color: transparent !important;
 }
 
 /* Style pour la section description avec effet harmonisé */
@@ -380,30 +399,6 @@
   animation: pulse 4s ease-in-out infinite;
 }
 
-/* ✅ Ligne décorative élégante sous le titre */
-.room-page-title::after {
-  content: "";
-  position: absolute;
-  bottom: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 4px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--brown) 20%,
-    var(--border-brown) 50%,
-    var(--brown) 80%,
-    transparent 100%
-  );
-  border-radius: 2px;
-  box-shadow:
-    0 2px 8px rgba(191, 167, 106, 0.3),
-    0 1px 3px rgba(0, 0, 0, 0.1);
-  animation: lineGlow 3s ease-in-out infinite alternate;
-}
-
 /* ✅ Animation de pulsation pour le fond */
 @keyframes pulse {
   0%,
@@ -524,6 +519,8 @@
   .next-button {
     width: 60px;
     height: 60px;
+    background-color: transparent !important;
+    border: none !important;
   }
 
   .previous-button {
