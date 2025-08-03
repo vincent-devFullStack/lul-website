@@ -3,8 +3,12 @@
 import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import Head from "next/head";
 
 export default function AccueilPlanInteractif() {
+  const router = useRouter();
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [tooltip, setTooltip] = useState({
     show: false,
     content: "",
@@ -13,10 +17,9 @@ export default function AccueilPlanInteractif() {
   });
   const [salles, setSalles] = useState([]);
   const [loading, setLoading] = useState(true);
-  // Ajout d'un état pour le cache
   const [initialized, setInitialized] = useState(false);
 
-  // Affiche une alerte si l’utilisateur est sur mobile
+  // Affiche une alerte si l'utilisateur est sur mobile
   useEffect(() => {
     if (window.innerWidth < 770) {
       alert(
@@ -28,13 +31,13 @@ export default function AccueilPlanInteractif() {
   // Optimisation du chargement des salles
   useEffect(() => {
     const fetchSalles = async () => {
-      if (initialized) return; // Évite les doubles chargements
+      if (initialized) return;
 
       try {
         setLoading(true);
         const response = await fetch("/api/salles", {
-          cache: "force-cache", // Met en cache la réponse
-          next: { revalidate: 3600 }, // Revalide toutes les heures
+          cache: "force-cache",
+          next: { revalidate: 3600 },
         });
 
         if (!response.ok) {
@@ -71,7 +74,16 @@ export default function AccueilPlanInteractif() {
     setTooltip({ show: false, content: "", x: 0, y: 0 });
   };
 
-  // Dans le même fichier
+  const handleRoomClick = (e, slug) => {
+    e.preventDefault();
+    setIsTransitioning(true);
+    setTooltip({ show: false, content: "", x: 0, y: 0 });
+
+    setTimeout(() => {
+      router.push(`/rooms/${slug}`);
+    }, 600);
+  };
+
   const sortedAndFilteredSalles = useMemo(() => {
     return salles.map((salle) => {
       const { _id, slug, name, description, coordinates, status } = salle;
@@ -84,129 +96,137 @@ export default function AccueilPlanInteractif() {
     });
   }, [salles]);
 
-  // Gestion des états de chargement et d'erreur
+  // ✅ Pas d'affichage de chargement, retourne null pendant le loading
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Chargement du plan du musée...</p>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
-    <div
-      className="plan-container"
-      style={{ position: "relative", margin: "0 auto" }}
-    >
-      <Image
-        src="/assets/plan.webp"
-        alt="Plan du musée"
-        fill
-        style={{ objectFit: "contain" }}
-        priority
-        loading="eager"
-        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-      />
+    <>
+      <Head>
+        <link rel="preload" href="/assets/plan.webp" as="image" />
+      </Head>
 
-      {sortedAndFilteredSalles.map((salle) => {
-        const {
-          _id,
-          slug,
-          name,
-          description,
-          coordinates,
-          status,
-          displayText,
-        } = salle;
-        const { top, left, width, height } = coordinates;
-        const isGeneric = /^S\.\d+$/.test(name);
+      <div
+        className="plan-container"
+        style={{ position: "relative", margin: "0 auto" }}
+      >
+        {/* ✅ Seul l'overlay de sortie reste pour les transitions entre pages */}
+        <div
+          className={`fixed inset-0 transition-opacity duration-600 ease-in-out pointer-events-none ${
+            isTransitioning ? "opacity-100" : "opacity-0"
+          }`}
+          style={{
+            backgroundColor: "#e3d4b4",
+            zIndex: 9999,
+          }}
+        />
 
-        // Si maintenance, pas de lien cliquable
-        if (status === "maintenance") {
-          return (
-            <div
-              key={_id}
-              aria-label={`${name} - ${description}`}
-              className="absolute flex justify-center items-center text-black font-semibold text-xs transition-all duration-200 opacity-60 cursor-not-allowed"
-              style={{ top, left, width, height }}
-              onMouseEnter={(e) => handleMouseEnter(salle, e)}
-              onMouseLeave={handleMouseLeave}
-              // Empêche le clic
-              onClick={(e) => e.preventDefault()}
-              tabIndex={-1}
-            >
-              {displayText && (
-                <span className="room-label text-center text-[#2a231a] px-2 py-1 transition-transform duration-200 scale-[0.9] break-words">
-                  {displayText}
-                </span>
-              )}
-            </div>
-          );
-        }
+        <Image
+          src="/assets/plan.webp"
+          alt="Plan du musée"
+          fill
+          style={{ objectFit: "contain" }}
+          priority={true}
+          loading="eager"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+          quality={95}
+          placeholder="empty"
+        />
 
-        // Sinon, lien cliquable normal
-        return (
-          <Link
-            key={_id}
-            href={`/rooms/${slug}`}
-            aria-label={`${name} - ${description}`}
-            role="button"
-            tabIndex={0}
-            className="absolute cursor-pointer bg-transparent flex justify-center items-center text-black font-semibold text-xs transition-all duration-200"
-            style={{ top, left, width, height }}
-            onMouseEnter={(e) => handleMouseEnter(salle, e)}
-            onMouseLeave={handleMouseLeave}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                window.location.href = `/rooms/${slug}`;
-              }
+        <div>
+          {sortedAndFilteredSalles.map((salle) => {
+            const {
+              _id,
+              slug,
+              name,
+              description,
+              coordinates,
+              status,
+              displayText,
+            } = salle;
+            const { top, left, width, height } = coordinates;
+
+            if (status === "maintenance") {
+              return (
+                <div
+                  key={_id}
+                  aria-label={`${name} - ${description}`}
+                  className="absolute flex justify-center items-center text-black font-semibold text-xs transition-all duration-200 opacity-60 cursor-not-allowed"
+                  style={{ top, left, width, height }}
+                  onMouseEnter={(e) => handleMouseEnter(salle, e)}
+                  onMouseLeave={handleMouseLeave}
+                  onClick={(e) => e.preventDefault()}
+                  tabIndex={-1}
+                >
+                  {displayText && (
+                    <span className="room-label text-center text-[#2a231a] px-2 py-1 transition-transform duration-200 scale-[0.9] break-words">
+                      {displayText}
+                    </span>
+                  )}
+                </div>
+              );
+            }
+
+            return (
+              <div
+                key={_id}
+                aria-label={`${name} - ${description}`}
+                role="button"
+                tabIndex={0}
+                className="absolute cursor-pointer bg-transparent flex justify-center items-center text-black font-semibold text-xs transition-all duration-200"
+                style={{ top, left, width, height }}
+                onMouseEnter={(e) => handleMouseEnter(salle, e)}
+                onMouseLeave={handleMouseLeave}
+                onClick={(e) => handleRoomClick(e, slug)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleRoomClick(e, slug);
+                  }
+                }}
+              >
+                {displayText && (
+                  <span className="room-label text-center text-[#2a231a] px-2 py-1 transition-transform duration-200 scale-[0.9] hover:scale-110 break-words">
+                    {displayText}
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Tooltip Component */}
+        {tooltip.show && !isTransitioning && (
+          <div
+            className="fixed z-[999] bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl border border-gray-700 max-w-sm pointer-events-none"
+            style={{
+              left: `${tooltip.x}px`,
+              top: `${tooltip.y - 25}px`,
+              transform: "translateY(-50%)",
             }}
           >
-            {displayText && (
-              <span className="room-label text-center text-[#2a231a] px-2 py-1 transition-transform duration-200 scale-[0.9] hover:scale-110 break-words">
-                {displayText}
-              </span>
-            )}
-          </Link>
-        );
-      })}
-
-      {/* Tooltip Component - Position fixe pour éviter les problèmes de scroll */}
-      {tooltip.show && (
-        <div
-          className="fixed z-[999] bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl border border-gray-700 max-w-sm pointer-events-none"
-          style={{
-            left: `${tooltip.x}px`,
-            top: `${tooltip.y - 25}px`,
-            transform: "translateY(-50%)",
-          }}
-        >
-          <div className="font-semibold text-sm mb-1">
-            {tooltip.content.name}
-          </div>
-          <div className="text-xs text-gray-300">
-            {tooltip.content.description}
-          </div>
-          {tooltip.content.status === "maintenance" && (
-            <div className="text-xs text-orange-400 mt-1">
-              🛠️ Salle en maintenance
+            <div className="font-semibold text-sm mb-1">
+              {tooltip.content.name}
             </div>
-          )}
-          {/* Petite flèche */}
-          <div
-            className="absolute w-2 h-2 bg-gray-900 border-l border-b border-gray-700 transform rotate-45"
-            style={{
-              left: "-4px",
-              top: "50%",
-              transform: "translateY(-50%) rotate(45deg)",
-            }}
-          />
-        </div>
-      )}
-    </div>
+            <div className="text-xs text-gray-300">
+              {tooltip.content.description}
+            </div>
+            {tooltip.content.status === "maintenance" && (
+              <div className="text-xs text-orange-400 mt-1">
+                🛠️ Salle en maintenance
+              </div>
+            )}
+            <div
+              className="absolute w-2 h-2 bg-gray-900 border-l border-b border-gray-700 transform rotate-45"
+              style={{
+                left: "-4px",
+                top: "50%",
+                transform: "translateY(-50%) rotate(45deg)",
+              }}
+            />
+          </div>
+        )}
+      </div>
+    </>
   );
 }

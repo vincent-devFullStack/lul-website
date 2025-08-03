@@ -18,13 +18,61 @@
     0 20px 40px rgba(0, 0, 0, 0.1),
     0 8px 16px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(125, 113, 84, 0.2);
+  /* ✅ Animation fade in up */
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* ✅ ANIMATION FADE IN UP */
+.fade-in-up-initial {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.fade-in-up-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ✅ Animation avec keyframes pour plus de fluidité */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.about-modern-container.fade-in-up-active {
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* ✅ Animation staggerée pour les sections internes (optionnel) */
 .about-hero-section {
   background: var(--header-background);
   padding: 30px 40px 40px;
   text-align: center;
   border-bottom: 1px solid rgba(125, 113, 84, 0.2);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+}
+
+.about-content-section {
+  padding: 50px 60px 60px;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
+}
+
+.fade-in-up-initial .about-hero-section,
+.fade-in-up-initial .about-content-section {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.fade-in-up-active .about-hero-section,
+.fade-in-up-active .about-content-section {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .about-title {

@@ -3,35 +3,34 @@
 import "../../../styles/pages/about.css";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import ImageUpload from "@/components/ImageUpload"; // ✅ IMPORT DU COMPOSANT
+import ImageUpload from "@/components/ImageUpload";
 import Image from "next/image";
 
 export default function About() {
   const { isAuthenticated } = useAuth();
-  // ✅ PLUS BESOIN DE SÉPARER - CSS GÈRE TOUT
   const [fullText, setFullText] = useState("");
   const [title, setTitle] = useState("À propos de moi");
-  const [imageUrl, setImageUrl] = useState(null); // ✅ STATE POUR L'IMAGE
+  const [imageUrl, setImageUrl] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState("");
   const [editContent, setEditContent] = useState("");
-  const [editImageUrl, setEditImageUrl] = useState(null); // ✅ STATE POUR L'IMAGE EN ÉDITION
+  const [editImageUrl, setEditImageUrl] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState(null); // ✅ MESSAGES D'ÉTAT PROFESSIONNELS
-  const [textAnalysis, setTextAnalysis] = useState(null); // ✅ ANALYSE DU TEXTE
-  // Ajoutez un état pour éviter les re-rendus inutiles
+  const [message, setMessage] = useState(null);
+  const [textAnalysis, setTextAnalysis] = useState(null);
   const [initialized, setInitialized] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
 
   // Charger le contenu depuis l'API
   useEffect(() => {
     const fetchContent = async () => {
-      if (initialized) return; // Évite les doubles chargements
+      if (initialized) return;
 
       try {
         setLoading(true);
         const response = await fetch("/api/content/about-page", {
-          cache: "force-cache", // Met en cache la réponse
+          cache: "force-cache",
         });
 
         if (response.ok) {
@@ -53,7 +52,6 @@ export default function About() {
 
   // Fonction pour sauvegarder les modifications
   const handleSave = async () => {
-    // Validation côté client
     if (!editTitle.trim()) {
       setMessage({ type: "error", text: "Le titre est requis" });
       return;
@@ -75,7 +73,7 @@ export default function About() {
         body: JSON.stringify({
           title: editTitle.trim(),
           content: editContent.trim(),
-          imageUrl: editImageUrl, // ✅ INCLURE L'IMAGE DANS LA SAUVEGARDE
+          imageUrl: editImageUrl,
         }),
       });
 
@@ -89,7 +87,6 @@ export default function About() {
           text: "Contenu mis à jour avec succès !",
         });
 
-        // Fermer le modal après un délai
         setTimeout(() => {
           setIsEditing(false);
           setMessage(null);
@@ -112,37 +109,33 @@ export default function About() {
     }
   };
 
-  // Fonction pour démarrer l'édition
   const startEditing = () => {
     setEditTitle(title);
     setEditContent(fullText);
-    setEditImageUrl(imageUrl); // ✅ CHARGER L'IMAGE ACTUELLE DANS L'ÉDITION
+    setEditImageUrl(imageUrl);
     setIsEditing(true);
   };
 
-  // Fonction pour annuler l'édition
   const cancelEdit = () => {
     setIsEditing(false);
     setEditTitle("");
     setEditContent("");
     setEditImageUrl(null);
-    setMessage(null); // ✅ CLEAR MESSAGES
+    setMessage(null);
   };
 
-  // ✅ ANALYSE SIMPLE DU TEXTE (CSS GÈRE LA RÉPARTITION)
   useEffect(() => {
     if (!fullText) return;
 
     const totalChars = fullText.length;
     setTextAnalysis({
       totalChars,
-      fitsInLayout: true, // CSS gère tout
+      fitsInLayout: true,
       isAdaptive: true,
       layoutType: "css-columns",
     });
   }, [fullText]);
 
-  // ✅ CALCULER L'ÉTAT DU TEXTE SIMPLIFIÉ
   const getTextStatus = (text) => {
     const length = text.length;
     if (length === 0) return { type: "empty", message: "Ajoutez du contenu" };
@@ -159,26 +152,24 @@ export default function About() {
     return { type: "info", message: `${length} caractères - Texte long` };
   };
 
+  // ✅ Effect pour déclencher l'animation fade in up
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+
+  // ✅ Pas d'affichage de chargement, retourne null pendant le loading
   if (loading) {
-    return (
-      <div className="about-container">
-        <div className="about-content about-left">
-          <div className="page-content">
-            <p className="book-text">Chargement...</p>
-          </div>
-        </div>
-        <div className="about-content about-right">
-          <div className="page-content">
-            <p className="book-text"></p>
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
     <div className="edit-container">
-      {/* Boutons d'édition - visibles seulement si connecté */}
       {isAuthenticated && !isEditing && (
         <div className="edit-button-wrapper">
           <button onClick={startEditing} className="edit-button">
@@ -188,7 +179,6 @@ export default function About() {
       )}
 
       <div className="about-container">
-        {/* Interface d'édition */}
         {isEditing && (
           <div className="edit-modal-overlay">
             <div className="edit-modal-content">
@@ -196,7 +186,6 @@ export default function About() {
                 Modifier le contenu de la page
               </h2>
 
-              {/* Messages d'état */}
               {message && (
                 <div className={`edit-message edit-message-${message.type}`}>
                   {message.type === "success" && "✅"}
@@ -236,7 +225,6 @@ export default function About() {
                   placeholder="Votre contenu ici..."
                 />
 
-                {/* ✅ COMPTEUR INTELLIGENT */}
                 <div className="text-analysis">
                   <div
                     className={`char-counter char-counter-${getTextStatus(editContent).type}`}
@@ -275,8 +263,11 @@ export default function About() {
           </div>
         )}
 
-        {/* Design moderne et élégant */}
-        <div className="about-modern-container">
+        <div
+          className={`about-modern-container ${
+            isVisible ? "fade-in-up-active" : "fade-in-up-initial"
+          }`}
+        >
           <div className="about-hero-section">
             <h1 className="about-title">{title}</h1>
 
@@ -285,8 +276,8 @@ export default function About() {
                 <Image
                   src={imageUrl}
                   alt={title}
-                  width={500} // spécifiez une largeur
-                  height={300} // spécifiez une hauteur
+                  width={500}
+                  height={300}
                   className="about-image"
                 />
               ) : (

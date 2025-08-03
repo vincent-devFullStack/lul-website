@@ -1,64 +1,489 @@
+.contact-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 200px);
+  padding: 2rem;
+}
+
 .contact-container {
-    display: flex;
-    gap: 24px;
-    flex-direction: column;
-    align-items: center;
-    background-color: var(--login-background);
-    justify-content: space-between;
-    height: auto; /* Donne une hauteur minimale pour que justify-content fonctionne */
-    width: 400px;
-    margin: 0 auto; /* Centre horizontalement */
-    padding: 24px; /*Ajoute un peu d'espace intérieur */
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--login-background);
+  justify-content: space-between;
+  height: auto;
+  width: 1200px; /* ✅ Augmenté pour 3 sections */
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(125, 113, 84, 0.2);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ✅ Nouveau wrapper pour organiser le contenu en trois colonnes */
+.contact-content {
+  display: flex;
+  gap: 40px;
+  align-items: stretch; /* ✅ Changé de flex-start à stretch pour égaliser les hauteurs */
+  width: 100%;
+  min-height: 400px; /* ✅ Hauteur minimale pour permettre le centrage */
+}
+
+/* ✅ Section texte à gauche */
+.contact-text-section {
+  flex: 1;
+  padding: 0 20px;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+}
+
+.contact-text-section h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 1.5rem;
+  font-family: "EB Garamond", serif;
+}
+
+.contact-text-section p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+  text-align: justify;
+  font-family: "EB Garamond", serif;
+}
+
+.fade-in-up-initial .contact-text-section {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.fade-in-up-active .contact-text-section {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ✅ ANIMATION FADE IN UP */
+.fade-in-up-initial {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.fade-in-up-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ✅ Animation avec keyframes pour plus de fluidité */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
   }
-  
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contact-container.fade-in-up-active {
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* ✅ Animation staggerée pour le formulaire */
 .contact-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1; /* ✅ Prend l'espace disponible */
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
+}
+
+.fade-in-up-initial .contact-form {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.fade-in-up-active .contact-form {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ✅ Wrapper pour l'image - centrage vertical */
+.contact-image-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center; /* ✅ Centre verticalement */
+  justify-content: center; /* ✅ Centre horizontalement */
+  min-height: 100%; /* ✅ Prend toute la hauteur disponible */
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+}
+
+/* ✅ Alternative si le centrage vertical ne fonctionne pas bien */
+.contact-content {
+  display: flex;
+  gap: 40px;
+  align-items: stretch; /* ✅ Changé de flex-start à stretch pour égaliser les hauteurs */
+  width: 100%;
+  min-height: 400px; /* ✅ Hauteur minimale pour permettre le centrage */
+}
+
+.fade-in-up-initial .contact-image-wrapper {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.fade-in-up-active .contact-image-wrapper {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ✅ Style de l'image */
+.contact-image {
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+  max-width: 100%;
+  height: auto;
+  /* ✅ Assure que l'image reste centrée */
+  object-fit: contain;
+}
+
+.contact-image:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+
+/* ✅ Si besoin d'un centrage plus strict, alternative avec position */
+.contact-image-wrapper-alt {
+  flex: 1;
+  position: relative;
+  display: flex;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+}
+
+.contact-image-alt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 12px;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+  max-width: 80%;
+  height: auto;
+  transition: all 0.3s ease;
 }
 
 .contact-form-item {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.contact-form-item input,
+textarea {
+  background-color: var(--login-form-input-background);
+  border: 1.5px solid var(--login-form-input-border);
+  border-radius: 4px;
+  padding: 8px;
+  color: #6a6a6a;
+  transition: all 0.2s ease;
+}
+
+.contact-form-item input:focus,
+textarea:focus {
+  outline: none;
+  border: 1.5px solid var(--brown);
+  box-shadow: 0 0 0 3px rgba(191, 167, 106, 0.1);
+}
+
+.contact-form-item label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.contact-form button {
+  background-color: var(--brown);
+  border: 1.5px solid var(--login-form-button-border);
+  border-radius: 4px;
+  padding: 8px;
+  color: var(--login-form-button-text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.contact-form button:hover {
+  background-color: #ae9b79;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(191, 167, 106, 0.3);
+}
+
+.contact-form button:active {
+  background-color: #9d8e6c;
+  transform: translateY(0);
+}
+
+/* ✅ Responsive pour mobile */
+@media (max-width: 1024px) {
+  .contact-container {
     width: 100%;
-  }
-  
-  .contact-form-item input, textarea {
-    background-color: var(--login-form-input-background);
-    border: 1.5px solid var(--login-form-input-border);
-    border-radius: 4px;
-    padding: 8px;
-    color: #6A6A6A;
-  }
-  
-  .contact-form-item input:focus, textarea:focus {
-    outline: none;
-    border: 1.5px solid var(--brown);
-  }
-  
-  .contact-form-item label {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 4px;
+    max-width: 800px;
   }
 
+  .contact-content {
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+    min-height: auto; /* ✅ Supprime la hauteur minimale sur mobile */
+  }
 
-  
-  .contact-form button {
-    background-color: var(--brown);
-    border: 1.5px solid var(--login-form-button-border);
-    border-radius: 4px;
-    padding: 8px;
-    color: var(--login-form-button-text-color);
-    cursor: pointer;
+  .contact-text-section {
+    order: 1;
+    text-align: center;
   }
-  
-  .contact-form button:hover {
-    background-color: #ae9b79;
-    transition: background-color 0.1s ease-in-out;
+
+  .contact-form {
+    order: 2;
   }
-  
-  .contact-form button:active {
-    background-color: #9D8E6C;
+
+  .contact-image-wrapper {
+    order: 3;
+    min-height: 200px; /* ✅ Hauteur réduite sur tablette */
   }
+}
+
+@media (max-width: 768px) {
+  .contact-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 1rem;
+  }
+
+  .contact-image {
+    width: 200px;
+    height: 200px;
+  }
+
+  .contact-image-wrapper {
+    min-height: 150px; /* ✅ Hauteur encore plus réduite sur mobile */
+  }
+
+  .contact-wrapper {
+    padding: 1rem;
+    min-height: auto;
+  }
+}
+
+/* ✅ Style pour le titre "Dictionnaire :" */
+.dictionary-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
+  font-family: "EB Garamond", serif;
+  text-decoration: underline;
+  text-decoration-color: var(--brown);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+/* ✅ Container pour l'animation machine à écrire */
+.typewriter-container {
+  min-height: 250px; /* ✅ Augmenté pour le texte plus long */
+}
+
+/* ✅ Texte avec animation machine à écrire */
+.typewriter-text {
+  font-size: 1rem;
+  line-height: 1.7; /* ✅ Légèrement augmenté pour plus de lisibilité */
+  color: var(--foreground);
+  text-align: justify;
+  font-family: "EB Garamond", serif;
+  margin-bottom: 0;
+  position: relative;
+  /* ✅ Amélioration de la lisibilité pour les définitions */
+  text-indent: 1rem;
+  padding-right: 1rem;
+}
+
+/* ✅ Style spécial pour les numéros de définition */
+.typewriter-text::first-line {
+  font-weight: 500;
+}
+
+/* ✅ Curseur clignotant de la machine à écrire */
+.typewriter-cursor {
+  color: var(--brown);
+  font-weight: bold;
+  animation: blink 1s infinite;
+  margin-left: 2px; /* ✅ Petit espace avant le curseur */
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ✅ Animation d'apparition du curseur */
+.fade-in-up-initial .typewriter-cursor {
+  opacity: 0;
+}
+
+.fade-in-up-active .typewriter-cursor {
+  opacity: 1;
+  animation: blink 1s infinite;
+}
+
+/* ✅ Effet sonore visuel pour la machine à écrire (optionnel) */
+.typewriter-text::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  width: 2px;
+  height: 1.2em;
+  background-color: transparent;
+}
+
+/* ✅ Effets sur les synonymes */
+.synonym {
+  color: var(--brown);
+  font-weight: 600;
+  font-style: italic;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  padding: 2px 4px;
+  border-radius: 4px;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    transparent 50%,
+    rgba(191, 167, 106, 0.1) 50%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+}
+
+/* ✅ Effet hover sur les synonymes */
+.synonym:hover {
+  color: var(--foreground);
+  background-color: var(--brown);
+  border-bottom-color: var(--brown);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(191, 167, 106, 0.3);
+  background-position: 0 0;
+}
+
+/* ✅ Animation d'apparition progressive des synonymes */
+@keyframes synonymHighlight {
+  0% {
+    background-color: transparent;
+    color: var(--foreground);
+  }
+  50% {
+    background-color: rgba(191, 167, 106, 0.3);
+    color: var(--brown);
+    transform: scale(1.05);
+  }
+  100% {
+    background-color: rgba(191, 167, 106, 0.1);
+    color: var(--brown);
+    transform: scale(1);
+  }
+}
+
+/* ✅ Effet de pulsation subtile */
+.synonym::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle,
+    rgba(191, 167, 106, 0.2) 0%,
+    transparent 70%
+  );
+  border-radius: 4px;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+  z-index: -1;
+}
+
+.synonym:hover::before {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* ✅ Animation quand les synonymes apparaissent dans le texte */
+.synonym {
+  animation: synonymHighlight 1.5s ease-in-out;
+  animation-delay: var(--delay, 0s);
+}
+
+/* ✅ Effet de brillance qui passe sur les synonymes */
+.synonym::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.synonym:hover::after {
+  left: 100%;
+}
+
+/* ✅ Style spécial pour "SYNONYMES :" */
+.typewriter-text strong,
+.typewriter-text b {
+  color: var(--brown);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ✅ Animation pour faire ressortir les tirets entre synonymes */
+.synonym + span {
+  color: var(--brown);
+  font-weight: bold;
+  margin: 0 8px;
+  transition: all 0.3s ease;
+}
+
+/* ✅ Responsive pour les effets synonymes */
+@media (max-width: 768px) {
+  .synonym {
+    padding: 1px 2px;
+    font-size: 0.95rem;
+  }
+
+  .synonym:hover {
+    transform: none; /* Désactive le translateY sur mobile */
+  }
+}
