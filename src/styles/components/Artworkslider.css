@@ -32,14 +32,14 @@
   background-position: center;
 }
 .previous-button {
-  left: -150px; /* éloigne la flèche de l’œuvre */
+  left: -100px; /* éloigne la flèche de l’œuvre */
   background-image: url("/assets/left.webp");
 }
 .previous-button:hover {
   transform: translateY(-50%) translateX(-18px);
 }
 .next-button {
-  right: -150px; /* éloigne la flèche de l’œuvre */
+  right: -100px; /* éloigne la flèche de l’œuvre */
   background-image: url("/assets/right.webp");
 }
 .next-button:hover {
