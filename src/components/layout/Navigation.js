@@ -4,12 +4,18 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { Settings } from "lucide-react";
+import { useEffect, useState } from "react";
 import "../../styles/layout/Navigation.css";
 
 export default function Navigation() {
   const { isAuthenticated, logout } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLogout = () => {
     logout();
@@ -29,7 +35,7 @@ export default function Navigation() {
     <nav className="relative flex flex-col top-0 left-0 right-0 header-menu shadow-lg z-[100] h-[120px] items-center justify-center">
       <div className="w-full relative max-w-[1280px] mx-auto px-4">
         <div className="flex justify-center mb-3">
-          <Link href="/" className="text-[56px] font-bold leading-none">
+          <Link href="/" className="main-title" tabIndex="0">
             L'iconodule
           </Link>
         </div>
