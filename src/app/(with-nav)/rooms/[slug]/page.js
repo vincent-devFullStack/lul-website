@@ -52,7 +52,10 @@ export default async function RoomPage(props) {
           {room?.name || room?.title || slug}
         </h1>
       </div>
+
+      {/* Ce composant affiche déjà les images */}
       <ArtworkSlider artworks={room?.artworks || []} />
+
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -72,18 +75,6 @@ export default async function RoomPage(props) {
           }),
         }}
       />
-      {room?.artworks?.map((artwork, index) => (
-        <Image
-          key={artwork._id}
-          src={artwork.imageUrl}
-          alt={`${
-            artwork.title
-          } - ${artwork.description?.substring(0, 50) || "Œuvre d'art"}`}
-          width={800}
-          height={600}
-          priority={index === 0}
-        />
-      ))}
     </div>
   );
 }
