@@ -3,6 +3,14 @@
     "baseUrl": "src",
     "paths": {
       "@/*": ["*"]
-    }
-  }
+    },
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "checkJs": false,
+    "strict": false,
+    "jsx": "preserve"
+  },
+  "exclude": ["node_modules", "public", ".next", "out"]
 }
