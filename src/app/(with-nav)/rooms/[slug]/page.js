@@ -17,7 +17,7 @@ export default async function RoomPage(props) {
     <div className="container mx-auto px-4">
       {/* ✅ AJOUT : Bouton de retour */}
       <div className="back-button-container mb-6">
-        <Link href="/" className="back-button">
+        <Link href="/accueil" className="back-button">
           <span className="back-arrow">←</span>
           Retour à l'accueil
         </Link>
