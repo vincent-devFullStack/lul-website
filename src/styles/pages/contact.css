@@ -8,7 +8,7 @@
   width: 100%;
 }
 
-/* ✅ CONTAINER PRINCIPAL - UNE SEULE DÉFINITION */
+/* ✅ CONTAINER PRINCIPAL */
 .contact-container {
   display: flex;
   gap: 24px;
@@ -17,9 +17,8 @@
   background-color: var(--login-background);
   justify-content: space-between;
   height: auto;
-  /* ✅ SUPPRIMÉ : width: 1200px; fixe qui causait le problème */
   width: 100%;
-  max-width: 1200px; /* ✅ CHANGÉ en max-width */
+  max-width: 1200px;
   margin: 0 auto;
   padding: 24px;
   border-radius: 16px;
@@ -30,263 +29,103 @@
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* ✅ MEDIA QUERY UNIQUE ET COHÉRENTE - sous 1100px */
-@media (max-width: 1100px) {
-  .contact-wrapper {
-    width: 90%;
-    margin: 0 auto;
-    padding: 1.5rem;
-  }
-
-  .contact-container {
-    width: 100%;
-    max-width: 900px;
-    padding: 20px;
-  }
-
-  .contact-content {
-    flex-direction: column;
-    gap: 25px;
-    align-items: center;
-    min-height: auto;
-  }
-
-  .contact-text-section {
-    order: 1;
-    width: 100%;
-    text-align: center;
-    padding: 0 10px;
-  }
-
-  .contact-form-and-image {
-    order: 2;
-    display: flex;
-    gap: 20px;
-    width: 100%;
-    align-items: flex-start;
-  }
-
-  .contact-form {
-    flex: 1.2;
-    order: 1;
-  }
-
-  .contact-image-wrapper {
-    flex: 0.8;
-    order: 2;
-    min-height: 300px;
-    max-width: 250px;
-  }
-
-  .contact-image {
-    max-width: 100%;
-    height: auto;
-  }
-
-  .contact-text-section h2 {
-    font-size: 1.6rem;
-  }
-
-  .contact-text-section p {
-    font-size: 0.95rem;
-    line-height: 1.5;
-  }
-
-  .typewriter-text {
-    font-size: 0.9rem;
-    line-height: 1.6;
-  }
-
-  .dictionary-title {
-    font-size: 1.2rem;
-  }
-}
-
-/* ✅ SUPPRIMÉ toutes les autres media queries en double */
-/* Gardez seulement les media queries essentielles : */
-
-@media (max-width: 768px) {
-  .contact-wrapper {
-    width: 95%;
-    padding: 1rem;
-  }
-
-  .contact-container {
-    width: 100%;
-    max-width: 600px;
-    padding: 16px;
-  }
-
-  .contact-form-and-image {
-    flex-direction: column !important;
-    gap: 15px;
-  }
-}
-
-@media (max-width: 480px) {
-  .contact-wrapper {
-    width: 98%;
-    padding: 0.5rem;
-    min-height: auto;
-  }
-
-  .contact-container {
-    width: 100%;
-    padding: 12px;
-  }
-}
-
-/* ✅ Gardez le reste du CSS existant pour le contenu */
+/* ✅ CONTENT LAYOUT */
 .contact-content {
   display: flex;
   gap: 40px;
-  align-items: stretch;
+  align-items: center;
   width: 100%;
   min-height: 400px;
 }
 
-/* ✅ Section texte à gauche */
+/* ✅ Section texte */
 .contact-text-section {
   flex: 1;
+
   padding: 0 20px;
   transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
 }
 
-.contact-text-section h2 {
-  font-size: 1.8rem;
+/* ✅ Titre "Contact :" */
+.contact-title {
+  font-size: 2rem;
   font-weight: 600;
   color: var(--foreground);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  margin-top: 0; /* ✅ Supprimé margin-top pour Contact: */
   font-family: "EB Garamond", serif;
 }
 
-.contact-text-section p {
+/* ✅ Container animation machine à écrire */
+.typewriter-container {
+  min-height: 520px;
+  min-width: 345px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(167, 151, 109, 0.5) 100%
+  );
+  border-left: 4px solid #bfa76a;
+  padding: 1.5rem;
+  border-radius: 0 8px 8px 0;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.05),
+    0 2px 8px rgba(191, 167, 106, 0.5);
+}
+
+/* ✅ Texte machine à écrire - DÉFINITION UNIQUE */
+.typewriter-text {
   font-size: 1rem;
-  line-height: 1.6;
+  line-height: 1.8;
   color: var(--foreground);
-  margin-bottom: 1rem;
   text-align: justify;
   font-family: "EB Garamond", serif;
+  margin-bottom: 0;
+  position: relative;
+  text-indent: 1rem;
+  padding-right: 1rem;
 }
 
-.fade-in-up-initial .contact-text-section {
-  opacity: 0;
-  transform: translateY(20px);
+/* ✅ Styles pour la nouvelle définition */
+.typewriter-text strong {
+  color: #3b3b3b;
+  font-weight: 700;
+  font-size: 1.05em;
 }
 
-.fade-in-up-active .contact-text-section {
-  opacity: 1;
-  transform: translateY(0);
+.typewriter-text em {
+  color: #a89478;
+  font-style: italic;
+  font-size: 0.9em;
+  opacity: 0.8;
 }
 
-/* ✅ ANIMATION FADE IN UP */
-.fade-in-up-initial {
-  opacity: 0;
-  transform: translateY(40px);
+/* ✅ Curseur clignotant */
+.typewriter-cursor {
+  color: var(--brown);
+  font-weight: bold;
+  animation: blink 1s infinite;
+  margin-left: 2px;
 }
 
-.fade-in-up-active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ✅ Animation avec keyframes pour plus de fluidité */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
+@keyframes blink {
+  0%,
+  50% {
     opacity: 1;
-    transform: translateY(0);
+  }
+  51%,
+  100% {
+    opacity: 0;
   }
 }
 
-.contact-container.fade-in-up-active {
-  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-/* ✅ Animation staggerée pour le formulaire */
+/* ✅ FORMULAIRE */
 .contact-form {
   display: flex;
   flex-direction: column;
   width: 100%;
-  flex: 1; /* ✅ Prend l'espace disponible */
+  flex: 1;
   transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
-}
-
-.fade-in-up-initial .contact-form {
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.fade-in-up-active .contact-form {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ✅ Wrapper pour l'image - centrage vertical */
-.contact-image-wrapper {
-  flex: 1;
-  display: flex;
-  align-items: center; /* ✅ Centre verticalement */
-  justify-content: center; /* ✅ Centre horizontalement */
-  min-height: 100%; /* ✅ Prend toute la hauteur disponible */
-  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
-}
-
-/* ✅ Alternative si le centrage vertical ne fonctionne pas bien */
-.contact-content {
-  display: flex;
-  gap: 40px;
-  align-items: stretch; /* ✅ Changé de flex-start à stretch pour égaliser les hauteurs */
-  width: 100%;
-  min-height: 400px; /* ✅ Hauteur minimale pour permettre le centrage */
-}
-
-.fade-in-up-initial .contact-image-wrapper {
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.fade-in-up-active .contact-image-wrapper {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ✅ Style de l'image */
-.contact-image {
-  border-radius: 12px;
-  transition: transform 0.3s ease;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
-  max-width: 100%;
-  height: auto;
-  /* ✅ Assure que l'image reste centrée */
-  object-fit: contain;
-}
-
-.contact-image:hover {
-  transform: scale(1.05) rotate(2deg);
-}
-
-/* ✅ Si besoin d'un centrage plus strict, alternative avec position */
-.contact-image-wrapper-alt {
-  flex: 1;
-  position: relative;
-  display: flex;
-  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
-}
-
-.contact-image-alt {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 12px;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
-  max-width: 80%;
-  height: auto;
-  transition: all 0.3s ease;
 }
 
 .contact-form-item {
@@ -335,66 +174,66 @@ textarea:focus {
   box-shadow: 0 4px 12px rgba(191, 167, 106, 0.3);
 }
 
-.contact-form button:active {
-  background-color: #9d8e6c;
+/* ✅ IMAGE */
+.contact-image-wrapper {
+  flex: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+}
+
+.contact-image {
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+  width: 90%;
+  max-width: 400px;
+  height: auto;
+  object-fit: contain;
+}
+
+.contact-image:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+
+/* ✅ ANIMATIONS FADE IN UP */
+.fade-in-up-initial {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.fade-in-up-active {
+  opacity: 1;
   transform: translateY(0);
 }
 
-/* ✅ Responsive pour mobile */
-@media (max-width: 1024px) {
-  .contact-container {
-    width: 100%;
-    max-width: 800px;
-  }
+.contact-container.fade-in-up-active {
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
 
-  .contact-content {
-    flex-direction: column;
-    gap: 30px;
-    align-items: center;
-    min-height: auto; /* ✅ Supprime la hauteur minimale sur mobile */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
   }
-
-  .contact-text-section {
-    order: 1;
-    text-align: center;
-  }
-
-  .contact-form {
-    order: 2;
-  }
-
-  .contact-image-wrapper {
-    order: 3;
-    min-height: 200px; /* ✅ Hauteur réduite sur tablette */
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (max-width: 768px) {
-  .contact-container {
-    width: 100%;
-    max-width: 400px;
-    margin: 1rem;
-  }
-
-  .contact-image {
-    width: 200px;
-    height: 200px;
-  }
-
-  .contact-image-wrapper {
-    min-height: 150px; /* ✅ Hauteur encore plus réduite sur mobile */
-  }
-
-  .contact-wrapper {
-    padding: 1rem;
-    min-height: auto;
-  }
-}
-
-/* ✅ Responsive amélioré pour tablettes et écrans moyens */
+/* ✅ RESPONSIVE - Media queries adaptées aux nouvelles modifications */
 @media (max-width: 1100px) {
+  .contact-wrapper {
+    width: 90%;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+
   .contact-container {
-    width: 90%; /* ✅ CHANGÉ : 90% au lieu de 95% */
+    width: 100%;
     max-width: 900px;
     padding: 20px;
   }
@@ -406,7 +245,6 @@ textarea:focus {
     min-height: auto;
   }
 
-  /* ✅ Réorganisation pour iPad : texte en haut, puis formulaire et image côte à côte */
   .contact-text-section {
     order: 1;
     width: 100%;
@@ -414,123 +252,152 @@ textarea:focus {
     padding: 0 10px;
   }
 
-  .contact-form-and-image {
-    order: 2;
-    display: flex;
-    gap: 20px;
-    width: 100%;
-    align-items: flex-start;
+  /* ✅ Typewriter container responsive */
+  .typewriter-container {
+    min-height: 400px; /* ✅ RÉDUIT pour tablettes */
+    min-width: 100%; /* ✅ Prend toute la largeur */
+    padding: 1.2rem;
   }
 
-  .contact-form {
-    flex: 1.2; /* ✅ Formulaire prend plus d'espace */
-    order: 1;
-  }
-
-  .contact-image-wrapper {
-    flex: 0.8; /* ✅ Image prend moins d'espace */
-    order: 2;
-    min-height: 300px;
-    max-width: 250px;
-  }
-
-  .contact-image {
-    max-width: 100%;
-    height: auto;
-  }
-
-  /* ✅ Réduction des tailles de police pour iPad */
-  .contact-text-section h2 {
-    font-size: 1.6rem;
-  }
-
-  .contact-text-section p {
-    font-size: 0.95rem;
-    line-height: 1.5;
+  .contact-title {
+    font-size: 1.8rem; /* ✅ ADAPTÉ pour tablettes */
+    margin-bottom: 1.2rem;
   }
 
   .typewriter-text {
-    font-size: 0.9rem;
-    line-height: 1.6;
-  }
-
-  .dictionary-title {
-    font-size: 1.2rem;
-  }
-}
-
-/* ✅ Ajustement spécifique pour iPad en mode portrait */
-@media (max-width: 768px) and (orientation: portrait) {
-  .contact-container {
-    width: 95%;
-    max-width: 600px;
-    margin: 1rem auto;
-    padding: 16px;
-  }
-
-  .contact-content {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .contact-form-and-image {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .contact-text-section {
-    order: 1;
+    font-size: 0.95rem; /* ✅ LÉGÈREMENT plus grand */
+    line-height: 1.7;
   }
 
   .contact-form {
     order: 2;
-    flex: none;
   }
 
   .contact-image-wrapper {
     order: 3;
-    flex: none;
-    min-height: 200px;
-    max-width: 200px;
-    margin: 0 auto;
+    min-height: 350px; /* ✅ AUGMENTÉ pour image plus grande */
+    max-width: 350px; /* ✅ AUGMENTÉ */
+    flex: none; /* ✅ Pas de flex sur tablettes */
+  }
+
+  .contact-image {
+    width: 100%; /* ✅ Image prend toute la largeur du wrapper */
+    max-width: 350px;
   }
 }
 
-/* ✅ Mobile standard */
+@media (max-width: 768px) {
+  .contact-wrapper {
+    width: 95%;
+    padding: 1rem;
+  }
+
+  .contact-container {
+    width: 100%;
+    max-width: 600px;
+    padding: 16px;
+  }
+
+  /* ✅ Typewriter container mobile */
+  .typewriter-container {
+    min-height: 320px; /* ✅ RÉDUIT pour mobile */
+    min-width: 100%;
+    padding: 1rem;
+  }
+
+  .contact-title {
+    font-size: 1.5rem; /* ✅ RÉDUIT pour mobile */
+    margin-bottom: 1rem;
+    border-bottom-width: 2px; /* ✅ Bordure plus fine */
+  }
+
+  .contact-title::after {
+    width: 40px; /* ✅ Trait décoratif plus court */
+  }
+
+  .typewriter-text {
+    font-size: 0.9rem; /* ✅ ADAPTÉ pour mobile */
+    line-height: 1.6;
+    text-indent: 0.5rem; /* ✅ Indentation réduite */
+  }
+
+  .typewriter-text strong {
+    font-size: 1.05em; /* ✅ Proportion maintenue */
+  }
+
+  .typewriter-text em {
+    font-size: 0.85em; /* ✅ Proportion maintenue */
+    margin: 0.6rem 0 1rem 0; /* ✅ Marges réduites */
+    padding-left: 0.8rem;
+  }
+
+  .contact-image-wrapper {
+    min-height: 280px; /* ✅ AUGMENTÉ pour image plus grande */
+    max-width: 280px; /* ✅ AUGMENTÉ */
+  }
+
+  .contact-image {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
 @media (max-width: 480px) {
   .contact-wrapper {
+    width: 98%;
     padding: 0.5rem;
     min-height: auto;
   }
 
   .contact-container {
-    width: 98%;
-    max-width: none;
-    margin: 0.5rem auto;
+    width: 100%;
     padding: 12px;
   }
 
-  .contact-content {
-    gap: 15px;
+  /* ✅ Typewriter container très petit écran */
+  .typewriter-container {
+    min-height: 280px; /* ✅ COMPACT pour très petit écran */
+    min-width: 100%;
+    padding: 0.8rem;
   }
 
-  .contact-text-section h2 {
-    font-size: 1.4rem;
+  .contact-title {
+    font-size: 1.3rem; /* ✅ COMPACT */
+    margin-bottom: 0.8rem;
+    text-transform: none; /* ✅ Pas de majuscules sur mobile */
+    letter-spacing: 0.05em; /* ✅ Espacement réduit */
   }
 
-  .contact-text-section p,
+  .contact-title::after {
+    width: 30px; /* ✅ Trait encore plus court */
+  }
+
   .typewriter-text {
-    font-size: 0.85rem;
-    line-height: 1.4;
+    font-size: 0.85rem; /* ✅ Plus petit pour mobile */
+    line-height: 1.5;
+    text-indent: 0; /* ✅ Pas d'indentation sur mobile */
+    padding-right: 0.5rem;
+  }
+
+  .typewriter-text strong {
+    font-size: 1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .typewriter-text em {
+    font-size: 0.8em;
+    margin: 0.5rem 0 0.8rem 0;
+    padding-left: 0.5rem;
   }
 
   .contact-image-wrapper {
-    min-height: 150px;
-    max-width: 150px;
+    min-height: 220px; /* ✅ RÉDUIT mais encore visible */
+    max-width: 220px; /* ✅ RÉDUIT */
   }
 
-  .contact-form-item {
-    margin-bottom: 10px;
+  .contact-image {
+    width: 100%;
+    max-width: 220px;
   }
 
   .contact-form-item input,
@@ -545,251 +412,35 @@ textarea:focus {
   }
 }
 
-/* ✅ Style pour le titre "Dictionnaire :" */
-.dictionary-title {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: var(--foreground);
-  margin-bottom: 1rem;
-  margin-top: 1.5rem;
-  font-family: "EB Garamond", serif;
-  text-decoration: underline;
-  text-decoration-color: var(--brown);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
-}
-
-/* ✅ Container pour l'animation machine à écrire */
-.typewriter-container {
-  min-height: 250px; /* ✅ Augmenté pour le texte plus long */
-}
-
-/* ✅ Texte avec animation machine à écrire */
-.typewriter-text {
-  font-size: 1rem;
-  line-height: 1.7; /* ✅ Légèrement augmenté pour plus de lisibilité */
-  color: var(--foreground);
-  text-align: justify;
-  font-family: "EB Garamond", serif;
-  margin-bottom: 0;
-  position: relative;
-  /* ✅ Amélioration de la lisibilité pour les définitions */
-  text-indent: 1rem;
-  padding-right: 1rem;
-}
-
-/* ✅ Style spécial pour les numéros de définition */
-.typewriter-text::first-line {
-  font-weight: 500;
-}
-
-/* ✅ Curseur clignotant de la machine à écrire */
-.typewriter-cursor {
-  color: var(--brown);
-  font-weight: bold;
-  animation: blink 1s infinite;
-  margin-left: 2px; /* ✅ Petit espace avant le curseur */
-}
-
-@keyframes blink {
-  0%,
-  50% {
-    opacity: 1;
+/* ✅ Media query spéciale pour iPad en mode paysage */
+@media (max-width: 1024px) and (min-width: 769px) and (orientation: landscape) {
+  .contact-content {
+    flex-direction: row; /* ✅ Garde la disposition horizontale en paysage */
+    gap: 20px;
   }
-  51%,
-  100% {
-    opacity: 0;
+
+  .contact-text-section {
+    flex: 1.2;
+    order: 1;
   }
-}
 
-/* ✅ Animation d'apparition du curseur */
-.fade-in-up-initial .typewriter-cursor {
-  opacity: 0;
-}
-
-.fade-in-up-active .typewriter-cursor {
-  opacity: 1;
-  animation: blink 1s infinite;
-}
-
-/* ✅ Effet sonore visuel pour la machine à écrire (optionnel) */
-.typewriter-text::after {
-  content: "";
-  position: absolute;
-  right: 0;
-  width: 2px;
-  height: 1.2em;
-  background-color: transparent;
-}
-
-/* ✅ Effets sur les synonymes */
-.synonym {
-  color: var(--brown);
-  font-weight: 600;
-  font-style: italic;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-decoration: none;
-  border-bottom: 2px solid transparent;
-  padding: 2px 4px;
-  border-radius: 4px;
-  background: linear-gradient(
-    120deg,
-    transparent 0%,
-    transparent 50%,
-    rgba(191, 167, 106, 0.1) 50%
-  );
-  background-size: 250% 100%;
-  background-position: 100% 0;
-}
-
-/* ✅ Effet hover sur les synonymes */
-.synonym:hover {
-  color: var(--foreground);
-  background-color: var(--brown);
-  border-bottom-color: var(--brown);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(191, 167, 106, 0.3);
-  background-position: 0 0;
-}
-
-/* ✅ Animation d'apparition progressive des synonymes */
-@keyframes synonymHighlight {
-  0% {
-    background-color: transparent;
-    color: var(--foreground);
+  .contact-form {
+    flex: 1;
+    order: 2;
   }
-  50% {
-    background-color: rgba(191, 167, 106, 0.3);
-    color: var(--brown);
-    transform: scale(1.05);
+
+  .contact-image-wrapper {
+    flex: 0.8;
+    order: 3;
+    min-height: 250px;
+    max-width: 250px;
   }
-  100% {
-    background-color: rgba(191, 167, 106, 0.1);
-    color: var(--brown);
-    transform: scale(1);
+
+  .typewriter-container {
+    min-height: 300px;
   }
-}
 
-/* ✅ Effet de pulsation subtile */
-.synonym::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(
-    circle,
-    rgba(191, 167, 106, 0.2) 0%,
-    transparent 70%
-  );
-  border-radius: 4px;
-  opacity: 0;
-  transform: scale(0.8);
-  transition: all 0.3s ease;
-  z-index: -1;
-}
-
-.synonym:hover::before {
-  opacity: 1;
-  transform: scale(1.1);
-}
-
-/* ✅ Animation quand les synonymes apparaissent dans le texte */
-.synonym {
-  animation: synonymHighlight 1.5s ease-in-out;
-  animation-delay: var(--delay, 0s);
-}
-
-/* ✅ Effet de brillance qui passe sur les synonymes */
-.synonym::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
-  transition: left 0.5s ease;
-}
-
-.synonym:hover::after {
-  left: 100%;
-}
-
-/* ✅ Style spécial pour "SYNONYMES :" */
-.typewriter-text strong,
-.typewriter-text b {
-  color: var(--brown);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-/* ✅ Animation pour faire ressortir les tirets entre synonymes */
-.synonym + span {
-  color: var(--brown);
-  font-weight: bold;
-  margin: 0 8px;
-  transition: all 0.3s ease;
-}
-
-/* ✅ Correction du main-container pour responsive */
-.main-container {
-  /* ✅ SUPPRIMÉ : width: 1104px; qui cassait le responsive */
-  width: 100%;
-  max-width: 1200px; /* ✅ CHANGÉ en max-width */
-  margin: 0 auto;
-  padding: 0 20px;
-  /* ... autres styles ... */
-}
-
-/* ✅ Media query pour main-container sous 1100px */
-@media (max-width: 1100px) {
-  .main-container {
-    width: 90%; /* ✅ 90% de largeur */
-    max-width: 900px;
-    padding: 0 15px;
+  .contact-title {
+    font-size: 1.6rem;
   }
-}
-
-@media (max-width: 768px) {
-  .main-container {
-    width: 95%;
-    padding: 0 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .main-container {
-    width: 98%;
-    padding: 0 5px;
-  }
-}
-
-/* ✅ Override forcé pour la page contact */
-@media (max-width: 1100px) {
-  body,
-  html,
-  main,
-  .main-container {
-    padding-inline: 0 !important;
-    width: 100% !important;
-    max-width: 900px !important;
-    margin: 0 auto !important;
-  }
-}
-
-/* ✅ Override plus spécifique */
-.contact-wrapper {
-  padding-inline: 0 !important;
-  width: 100% !important;
-  margin: 0 auto !important;
 }

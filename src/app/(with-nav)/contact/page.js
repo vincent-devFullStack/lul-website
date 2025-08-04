@@ -8,9 +8,9 @@ export default function Contact() {
   const [isVisible, setIsVisible] = useState(false);
   const [typewriterText, setTypewriterText] = useState("");
 
-  // ✅ Texte de définition du dictionnaire avec marquage des synonymes et sauts de ligne
-  const dictionaryText =
-    "1. Ouvrage didactique constitué par un ensemble d'articles dont l'entrée constitue un mot, indépendants les uns des autres et rangés dans un ordre déterminé, le plus souvent alphabétique. (Abréviation familière : dico.)<br><br>SYNONYMES : <span class='synonym'>glossaire</span> - <span class='synonym'>lexique</span>.<br><br>2. Partie d'un programme d'assemblage qui donne, sous forme imprimée, la liste des adresses symboliques et leurs adresses absolues ou translatables.";
+  // ✅ NOUVELLE définition du contact
+  const contactText =
+    "<strong>nom masculin</strong><br><br><em>(latin contactus, de contingere, toucher)</em><br><br>1. État ou position de deux corps ou substances qui se touchent<br><br>2. État ou action de personnes qui sont en relation, qui communiquent entre elles<br><br>3. Personne avec qui on est en relation, avec qui on entre en rapport pour se procurer quelque chose, pour obtenir des renseignements";
 
   // ✅ Effect pour déclencher l'animation fade in up
   useEffect(() => {
@@ -30,8 +30,8 @@ export default function Contact() {
       let currentIndex = 0;
 
       const typeNextChar = () => {
-        if (currentIndex < dictionaryText.length) {
-          setTypewriterText(dictionaryText.slice(0, currentIndex + 1));
+        if (currentIndex < contactText.length) {
+          setTypewriterText(contactText.slice(0, currentIndex + 1));
           currentIndex++;
           timeoutId = setTimeout(typeNextChar, 30); // Vitesse de frappe
         }
@@ -57,15 +57,11 @@ export default function Contact() {
           }`}
         >
           <div className="contact-content">
-            {/* ✅ Section définition du dictionnaire à gauche */}
             <div className="contact-text-section">
-              <h2>Contactez-nous</h2>
-
-              {/* ✅ Titre "Dictionnaire :" souligné */}
-              <h3 className="dictionary-title">Dictionnaire :</h3>
-
               {/* ✅ Texte avec animation machine à écrire */}
               <div className="typewriter-container">
+                {/* ✅ Titre "Contact :" souligné */}
+                <h3 className="contact-title">Contact :</h3>
                 <p
                   className="typewriter-text"
                   dangerouslySetInnerHTML={{

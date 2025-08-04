@@ -24,7 +24,7 @@ export default function Home() {
       }`}
       style={{
         backgroundImage: "url('/assets/hero.webp')",
-        backgroundSize: "cover",
+        backgroundSize: "cover", // ✅ CHANGÉ : de "cover" à "contain"
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
