@@ -2,7 +2,7 @@
 module.exports = {
   siteUrl: "https://www.iconodule.fr",
   generateRobotsTxt: true,
-  exclude: ["/admin/*", "/login", "/register"],
   generateIndexSitemap: true,
   outDir: "public",
+  exclude: ["/admin", "/admin/*", "/login", "/register", "/forgot-password"],
 };
