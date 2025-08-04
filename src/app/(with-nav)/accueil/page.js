@@ -4,7 +4,6 @@ import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import Head from "next/head";
 
 export default function AccueilPlanInteractif() {
   const router = useRouter();
@@ -103,10 +102,6 @@ export default function AccueilPlanInteractif() {
 
   return (
     <>
-      <Head>
-        <link rel="preload" href="/assets/plan.webp" as="image" />
-      </Head>
-
       <div
         className="plan-container"
         style={{ position: "relative", margin: "0 auto" }}

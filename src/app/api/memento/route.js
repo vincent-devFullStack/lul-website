@@ -18,15 +18,10 @@ export const POST = withAuth(async (req) => {
   const Memento = getMementoModel();
   const body = await req.json();
 
-  if (
-    !body.quote ||
-    !body.author ||
-    !body.role ||
-    !body.imageUrl ||
-    !body.link
-  ) {
+  // ✅ MODIFIÉ : Link retiré des champs obligatoires
+  if (!body.quote || !body.author || !body.role || !body.imageUrl) {
     return NextResponse.json(
-      { error: "Tous les champs sont requis" },
+      { error: "Les champs citation, auteur, rôle et image sont requis" },
       { status: 400 }
     );
   }
@@ -35,7 +30,7 @@ export const POST = withAuth(async (req) => {
     quote: body.quote,
     author: body.author,
     role: body.role,
-    link: body.link || null, // ✅ Inclure le lien
+    link: body.link || null, // ✅ Déjà correct, reste facultatif
     imageUrl: body.imageUrl,
   });
   return NextResponse.json(memento, { status: 201 });
