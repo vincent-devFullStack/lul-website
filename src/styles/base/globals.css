@@ -7,6 +7,8 @@
   --foreground: #3b3b3b;
   --active-menu-item: #6b522c;
   --brown: #b3a279;
+  --brown-hover: #5a513d;
+  --border-brown-hover: #aa9a73;
   --border-brown: #7d7154;
   --header-background: #fff1ca;
   --login-background: #efebda;
@@ -177,16 +179,88 @@ textarea::-webkit-scrollbar-thumb:hover,
   }
 }
 
+/* Suppression de la contrainte min-width globale pour permettre le responsive
 body,
 html,
 #__next {
   min-width: 1200px;
-}
+} */
 
-/* Désactive le responsive uniquement sur la page /accueil */
+/* Désactive le responsive uniquement sur la page /accueil - COMMENTÉ car plus utilisé
 body.no-responsive {
   min-width: 1200px;
   overflow-x: hidden;
+} */
+
+/* Exception : La navigation reste responsive même avec no-responsive */
+body.no-responsive .header-menu {
+  min-width: auto !important;
+}
+
+body.no-responsive .header-menu * {
+  min-width: auto !important;
+}
+
+/* Protection globale contre les débordements */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  min-width: 0 !important; /* Force la suppression de toute min-width */
+}
+
+/* Assurer que tous les containers respectent la largeur maximum */
+.container,
+.max-w-7xl,
+.max-w-6xl,
+.max-w-5xl,
+.max-w-4xl {
+  width: 100%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Force le responsive sur tous les éléments critiques */
+#__next,
+.main-container,
+main {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100vw !important;
+  overflow-x: hidden;
+}
+
+/* Classes utilitaires pour éviter les débordements */
+.break-anywhere {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.no-overflow {
+  overflow-x: hidden;
+}
+
+/* Correction spécifique pour la plage 770px-1200px */
+@media (min-width: 770px) and (max-width: 1200px) {
+  body, html, #__next {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+  }
+  
+  .main-container,
+  .plan-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 
 /* Conteneur général */
@@ -229,10 +303,8 @@ body.no-responsive {
 }
 
 .room-label:hover {
-  font-size: 0.7rem;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
   color: #93692a;
-  max-width: 88%;
   word-break: normal;
   overflow-wrap: normal;
 }
@@ -256,7 +328,7 @@ body.no-responsive {
   }
 }
 
-/* Responsive header/footer */
+/* Responsive header/footer - SUPPRIMÉ car conflictuel avec Tailwind
 @media (max-width: 770px) {
   body,
   html,
@@ -265,7 +337,7 @@ body.no-responsive {
     width: 100%;
   }
   .plan-container {
-    display: none; /* on cache sur mobile */
+    display: none;
   }
 
   .header-menu,
@@ -277,21 +349,22 @@ body.no-responsive {
     flex-direction: column;
     text-align: center;
   }
+} */
 
-  .footer-nav {
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .footer-nav-item {
-    font-size: 0.9rem;
-  }
-
-  .main-container {
-    padding: 1rem;
-  }
+/* Règles CSS orphelines corrigées
+.footer-nav {
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
 }
+
+.footer-nav-item {
+  font-size: 0.9rem;
+}
+
+.main-container {
+  padding: 1rem;
+} */
 
 /* Curseur personnalisé pour les éléments avec la classe .arrow-cursor */
 .arrow-cursor {

@@ -47,14 +47,14 @@ export default function AdminLayout({ children }) {
         <div className="admin-header-right">
           <Link href="/accueil" className="admin-header-link">
             <FiHome className="w-5 h-5 mr-2" />
-            Retour au site
+            <span className="hidden md:block">Retour au site</span>
           </Link>
           <button
             onClick={handleLogout}
             className="admin-header-link admin-header-logout"
           >
             <BiLogOut className="w-5 h-5 mr-2" />
-            Déconnexion
+            <span className="hidden md:block">Déconnexion</span>
           </button>
         </div>
       </header>

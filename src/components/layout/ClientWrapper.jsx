@@ -9,21 +9,22 @@ export default function ClientWrapper({ children }) {
   const pathname = usePathname();
 
   const isEntryPage = pathname === "/";
-  const isAccueilPage = pathname === "/accueil";
+  const isAdminPage = pathname.startsWith("/admin");
+  // const isAccueilPage = pathname === "/accueil";
 
-  useEffect(() => {
-    if (isAccueilPage) {
-      document.body.classList.add("no-responsive");
-    } else {
-      document.body.classList.remove("no-responsive");
-    }
-  }, [isAccueilPage]);
+  // useEffect(() => {
+  //   if (isAccueilPage) {
+  //     document.body.classList.add("no-responsive");
+  //   } else {
+  //     document.body.classList.remove("no-responsive");
+  //   }
+  // }, [isAccueilPage]);
 
   return (
     <>
-      {!isEntryPage && <Navigation />}
+      {!isEntryPage && !isAdminPage && <Navigation />}
       <main className="flex-1">{children}</main>
-      {!isEntryPage && <Footer />}
+      {!isEntryPage && !isAdminPage && <Footer />}
     </>
   );
 }

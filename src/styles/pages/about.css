@@ -145,21 +145,22 @@
 .about-image-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 30px;
-  padding: 80px; /* ✅ Plus d'espace autour */
+  /* margin-bottom: 30px; */
+  /* padding: 80px; */
   position: relative;
+  width: 100%;
 }
 
 /* ✅ Effet de cadre décoratif autour de l'image - AMÉLIORÉ */
-.about-image-container::before {
+/* .about-image-container::before {
   content: "";
   position: absolute;
-  top: 30px; /* ✅ Ajusté pour la plus grande image */
+  top: 30px; 
   left: 30px;
   right: 30px;
   bottom: 30px;
   border: 2px solid rgba(191, 167, 106, 0.4);
-  border-radius: 20px; /* ✅ Plus arrondi */
+  border-radius: 20px; 
   pointer-events: none;
   background: linear-gradient(
     135deg,
@@ -168,31 +169,28 @@
     rgba(191, 167, 106, 0.05)
   );
   box-shadow: inset 0 2px 8px rgba(191, 167, 106, 0.1);
-}
+} */
 
-/* ✅ Effet de profondeur avec un second cadre */
-.about-image-container::after {
+/* .about-image-container::after {
   content: "";
   position: absolute;
-  top: 12px; /* ✅ Ajusté pour la plus grande image */
+  top: 12px;
   left: 12px;
   right: 12px;
   bottom: 12px;
   border: 1px solid rgba(125, 113, 84, 0.2);
-  border-radius: 24px; /* ✅ Plus arrondi */
+  border-radius: 24px; 
   pointer-events: none;
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.05),
     inset 0 1px 3px rgba(255, 255, 255, 0.3);
-}
+} */
 
 .about-image {
   width: auto;
   height: auto;
-  max-width: 700px; /* ✅ Augmenté de 500px à 700px */
-  max-height: 700px; /* ✅ Augmenté de 500px à 700px */
   object-fit: contain;
-  border-radius: 20px; /* ✅ Plus arrondi pour la grande image */
+  border-radius: 50px; /* ✅ Plus arrondi pour la grande image */
   box-shadow:
     0 25px 50px rgba(0, 0, 0, 0.18),
     /* ✅ Ombre plus forte */ 0 12px 25px rgba(0, 0, 0, 0.12),
@@ -202,7 +200,7 @@
   position: relative;
   z-index: 2;
   background: #efebda;
-  padding: 12px 12px 30px 12px; /* ✅ Plus de padding pour effet polaroid */
+  padding: 12px; /* ✅ Plus de padding pour effet polaroid */
 }
 
 /* ✅ Effet de reflet subtil adapté à la grande image */
@@ -394,12 +392,21 @@
 @media (max-width: 480px) {
   .about-image,
   .about-image-placeholder {
-    max-height: 300px;
+    max-height: 350px;
     border-radius: 12px;
   }
 
   .about-image-container {
     padding: 15px;
+  }
+
+  .about-title {
+    font-size: 1.75rem;
+  }
+
+  .about-text {
+    font-size: 1rem;
+    line-height: 1.25;
   }
 }
 
@@ -422,30 +429,19 @@
 
 .edit-button {
   /* ✅ COULEURS HARMONISÉES avec les autres boutons */
-  background: linear-gradient(
-    135deg,
-    rgba(219, 191, 125, 0.404) 0%,
-    rgba(223, 204, 158, 0.329) 100%
-  );
-  color: #8b6e4e; /* ✅ Même couleur que les autres boutons */
-  border: 2px solid rgba(191, 167, 106, 0.3); /* ✅ Bordure harmonisée */
+  background-color: var(--brown);
+  color: var(--color-amber-50); /* ✅ Même couleur que les autres boutons */
+  border: 0.75px solid var(--border-brown); /* ✅ Bordure harmonisée */
   padding: 16px 32px;
-  border-radius: 25px; /* ✅ Plus arrondi comme les autres */
+  border-radius: 15px; /* ✅ Plus arrondi comme les autres */
   cursor: pointer;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   font-family: "EB Garamond", serif;
-  /* ✅ Ombres harmonisées */
-  box-shadow:
-    0 4px 15px rgba(191, 167, 106, 0.2),
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   letter-spacing: 0.02em;
   position: relative;
   overflow: hidden;
-  /* ✅ Text-shadow harmonisé */
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 /* ✅ Effet de brillance harmonisé */
@@ -472,20 +468,9 @@
 
 .edit-button:hover {
   /* ✅ Couleurs hover harmonisées */
-  background: linear-gradient(
-    135deg,
-    rgba(191, 167, 106, 0.25) 0%,
-    rgba(212, 196, 168, 0.2) 50%,
-    rgba(191, 167, 106, 0.15) 100%
-  );
-  color: #6b5d4f; /* ✅ Même couleur hover que les autres */
-  border-color: rgba(191, 167, 106, 0.5);
-  /* ✅ Ombres hover harmonisées */
-  box-shadow:
-    0 8px 25px rgba(191, 167, 106, 0.3),
-    0 4px 15px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+  background: var(--brown-hover);
+  border: 0.75px solid var(--border-brown-hover);
+  color: var(--color-amber-50);
 }
 
 /* ✅ Effet focus harmonisé */

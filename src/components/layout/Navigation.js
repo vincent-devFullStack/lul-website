@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { Settings } from "lucide-react";
+import { Settings, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import "../../styles/layout/Navigation.css";
 
@@ -12,10 +12,19 @@ export default function Navigation() {
   const pathname = usePathname();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
 
   const handleLogout = () => {
     logout();
@@ -32,62 +41,191 @@ export default function Navigation() {
   const isActive = (href) => pathname === href;
 
   return (
-    <nav className="relative flex flex-col top-0 left-0 right-0 header-menu shadow-lg z-[100] h-[120px] items-center justify-center">
-      <div className="w-full relative max-w-[1280px] mx-auto px-4">
-        <div className="flex justify-center mb-3">
-          <Link href="/" className="main-title" tabIndex="0">
-            L'iconodule
-          </Link>
-        </div>
+    <>
+      {/* Header principal - Design mobile-first */}
+      <nav className="header-menu sticky top-0 left-0 right-0 w-full shadow-lg z-50">
+        <div className="w-full flex md:justify-between lg:justify-center px-4">
+          
+          {/* Layout Desktop Original - Structure en colonne avec titre centré */}
+          <div className="hidden lg:flex flex-col items-center justify-center h-[120px]">
+            
+            {/* Titre centré en haut */}
+            <div className="flex justify-center mb-3">
+              <Link href="/" className="main-title" tabIndex="0">
+                L'iconodule
+              </Link>
+            </div>
 
-        <div className="flex justify-center items-center space-x-10 mb-2">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`header-link px-3 py-2 text-lg font-medium transition-colors duration-200 ${
-                isActive(item.href)
-                  ? "item-active"
-                  : "hover:text-[var(--active-menu-item)]"
-              }`}
-            >
-              {item.name}
+            {/* Navigation horizontale en bas */}
+            <div className="flex justify-center items-center space-x-10 mb-2">
+              {navItems.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={`header-link px-3 py-2 text-lg font-medium transition-colors duration-200 ${
+                    isActive(item.href)
+                      ? "item-active"
+                      : "hover:text-[var(--active-menu-item)]"
+                  }`}
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+
+            {/* Auth Desktop - Position absolue en haut à droite */}
+            {isAuthenticated && (
+              <div className="absolute top-5 right-5 flex items-center space-x-6">
+                <Link
+                  href="/admin/salles"
+                  aria-label="Administration"
+                  role="button"
+                  className="text-[var(--admin-button-text)] hover:text-[var(--admin-button-hover-text)] transition-colors duration-200"
+                >
+                  <Settings
+                    title="Administration"
+                    className="w-5 h-5 transition-transform duration-300 ease-in-out hover:rotate-90"
+                  />
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="text-lg hover:text-[var(--active-menu-item)]"
+                >
+                  Se déconnecter
+                </button>
+              </div>
+            )}
+
+            {!isAuthenticated && (
+              <Link
+                href="/login"
+                className="absolute top-5 right-5 text-lg hover:text-[var(--active-menu-item)]"
+              >
+                Se connecter
+              </Link>
+            )}
+          </div>
+
+          {/* Layout Mobile - Titre à gauche, bouton à droite avec espacement maximum */}
+          <div className="flex lg:hidden items-center h-16 md:h-20 w-full">
+            
+            {/* Logo/Titre complètement à gauche */}
+            <Link href="/" className="main-title text-xl sm:text-2xl md:text-3xl flex-shrink-0" tabIndex="0">
+              L'iconodule
             </Link>
-          ))}
-        </div>
 
-        {isAuthenticated && (
-          <div className="absolute top-5 right-5 flex items-center space-x-6">
-            <Link
-              href="/admin/salles"
-              aria-label="Administration"
-              role="button"
-              className="text-[var(--admin-button-text)] hover:text-[var(--admin-button-hover-text)] transition-colors duration-200"
-            >
-              <Settings
-                title="Administration"
-                className="w-5 h-5 transition-transform duration-300 ease-in-out hover:rotate-90"
-              />
-            </Link>
+            {/* Espaceur qui prend tout l'espace disponible */}
+            <div className="flex-grow"></div>
 
+            {/* Bouton Menu Mobile - complètement à droite */}
             <button
-              onClick={handleLogout}
-              className="text-lg hover:text-[var(--active-menu-item)]"
+              onClick={toggleMobileMenu}
+              className="p-2 rounded-lg bg-[rgba(191,167,106,0.1)] hover:bg-[rgba(191,167,106,0.2)] transition-all duration-300 z-50 flex-shrink-0"
+              aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
+              aria-expanded={mobileMenuOpen}
             >
-              Se déconnecter
+              {mobileMenuOpen ? (
+                <X className="h-6 w-6 text-[var(--foreground)]" />
+              ) : (
+                <Menu className="h-6 w-6 text-[var(--foreground)]" />
+              )}
             </button>
           </div>
-        )}
+        </div>
+      </nav>
 
-        {!isAuthenticated && (
-          <Link
-            href="/login"
-            className="absolute top-5 right-5 text-lg hover:text-[var(--active-menu-item)]"
-          >
-            Se connecter
-          </Link>
-        )}
+      {/* Menu Mobile - Drawer/Sidebar */}
+      <div className={`lg:hidden fixed inset-0 z-40 transition-opacity duration-300 ${
+        mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      }`}>
+        
+        {/* Overlay */}
+        <div 
+          className="fixed inset-0 bg-black/50 transition-opacity duration-300"
+          onClick={closeMobileMenu}
+        />
+
+        {/* Drawer */}
+        <div className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gradient-to-b from-[var(--header-background)] via-white to-[var(--login-background)] shadow-xl transform transition-transform duration-300 ease-out ${
+          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}>
+          
+          {/* Header du drawer */}
+          <div className="flex items-center justify-between p-6 border-b border-[rgba(191,167,106,0.2)]">
+            <span className="text-lg font-semibold text-[var(--foreground)]">Menu</span>
+            <button
+              onClick={closeMobileMenu}
+              className="p-2 rounded-lg hover:bg-[rgba(191,167,106,0.1)] transition-colors duration-200"
+            >
+              <X className="h-5 w-5 text-[var(--foreground)]" />
+            </button>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="px-6 py-4 space-y-2">
+            {navItems.map((item, index) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                onClick={closeMobileMenu}
+                className={`block px-4 py-3 rounded-lg font-medium transition-all duration-200 transform hover:translate-x-2 ${
+                  isActive(item.href)
+                    ? "bg-[rgba(191,167,106,0.2)] text-[var(--active-menu-item)] font-semibold border-l-4 border-[var(--active-menu-item)]"
+                    : "text-[var(--foreground)] hover:bg-[rgba(191,167,106,0.1)] hover:text-[var(--active-menu-item)]"
+                }`}
+                style={{
+                  animationDelay: mobileMenuOpen ? `${index * 100}ms` : '0ms'
+                }}
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+
+          {/* Séparateur */}
+          <div className="mx-6 border-t border-[rgba(191,167,106,0.2)]"></div>
+
+          {/* Auth Section */}
+          <div className="px-6 py-4 space-y-2">
+            {isAuthenticated ? (
+              <>
+                <Link
+                  href="/admin/salles"
+                  onClick={closeMobileMenu}
+                  className="flex items-center px-4 py-3 rounded-lg font-medium text-[var(--brown)] hover:bg-[rgba(191,167,106,0.1)] hover:text-[var(--active-menu-item)] transition-all duration-200"
+                >
+                  <Settings className="w-5 h-5 mr-3" />
+                  Administration
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    closeMobileMenu();
+                  }}
+                  className="w-full text-left px-4 py-3 rounded-lg font-medium text-[var(--active-menu-item)] hover:bg-[rgba(191,167,106,0.1)] hover:text-[var(--brown)] transition-all duration-200"
+                >
+                  Se déconnecter
+                </button>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                onClick={closeMobileMenu}
+                className="block px-4 py-3 rounded-lg font-medium text-[var(--active-menu-item)] hover:bg-[rgba(191,167,106,0.1)] hover:text-[var(--brown)] transition-all duration-200"
+              >
+                Se connecter
+              </Link>
+            )}
+          </div>
+
+          {/* Footer du drawer */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[rgba(191,167,106,0.1)] to-transparent">
+            <p className="text-xs text-[var(--foreground)] opacity-70 text-center">
+              L'iconodule © 2025
+            </p>
+          </div>
+        </div>
       </div>
-    </nav>
+    </>
   );
 }

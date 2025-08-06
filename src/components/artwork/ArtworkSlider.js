@@ -60,7 +60,6 @@ export default function ArtworkSlider({ artworks = [] }) {
           onClick={previous}
           disabled={isAnimating}
         >
-          <span className="sr-only">Précédent</span>
         </button>
 
         {/* ✅ Container avec animation slide */}
@@ -80,7 +79,6 @@ export default function ArtworkSlider({ artworks = [] }) {
           onClick={next}
           disabled={isAnimating}
         >
-          <span className="sr-only">Suivant</span>
         </button>
       </div>
 

@@ -276,8 +276,8 @@ export default function About() {
                 <Image
                   src={imageUrl}
                   alt={title}
-                  width={500}
-                  height={300}
+                  width={1000}
+                  height={1000}
                   className="about-image"
                 />
               ) : (
