@@ -11,7 +11,8 @@
     "seed": "node src/app/scripts/seed.js",
     "seed:reset": "node src/app/scripts/seed.js",
     "db:check": "node src/app/scripts/check-db.js",
-    "db:mongoose": "node src/app/scripts/check-mongoose.js"
+    "db:mongoose": "node src/app/scripts/check-mongoose.js",
+    "cloudinary:check": "node src/app/scripts/check-cloudinary.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
