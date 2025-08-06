@@ -204,8 +204,8 @@ body.no-responsive {
 .plan-container {
   position: relative;
   width: 100%;
-  max-width: 72rem; /* largeur fixe desktop */
-  aspect-ratio: 1152 / 600; /* ratio largeur/hauteur du plan */
+  max-width: 72rem;
+  aspect-ratio: 1152 / 600;
   height: auto;
   margin: 0 auto;
   overflow: hidden;
@@ -216,19 +216,25 @@ body.no-responsive {
   text-align: center;
   color: #2a231a;
   padding: 0 0;
-  transition: font-size 0.2s ease;
-  font-size: 0.7rem;
+  transition:
+    font-size 0.1s ease-in-out,
+    color 0.1s ease-in-out,
+    text-shadow 0.1s ease-in-out;
+  font-size: 0.65rem;
   white-space: normal;
   word-break: break-word;
   overflow-wrap: break-word;
   width: 100%;
-  max-width: 90%;
+  max-width: 92%;
 }
 
 .room-label:hover {
-  font-size: 0.73rem;
+  font-size: 0.7rem;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
   color: #93692a;
+  max-width: 88%;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 @media (max-width: 1300px) {
@@ -286,3 +292,159 @@ body.no-responsive {
     padding: 1rem;
   }
 }
+
+/* Curseur personnalisé pour les éléments avec la classe .arrow-cursor */
+.arrow-cursor {
+  cursor:
+    url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>')
+      12 12,
+    auto;
+}
+
+/* ✅ Container du bouton de retour */
+.back-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+/* ✅ Style du bouton de retour */
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #8b6e4e;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: "EB Garamond", serif;
+  /* ✅ Style harmonisé avec vos autres boutons */
+  background: linear-gradient(
+    135deg,
+    rgba(235, 227, 204, 0.6) 0%,
+    rgba(235, 227, 204, 0.4) 50%,
+    rgba(235, 227, 204, 0.3) 100%
+  );
+  border: 2px solid rgba(235, 227, 204, 0.7);
+  padding: 12px 24px;
+  border-radius: 25px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow:
+    0 4px 15px rgba(235, 227, 204, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ✅ Flèche de retour */
+.back-arrow {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+  font-weight: 400;
+}
+
+/* ✅ Effet de brillance */
+.back-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.5) 50%,
+    transparent 100%
+  );
+  transition: left 0.6s ease;
+  z-index: 1;
+}
+
+.back-button:hover::before {
+  left: 100%;
+}
+
+/* ✅ Effet hover */
+.back-button:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(235, 227, 204, 0.8) 0%,
+    rgba(235, 227, 204, 0.6) 50%,
+    rgba(235, 227, 204, 0.5) 100%
+  );
+  color: #6b5d4f;
+  border-color: rgba(235, 227, 204, 0.9);
+  box-shadow:
+    0 8px 25px rgba(235, 227, 204, 0.6),
+    0 4px 15px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.95);
+}
+
+/* ✅ Animation de la flèche au hover */
+.back-button:hover .back-arrow {
+  transform: translateX(-4px);
+}
+
+/* ✅ Focus pour accessibilité */
+.back-button:focus {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(235, 227, 204, 0.6),
+    0 4px 15px rgba(235, 227, 204, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* ✅ Responsive */
+@media (max-width: 768px) {
+  .back-button-container {
+    padding-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .back-button {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    border-radius: 20px;
+  }
+
+  .back-arrow {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-button-container {
+    padding-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .back-button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    border-radius: 18px;
+  }
+
+  .back-arrow {
+    font-size: 1rem;
+  }
+}
+
+/* ✅ Cherchez ces règles et modifiez-les */
+@media (min-width: 40rem) {
+  .main-container {
+    padding-inline: calc(var(--spacing) * 6); /* ✅ PROBLÈME ICI */
+  }
+}
+
+/* ✅ REMPLACEZ par : */
+@media (min-width: 40rem) {
+  .main-container {
+    padding-inline: calc(var(--spacing) * 2); /* ✅ Réduit le padding */
+  }
+}
+
+/* ✅ Ou supprimez complètement cette règle */

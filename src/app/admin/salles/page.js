@@ -9,14 +9,14 @@ export default function AdminSallesPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
-  
+
   // Room edit modal state
   const [roomModalOpen, setRoomModalOpen] = useState(false);
   const [editingRoom, setEditingRoom] = useState(null);
   const [roomFormData, setRoomFormData] = useState({
     name: "",
     description: "",
-    status: "active"
+    status: "active",
   });
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function AdminSallesPage() {
     try {
       setLoading(true);
       const response = await fetch("/api/salles");
-      
+
       if (!response.ok) {
         throw new Error("Erreur lors de la récupération des salles");
       }
@@ -48,7 +48,7 @@ export default function AdminSallesPage() {
     setRoomFormData({
       name: room.name || "",
       description: room.description || "",
-      status: room.status || "active"
+      status: room.status || "active",
     });
     setRoomModalOpen(true);
   };
@@ -59,13 +59,13 @@ export default function AdminSallesPage() {
     setRoomFormData({
       name: "",
       description: "",
-      status: "active"
+      status: "active",
     });
   };
 
   const handleRoomInputChange = (e) => {
     const { name, value } = e.target;
-    setRoomFormData(prev => ({ ...prev, [name]: value }));
+    setRoomFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleRoomSubmit = async (e) => {
@@ -84,24 +84,23 @@ export default function AdminSallesPage() {
       }
 
       const result = await response.json();
-      
+
       setMessage({
         type: "success",
-        text: "Informations de la salle mises à jour avec succès"
+        text: "Informations de la salle mises à jour avec succès",
       });
 
       // Mettre à jour la liste des salles
-      setRooms(prevRooms => 
-        prevRooms.map(room => 
+      setRooms((prevRooms) =>
+        prevRooms.map((room) =>
           room.slug === editingRoom.slug ? result.room : room
         )
       );
-      
+
       closeRoomModal();
-      
+
       // Clear message after 5 seconds
       setTimeout(() => setMessage(null), 5000);
-
     } catch (err) {
       setError(err.message);
     }
@@ -139,9 +138,7 @@ export default function AdminSallesPage() {
       </div>
 
       {message && (
-        <div className={`message message-${message.type}`}>
-          {message.text}
-        </div>
+        <div className={`message message-${message.type}`}>{message.text}</div>
       )}
 
       {rooms.length === 0 ? (
@@ -154,10 +151,17 @@ export default function AdminSallesPage() {
             <div key={room._id} className="room-card">
               <h3 className="room-card-title">{room.name || room.title}</h3>
               <p className="room-card-meta">
-                Slug: {room.slug} • {room.artworks?.length || 0} œuvre(s) • Statut: {room.status || 'active'}
+                Slug: {room.slug} • {room.artworks?.length || 0} œuvre(s) •
+                Statut: {room.status || "active"}
               </p>
               {room.description && (
-                <p style={{ color: '#6A6A6A', fontSize: '0.9rem', marginBottom: '16px' }}>
+                <p
+                  style={{
+                    color: "#6A6A6A",
+                    fontSize: "0.9rem",
+                    marginBottom: "16px",
+                  }}
+                >
                   {room.description}
                 </p>
               )}
@@ -195,12 +199,16 @@ export default function AdminSallesPage() {
               <h2 className="modal-title">
                 Modifier "{editingRoom?.name || editingRoom?.title}"
               </h2>
-              <button onClick={closeRoomModal} className="modal-close">×</button>
+              <button onClick={closeRoomModal} className="modal-close">
+                ×
+              </button>
             </div>
 
             <form onSubmit={handleRoomSubmit} className="admin-form">
               <div className="admin-form-group">
-                <label className="admin-form-label">Nom complet de la salle</label>
+                <label className="admin-form-label">
+                  Nom complet de la salle
+                </label>
                 <input
                   type="text"
                   name="name"
@@ -234,7 +242,6 @@ export default function AdminSallesPage() {
                   className="admin-form-select"
                 >
                   <option value="active">Active</option>
-                  <option value="restricted">Accès restreint</option>
                   <option value="maintenance">En maintenance</option>
                 </select>
               </div>
@@ -247,10 +254,7 @@ export default function AdminSallesPage() {
                 >
                   Annuler
                 </button>
-                <button
-                  type="submit"
-                  className="admin-btn"
-                >
+                <button type="submit" className="admin-btn">
                   Enregistrer les modifications
                 </button>
               </div>
@@ -260,4 +264,4 @@ export default function AdminSallesPage() {
       )}
     </div>
   );
-} 
+}

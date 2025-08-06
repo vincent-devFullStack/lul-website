@@ -1,118 +1,382 @@
-/* ✅ DESIGN MODERNE ET ÉLÉGANT - CLEAN VERSION */
+/* ✅ DESIGN MODERNE ET ÉLÉGANT - VERSION AMÉLIORÉE AVEC COULEUR PERSONNALISÉE */
 
 .about-container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
 }
 
 .about-modern-container {
-  background: linear-gradient(
-    135deg,
-    var(--login-background) 0%,
-    var(--header-background) 100%
-  );
+  background: #efebda; /* ✅ Couleur personnalisée */
   border-radius: 16px;
   overflow: hidden;
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.1),
     0 8px 16px rgba(0, 0, 0, 0.05);
-  border: 1px solid rgba(125, 113, 84, 0.2);
+  backdrop-filter: blur(10px);
+  /* ✅ Animation fade in up */
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
 }
 
+/* ✅ Effet de texture subtile sur le container */
+.about-modern-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 30%,
+    transparent 70%,
+    rgba(191, 167, 106, 0.05) 100%
+  );
+  pointer-events: none;
+  border-radius: 16px;
+}
+
+/* ✅ ANIMATION FADE IN UP */
+.fade-in-up-initial {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.fade-in-up-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ✅ Animation avec keyframes pour plus de fluidité */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.about-modern-container.fade-in-up-active {
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* ✅ Animation staggerée pour les sections internes */
 .about-hero-section {
-  background: var(--header-background);
-  padding: 60px 40px 40px;
+  background: linear-gradient(
+    135deg,
+    rgba(239, 235, 218, 0.8) 0%,
+    rgba(227, 212, 180, 0.6) 100%
+  );
+  padding: 40px 50px;
   text-align: center;
-  border-bottom: 1px solid rgba(125, 113, 84, 0.2);
+  border-bottom: 2px solid rgba(191, 167, 106, 0.4);
+  position: relative;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+}
+
+/* ✅ Effet décoratif sur la section hero */
+.about-hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+}
+
+.about-content-section {
+  padding: 50px 60px 60px;
+  background: linear-gradient(
+    135deg,
+    rgba(239, 235, 218, 0.5) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(239, 235, 218, 0.5) 100%
+  );
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
+  position: relative;
+}
+
+.fade-in-up-initial .about-hero-section,
+.fade-in-up-initial .about-content-section {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.fade-in-up-active .about-hero-section,
+.fade-in-up-active .about-content-section {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .about-title {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
   font-weight: 600;
-  color: var(--foreground);
+  color: #3a342a; /* ✅ Couleur plus contrastée pour la lisibilité */
   margin-bottom: 40px;
   font-family: "EB Garamond", serif;
   letter-spacing: -0.02em;
+  text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+  position: relative;
+}
+
+/* ✅ Effet décoratif sous le titre - RÉPARÉ */
+.about-title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--brown),
+    var(--border-brown),
+    var(--brown)
+  );
+  border-radius: 2px;
 }
 
 .about-image-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  padding: 80px; /* ✅ Plus d'espace autour */
+  position: relative;
+}
+
+/* ✅ Effet de cadre décoratif autour de l'image - AMÉLIORÉ */
+.about-image-container::before {
+  content: "";
+  position: absolute;
+  top: 30px; /* ✅ Ajusté pour la plus grande image */
+  left: 30px;
+  right: 30px;
+  bottom: 30px;
+  border: 2px solid rgba(191, 167, 106, 0.4);
+  border-radius: 20px; /* ✅ Plus arrondi */
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    transparent,
+    rgba(191, 167, 106, 0.05)
+  );
+  box-shadow: inset 0 2px 8px rgba(191, 167, 106, 0.1);
+}
+
+/* ✅ Effet de profondeur avec un second cadre */
+.about-image-container::after {
+  content: "";
+  position: absolute;
+  top: 12px; /* ✅ Ajusté pour la plus grande image */
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  border: 1px solid rgba(125, 113, 84, 0.2);
+  border-radius: 24px; /* ✅ Plus arrondi */
+  pointer-events: none;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.05),
+    inset 0 1px 3px rgba(255, 255, 255, 0.3);
 }
 
 .about-image {
-  width: 280px;
-  height: 280px;
-  object-fit: cover;
-  border-radius: 50%;
+  width: auto;
+  height: auto;
+  max-width: 700px; /* ✅ Augmenté de 500px à 700px */
+  max-height: 700px; /* ✅ Augmenté de 500px à 700px */
+  object-fit: contain;
+  border-radius: 20px; /* ✅ Plus arrondi pour la grande image */
   box-shadow:
-    0 12px 24px rgba(0, 0, 0, 0.15),
-    0 4px 8px rgba(0, 0, 0, 0.1);
-  border: 4px solid var(--header-background);
-  transition: transform 0.3s ease;
+    0 25px 50px rgba(0, 0, 0, 0.18),
+    /* ✅ Ombre plus forte */ 0 12px 25px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(125, 113, 84, 0.25);
+  border: 5px solid #efebda; /* ✅ Bordure plus épaisse */
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  z-index: 2;
+  background: #efebda;
+  padding: 12px 12px 30px 12px; /* ✅ Plus de padding pour effet polaroid */
+}
+
+/* ✅ Effet de reflet subtil adapté à la grande image */
+.about-image::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 100%
+  );
+  border-radius: 16px 16px 0 0; /* ✅ Ajusté au border-radius */
+  pointer-events: none;
 }
 
 .about-image:hover {
-  transform: scale(1.02);
+  transform: scale(1.02) translateY(-10px) rotate(0.5deg); /* ✅ Rotation réduite pour grande image */
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.22),
+    0 15px 30px rgba(0, 0, 0, 0.18),
+    0 6px 15px rgba(125, 113, 84, 0.35);
+  border-color: rgba(191, 167, 106, 0.8);
+  filter: brightness(1.03) contrast(1.01); /* ✅ Effet plus subtil */
 }
 
+/* ✅ Animation d'entrée pour l'image */
+@keyframes imageReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+.about-image {
+  animation: imageReveal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
+}
+
+/* ✅ Placeholder adapté à la grande taille */
 .about-image-placeholder {
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  background: rgba(179, 162, 121, 0.1);
-  border: 3px dashed var(--brown);
+  width: 100%;
+  max-width: 700px; /* ✅ Augmenté */
+  max-height: 700px; /* ✅ Augmenté */
+  aspect-ratio: 4/3; /* ✅ Ratio ajusté pour grande image */
+  border-radius: 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(191, 167, 106, 0.1) 50%,
+    rgba(255, 255, 255, 0.2) 100%
+  );
+  border: 4px dashed rgba(191, 167, 106, 0.6); /* ✅ Bordure plus épaisse */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: var(--brown);
   font-style: italic;
-  gap: 12px;
-  transition: all 0.3s ease;
+  gap: 16px; /* ✅ Plus d'espace */
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 4px 12px rgba(0, 0, 0, 0.06),
+    0 6px 16px rgba(191, 167, 106, 0.12);
+  font-size: 1.1rem; /* ✅ Texte plus grand */
+}
+
+/* ✅ Effet de texture sur le placeholder */
+.about-image-placeholder::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(
+      circle at 25% 25%,
+      rgba(191, 167, 106, 0.1) 1px,
+      transparent 1px
+    ),
+    radial-gradient(
+      circle at 75% 75%,
+      rgba(255, 255, 255, 0.1) 1px,
+      transparent 1px
+    );
+  background-size: 20px 20px;
+  background-position:
+    0 0,
+    10px 10px;
+  pointer-events: none;
 }
 
 .about-image-placeholder:hover {
-  background: rgba(179, 162, 121, 0.15);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(191, 167, 106, 0.2) 50%,
+    rgba(255, 255, 255, 0.3) 100%
+  );
   border-color: var(--border-brown);
+  transform: scale(1.02);
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.08),
+    0 8px 20px rgba(191, 167, 106, 0.2);
 }
 
-.about-content-section {
-  padding: 50px 60px 60px;
+/* ✅ Responsive adapté */
+@media (max-width: 1200px) {
+  .about-image {
+    max-width: 600px;
+    max-height: 600px;
+  }
+
+  .about-image-placeholder {
+    max-width: 600px;
+    max-height: 600px;
+  }
 }
 
-.about-text {
-  font-size: 1.25rem;
-  line-height: 1.8;
-  color: var(--foreground);
-  text-align: justify;
-  font-family: "EB Garamond", serif;
-  white-space: pre-line;
-  max-width: none;
-  margin: 0 auto;
-}
-
-/* Responsive */
 @media (max-width: 768px) {
   .about-container {
     padding: 20px 10px;
   }
 
   .about-hero-section {
-    padding: 40px 20px 30px;
+    padding: 30px 20px;
   }
 
   .about-title {
-    font-size: 2rem;
+    font-size: 2.2rem;
     margin-bottom: 30px;
+  }
+
+  .about-image-container {
+    padding: 20px; /* ✅ Moins de padding sur mobile */
   }
 
   .about-image,
   .about-image-placeholder {
-    width: 200px;
-    height: 200px;
+    max-width: 100%;
+    max-height: 400px; /* ✅ Hauteur limitée sur mobile */
+    border-radius: 16px;
+    padding: 8px 8px 20px 8px; /* ✅ Padding réduit sur mobile */
+  }
+
+  .about-image:hover {
+    transform: scale(1.01) translateY(-5px); /* ✅ Effet réduit sur mobile */
+  }
+
+  .about-image-container::before {
+    top: 15px;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    border-radius: 16px;
+  }
+
+  .about-image-container::after {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    border-radius: 20px;
   }
 
   .about-content-section {
@@ -122,11 +386,25 @@
   .about-text {
     font-size: 1.125rem;
     line-height: 1.7;
+    padding: 15px;
+  }
+}
+
+/* ✅ Très petits écrans */
+@media (max-width: 480px) {
+  .about-image,
+  .about-image-placeholder {
+    max-height: 300px;
+    border-radius: 12px;
+  }
+
+  .about-image-container {
+    padding: 15px;
   }
 }
 
 /* ========================================= */
-/* ÉDITION - MODAL ET BOUTONS */
+/* ÉDITION - MODAL ET BOUTONS HARMONISÉS */
 /* ========================================= */
 
 .edit-container {
@@ -137,36 +415,137 @@
 .edit-button-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   position: relative;
-  z-index: 20;
+  z-index: 1;
 }
 
 .edit-button {
-  background: var(--brown);
-  color: white;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 12px;
-  border: 1.5px solid var(--border-brown);
+  /* ✅ COULEURS HARMONISÉES avec les autres boutons */
+  background: linear-gradient(
+    135deg,
+    rgba(219, 191, 125, 0.404) 0%,
+    rgba(223, 204, 158, 0.329) 100%
+  );
+  color: #8b6e4e; /* ✅ Même couleur que les autres boutons */
+  border: 2px solid rgba(191, 167, 106, 0.3); /* ✅ Bordure harmonisée */
+  padding: 16px 32px;
+  border-radius: 25px; /* ✅ Plus arrondi comme les autres */
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
   font-family: "EB Garamond", serif;
+  /* ✅ Ombres harmonisées */
   box-shadow:
-    0 6px 12px rgba(0, 0, 0, 0.15),
-    0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+    0 4px 15px rgba(191, 167, 106, 0.2),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   letter-spacing: 0.02em;
+  position: relative;
+  overflow: hidden;
+  /* ✅ Text-shadow harmonisé */
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* ✅ Effet de brillance harmonisé */
+.edit-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 100%
+  );
+  transition: left 0.6s ease;
+  z-index: 1;
+}
+
+.edit-button:hover::before {
+  left: 100%;
 }
 
 .edit-button:hover {
+  /* ✅ Couleurs hover harmonisées */
+  background: linear-gradient(
+    135deg,
+    rgba(191, 167, 106, 0.25) 0%,
+    rgba(212, 196, 168, 0.2) 50%,
+    rgba(191, 167, 106, 0.15) 100%
+  );
+  color: #6b5d4f; /* ✅ Même couleur hover que les autres */
+  border-color: rgba(191, 167, 106, 0.5);
+  /* ✅ Ombres hover harmonisées */
   box-shadow:
-    0 8px 16px rgba(0, 0, 0, 0.2),
-    0 4px 8px rgba(0, 0, 0, 0.1);
+    0 8px 25px rgba(191, 167, 106, 0.3),
+    0 4px 15px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
 }
 
-/* Modal d'édition moderne */
+/* ✅ Effet focus harmonisé */
+.edit-button:focus {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(191, 167, 106, 0.4),
+    0 4px 15px rgba(191, 167, 106, 0.2),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* ✅ Effet actif harmonisé */
+.edit-button:active {
+  box-shadow:
+    0 4px 15px rgba(191, 167, 106, 0.25),
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* ✅ Animation de pulsation harmonisée */
+@keyframes buttonPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 4px 15px rgba(191, 167, 106, 0.2),
+      0 2px 8px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 6px 20px rgba(191, 167, 106, 0.25),
+      0 3px 12px rgba(0, 0, 0, 0.12),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+}
+
+/* ✅ Appliquer l'animation au focus */
+.edit-button:focus {
+  animation: buttonPulse 2s ease-in-out infinite;
+}
+
+/* ✅ Responsive harmonisé */
+@media (max-width: 768px) {
+  .edit-button {
+    padding: 14px 28px;
+    font-size: 15px;
+    border-radius: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .edit-button {
+    padding: 12px 24px;
+    font-size: 14px;
+    border-radius: 18px;
+  }
+}
+
+/* ✅ Modal d'édition harmonisée avec la couleur */
 .edit-modal-overlay {
   position: fixed;
   top: 0;
@@ -174,8 +553,8 @@
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(4px);
-  z-index: 1000;
+  backdrop-filter: blur(8px);
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -186,14 +565,21 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
+    backdrop-filter: blur(0px);
   }
   to {
     opacity: 1;
+    backdrop-filter: blur(8px);
   }
 }
 
 .edit-modal-content {
-  background: var(--header-background);
+  background: linear-gradient(
+    135deg,
+    #efebda 0%,
+    rgba(239, 235, 218, 0.95) 50%,
+    #f5f1e6 100%
+  ); /* ✅ Harmonisé avec la couleur principale */
   padding: 40px;
   border-radius: 16px;
   width: 90%;
@@ -201,79 +587,93 @@
   max-height: 90vh;
   overflow: auto;
   box-shadow:
-    0 24px 48px rgba(0, 0, 0, 0.2),
-    0 8px 16px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(125, 113, 84, 0.3);
-  animation: slideIn 0.3s ease-out;
+    0 25px 50px rgba(0, 0, 0, 0.25),
+    0 10px 20px rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(125, 113, 84, 0.4);
+  animation: slideIn 0.4s ease-out;
+  backdrop-filter: blur(10px);
 }
 
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(-20px);
+    transform: translateY(-30px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .edit-modal-title {
-  margin-bottom: 20px;
-  color: var(--foreground);
-  font-size: 1.5rem;
-  font-weight: bold;
+  margin-bottom: 30px;
+  color: #3a342a; /* ✅ Couleur harmonisée */
+  font-size: 1.8rem;
+  font-weight: 600;
   font-family: "EB Garamond", serif;
+  text-align: center;
+  position: relative;
+  padding-bottom: 15px;
+}
+
+/* ✅ Ligne décorative sous le titre du modal */
+.edit-modal-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--brown),
+    var(--border-brown),
+    var(--brown)
+  );
+  border-radius: 1px;
 }
 
 .edit-form-group {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .edit-form-label {
   display: block;
   margin-bottom: 8px;
-  font-weight: bold;
-  color: var(--foreground);
+  font-weight: 600;
+  color: #3a342a; /* ✅ Couleur harmonisée */
   font-family: "EB Garamond", serif;
+  font-size: 1.1rem;
 }
 
-.edit-form-input {
+.edit-form-input,
+.edit-form-textarea {
   width: 100%;
-  padding: 12px;
-  border: 2px solid var(--brown);
+  padding: 12px 16px;
+  border: 2px solid rgba(125, 113, 84, 0.4);
   border-radius: 8px;
   font-size: 16px;
   font-family: "EB Garamond", serif;
-  color: var(--foreground);
-  background: white;
-  transition: border-color 0.3s ease;
+  color: #3a342a;
+  background: rgba(255, 255, 255, 0.9);
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.edit-form-input:focus {
+.edit-form-input:focus,
+.edit-form-textarea:focus {
   outline: none;
-  border-color: var(--border-brown);
-  box-shadow: 0 0 0 3px rgba(179, 162, 121, 0.1);
+  border-color: var(--brown);
+  box-shadow:
+    0 0 0 3px rgba(191, 167, 106, 0.15),
+    inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 1);
 }
 
 .edit-form-textarea {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid var(--brown);
-  border-radius: 8px;
-  font-size: 16px;
-  font-family: "EB Garamond", serif;
   resize: vertical;
-  color: var(--foreground);
-  background: white;
   min-height: 120px;
-  transition: border-color 0.3s ease;
-}
-
-.edit-form-textarea:focus {
-  outline: none;
-  border-color: var(--border-brown);
-  box-shadow: 0 0 0 3px rgba(179, 162, 121, 0.1);
 }
 
 .edit-form-actions {
@@ -281,29 +681,34 @@
   gap: 15px;
   justify-content: flex-end;
   margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(125, 113, 84, 0.3);
 }
 
 .edit-button-cancel {
   padding: 12px 24px;
   border: 2px solid var(--brown);
-  background-color: transparent;
+  background: rgba(255, 255, 255, 0.9);
   color: var(--brown);
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
   font-family: "EB Garamond", serif;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.3s ease;
 }
 
 .edit-button-cancel:hover {
-  background-color: var(--brown);
+  background: var(--brown);
   color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(191, 167, 106, 0.3);
 }
 
 .edit-button-cancel:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none;
 }
 
 .edit-button-save {
@@ -321,11 +726,12 @@
   font-family: "EB Garamond", serif;
   font-weight: 600;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(191, 167, 106, 0.3);
 }
 
 .edit-button-save:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(191, 167, 106, 0.4);
 }
 
 .edit-button-save:disabled {
@@ -334,49 +740,70 @@
   transform: none;
 }
 
-/* Messages d'état professionnels */
+/* ✅ Messages d'état avec style harmonisé */
 .edit-message {
-  padding: 12px 16px;
-  margin-bottom: 20px;
+  padding: 16px 20px;
+  margin-bottom: 25px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   border: 1px solid;
   animation: slideIn 0.3s ease-out;
   font-family: "EB Garamond", serif;
+  backdrop-filter: blur(5px);
 }
 
 .edit-message-success {
-  background-color: #d4edda;
+  background: linear-gradient(
+    135deg,
+    #d4edda 0%,
+    rgba(212, 237, 218, 0.8) 100%
+  );
   color: #155724;
   border-color: #c3e6cb;
+  box-shadow: 0 4px 8px rgba(21, 87, 36, 0.1);
 }
 
 .edit-message-error {
-  background-color: #f8d7da;
+  background: linear-gradient(
+    135deg,
+    #f8d7da 0%,
+    rgba(248, 215, 218, 0.8) 100%
+  );
   color: #721c24;
   border-color: #f5c6cb;
+  box-shadow: 0 4px 8px rgba(114, 28, 36, 0.1);
 }
 
 .edit-message-info {
-  background-color: #d1ecf1;
+  background: linear-gradient(
+    135deg,
+    #d1ecf1 0%,
+    rgba(209, 236, 241, 0.8) 100%
+  );
   color: #0c5460;
   border-color: #bee5eb;
+  box-shadow: 0 4px 8px rgba(12, 84, 96, 0.1);
 }
 
-/* Analyseur de texte intelligent */
+/* ✅ Analyseur de texte avec style contact */
 .text-analysis {
-  margin-top: 12px;
-  padding: 12px;
-  background: rgba(179, 162, 121, 0.05);
+  margin-top: 15px;
+  padding: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(227, 212, 180, 0.1) 0%,
+    rgba(191, 167, 106, 0.05) 100%
+  );
   border-radius: 8px;
-  border-left: 3px solid var(--brown);
+  border-left: 4px solid var(--brown);
+  backdrop-filter: blur(5px);
 }
 
 .char-counter {
   font-size: 13px;
-  font-weight: 500;
-  margin-bottom: 4px;
+  font-weight: 600;
+  margin-bottom: 6px;
   font-family: "EB Garamond", serif;
 }
 
@@ -403,6 +830,12 @@
 .text-distribution {
   font-size: 11px;
   color: #6c757d;
-  margin-top: 4px;
+  margin-top: 6px;
   font-family: "EB Garamond", serif;
+  font-style: italic;
+}
+
+.header {
+  position: relative;
+  z-index: 10;
 }

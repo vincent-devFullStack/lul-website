@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.iconodule.fr
+
+# Sitemaps
+Sitemap: https://www.iconodule.fr/sitemap.xml

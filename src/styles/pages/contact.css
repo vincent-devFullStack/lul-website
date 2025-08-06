@@ -1,64 +1,492 @@
+/* ✅ Wrapper principal */
+.contact-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 200px);
+  padding: 2rem;
+  width: 100%;
+}
+
+/* ✅ CONTAINER PRINCIPAL */
 .contact-container {
-    display: flex;
-    gap: 24px;
-    flex-direction: column;
-    align-items: center;
-    background-color: var(--login-background);
-    justify-content: space-between;
-    height: auto; /* Donne une hauteur minimale pour que justify-content fonctionne */
-    width: 400px;
-    margin: 0 auto; /* Centre horizontalement */
-    padding: 24px; /*Ajoute un peu d'espace intérieur */
+  display: flex;
+  gap: 24px;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--login-background);
+  justify-content: space-between;
+  height: auto;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(125, 113, 84, 0.2);
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ✅ CONTENT LAYOUT */
+.contact-content {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  width: 100%;
+  min-height: 400px;
+}
+
+/* ✅ Section texte */
+.contact-text-section {
+  flex: 1;
+
+  padding: 0 20px;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
+}
+
+/* ✅ Titre "Contact :" */
+.contact-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 1rem;
+  margin-top: 0; /* ✅ Supprimé margin-top pour Contact: */
+  font-family: "EB Garamond", serif;
+}
+
+/* ✅ Container animation machine à écrire */
+.typewriter-container {
+  min-height: 520px;
+  min-width: 345px;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(167, 151, 109, 0.5) 100%
+  );
+  border-left: 4px solid #bfa76a;
+  padding: 1.5rem;
+  border-radius: 0 8px 8px 0;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.05),
+    0 2px 8px rgba(191, 167, 106, 0.5);
+}
+
+/* ✅ Texte machine à écrire - DÉFINITION UNIQUE */
+.typewriter-text {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--foreground);
+  text-align: justify;
+  font-family: "EB Garamond", serif;
+  margin-bottom: 0;
+  position: relative;
+  text-indent: 1rem;
+  padding-right: 1rem;
+}
+
+/* ✅ Styles pour la nouvelle définition */
+.typewriter-text strong {
+  color: #3b3b3b;
+  font-weight: 700;
+  font-size: 1.05em;
+}
+
+.typewriter-text em {
+  color: #a89478;
+  font-style: italic;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+/* ✅ Curseur clignotant */
+.typewriter-cursor {
+  color: var(--brown);
+  font-weight: bold;
+  animation: blink 1s infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
   }
-  
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ✅ FORMULAIRE */
 .contact-form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s;
 }
 
 .contact-form-item {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.contact-form-item input,
+textarea {
+  background-color: var(--login-form-input-background);
+  border: 1.5px solid var(--login-form-input-border);
+  border-radius: 4px;
+  padding: 8px;
+  color: #6a6a6a;
+  transition: all 0.2s ease;
+}
+
+.contact-form-item input:focus,
+textarea:focus {
+  outline: none;
+  border: 1.5px solid var(--brown);
+  box-shadow: 0 0 0 3px rgba(191, 167, 106, 0.1);
+}
+
+.contact-form-item label {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.contact-form button {
+  background-color: var(--brown);
+  border: 1.5px solid var(--login-form-button-border);
+  border-radius: 4px;
+  padding: 8px;
+  color: var(--login-form-button-text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.contact-form button:hover {
+  background-color: #ae9b79;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(191, 167, 106, 0.3);
+}
+
+/* ✅ IMAGE */
+.contact-image-wrapper {
+  flex: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s;
+}
+
+.contact-image {
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
+  width: 90%;
+  max-width: 400px;
+  height: auto;
+  object-fit: contain;
+}
+
+.contact-image:hover {
+  transform: scale(1.05) rotate(2deg);
+}
+
+/* ✅ ANIMATIONS FADE IN UP */
+.fade-in-up-initial {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.fade-in-up-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.contact-container.fade-in-up-active {
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ✅ RESPONSIVE - Media queries adaptées aux nouvelles modifications */
+@media (max-width: 1100px) {
+  .contact-wrapper {
+    width: 90%;
+    margin: 0 auto;
+    padding: 1.5rem;
+  }
+
+  .contact-container {
     width: 100%;
-  }
-  
-  .contact-form-item input, textarea {
-    background-color: var(--login-form-input-background);
-    border: 1.5px solid var(--login-form-input-border);
-    border-radius: 4px;
-    padding: 8px;
-    color: #6A6A6A;
-  }
-  
-  .contact-form-item input:focus, textarea:focus {
-    outline: none;
-    border: 1.5px solid var(--brown);
-  }
-  
-  .contact-form-item label {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 4px;
+    max-width: 900px;
+    padding: 20px;
   }
 
+  .contact-content {
+    flex-direction: column;
+    gap: 25px;
+    align-items: center;
+    min-height: auto;
+  }
 
-  
+  .contact-text-section {
+    order: 1;
+    width: 100%;
+    text-align: center;
+    padding: 0 10px;
+  }
+
+  /* ✅ Typewriter container responsive */
+  .typewriter-container {
+    min-height: 400px; /* ✅ RÉDUIT pour tablettes */
+    min-width: 100%; /* ✅ Prend toute la largeur */
+    padding: 1.2rem;
+  }
+
+  .contact-title {
+    font-size: 1.8rem; /* ✅ ADAPTÉ pour tablettes */
+    margin-bottom: 1.2rem;
+  }
+
+  .typewriter-text {
+    font-size: 0.95rem; /* ✅ LÉGÈREMENT plus grand */
+    line-height: 1.7;
+  }
+
+  .contact-form {
+    order: 2;
+  }
+
+  .contact-image-wrapper {
+    order: 3;
+    min-height: 350px; /* ✅ AUGMENTÉ pour image plus grande */
+    max-width: 350px; /* ✅ AUGMENTÉ */
+    flex: none; /* ✅ Pas de flex sur tablettes */
+  }
+
+  .contact-image {
+    width: 100%; /* ✅ Image prend toute la largeur du wrapper */
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-wrapper {
+    width: 95%;
+    padding: 1rem;
+  }
+
+  .contact-container {
+    width: 100%;
+    max-width: 600px;
+    padding: 16px;
+  }
+
+  /* ✅ Typewriter container mobile */
+  .typewriter-container {
+    min-height: 320px; /* ✅ RÉDUIT pour mobile */
+    min-width: 100%;
+    padding: 1rem;
+  }
+
+  .contact-title {
+    font-size: 1.5rem; /* ✅ RÉDUIT pour mobile */
+    margin-bottom: 1rem;
+    border-bottom-width: 2px; /* ✅ Bordure plus fine */
+  }
+
+  .contact-title::after {
+    width: 40px; /* ✅ Trait décoratif plus court */
+  }
+
+  .typewriter-text {
+    font-size: 0.9rem; /* ✅ ADAPTÉ pour mobile */
+    line-height: 1.6;
+    text-indent: 0.5rem; /* ✅ Indentation réduite */
+  }
+
+  .typewriter-text strong {
+    font-size: 1.05em; /* ✅ Proportion maintenue */
+  }
+
+  .typewriter-text em {
+    font-size: 0.85em; /* ✅ Proportion maintenue */
+    margin: 0.6rem 0 1rem 0; /* ✅ Marges réduites */
+    padding-left: 0.8rem;
+  }
+
+  .contact-image-wrapper {
+    min-height: 280px; /* ✅ AUGMENTÉ pour image plus grande */
+    max-width: 280px; /* ✅ AUGMENTÉ */
+  }
+
+  .contact-image {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-wrapper {
+    width: 98%;
+    padding: 0.5rem;
+    min-height: auto;
+  }
+
+  .contact-container {
+    width: 100%;
+    padding: 12px;
+  }
+
+  /* ✅ Typewriter container très petit écran */
+  .typewriter-container {
+    min-height: 280px; /* ✅ COMPACT pour très petit écran */
+    min-width: 100%;
+    padding: 0.8rem;
+  }
+
+  .contact-title {
+    font-size: 1.3rem; /* ✅ COMPACT */
+    margin-bottom: 0.8rem;
+    text-transform: none; /* ✅ Pas de majuscules sur mobile */
+    letter-spacing: 0.05em; /* ✅ Espacement réduit */
+  }
+
+  .contact-title::after {
+    width: 30px; /* ✅ Trait encore plus court */
+  }
+
+  .typewriter-text {
+    font-size: 0.85rem; /* ✅ Plus petit pour mobile */
+    line-height: 1.5;
+    text-indent: 0; /* ✅ Pas d'indentation sur mobile */
+    padding-right: 0.5rem;
+  }
+
+  .typewriter-text strong {
+    font-size: 1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .typewriter-text em {
+    font-size: 0.8em;
+    margin: 0.5rem 0 0.8rem 0;
+    padding-left: 0.5rem;
+  }
+
+  .contact-image-wrapper {
+    min-height: 220px; /* ✅ RÉDUIT mais encore visible */
+    max-width: 220px; /* ✅ RÉDUIT */
+  }
+
+  .contact-image {
+    width: 100%;
+    max-width: 220px;
+  }
+
+  .contact-form-item input,
+  textarea {
+    padding: 6px;
+    font-size: 0.9rem;
+  }
+
   .contact-form button {
-    background-color: var(--brown);
-    border: 1.5px solid var(--login-form-button-border);
-    border-radius: 4px;
-    padding: 8px;
-    color: var(--login-form-button-text-color);
-    cursor: pointer;
+    padding: 10px;
+    font-size: 0.95rem;
   }
-  
-  .contact-form button:hover {
-    background-color: #ae9b79;
-    transition: background-color 0.1s ease-in-out;
+}
+
+/* ✅ Media query spéciale pour iPad en mode paysage */
+@media (max-width: 1024px) and (min-width: 769px) and (orientation: landscape) {
+  .contact-content {
+    flex-direction: row; /* ✅ Garde la disposition horizontale en paysage */
+    gap: 20px;
   }
-  
-  .contact-form button:active {
-    background-color: #9D8E6C;
+
+  .contact-text-section {
+    flex: 1.2;
+    order: 1;
   }
+
+  .contact-form {
+    flex: 1;
+    order: 2;
+  }
+
+  .contact-image-wrapper {
+    flex: 0.8;
+    order: 3;
+    min-height: 250px;
+    max-width: 250px;
+  }
+
+  .typewriter-container {
+    min-height: 300px;
+  }
+
+  .contact-title {
+    font-size: 1.6rem;
+  }
+}
+
+/* Messages de succès et d'erreur */
+.form-success-message {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: #2e7d32;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border-left: 4px solid #2e7d32;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+.form-error-message {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #d32f2f;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border-left: 4px solid #d32f2f;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.required {
+  color: #d32f2f;
+  margin-left: 2px;
+}
+
+/* Style pour le bouton lors de l'envoi */
+.contact-form button.submitting {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}

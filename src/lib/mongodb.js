@@ -61,6 +61,21 @@ const RoomSchema = new mongoose.Schema(
   { timestamps: true }
 ); // ✅ Ajout timestamps
 
+const MementoSchema = new mongoose.Schema(
+  {
+    quote: { type: String, required: true },
+    author: { type: String, required: true },
+    role: { type: String, required: true },
+    link: { type: String, required: false, default: null }, // ✅ Champ link avec default
+    imageUrl: { type: String, required: true },
+  },
+  { timestamps: true }
+);
+
+export function getMementoModel() {
+  return mongoose.models.Memento || mongoose.model("Memento", MementoSchema);
+}
+
 let RoomModel;
 let ContentModel;
 

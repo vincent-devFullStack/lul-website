@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import { Edit, Trash2, Plus, Settings } from "lucide-react";
+import { Edit, Trash2, Plus, Settings, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 export default function AdminOeuvresPage() {
   const params = useParams();
@@ -16,12 +17,10 @@ export default function AdminOeuvresPage() {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
-  // Modal state
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState("add"); // "add" or "edit"
+  const [modalMode, setModalMode] = useState("add");
   const [editingArtwork, setEditingArtwork] = useState(null);
 
-  // Room edit modal state
   const [roomModalOpen, setRoomModalOpen] = useState(false);
   const [roomFormData, setRoomFormData] = useState({
     name: "",
@@ -29,7 +28,6 @@ export default function AdminOeuvresPage() {
     status: "active",
   });
 
-  // Form state
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -39,13 +37,7 @@ export default function AdminOeuvresPage() {
   const [imagePreview, setImagePreview] = useState(null);
   const [uploading, setUploading] = useState(false);
 
-  useEffect(() => {
-    if (slug) {
-      fetchArtworks();
-    }
-  }, [slug]);
-
-  const fetchArtworks = async () => {
+  const fetchArtworks = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/salles/${slug}/oeuvres`);
@@ -67,7 +59,13 @@ export default function AdminOeuvresPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [slug]);
+
+  useEffect(() => {
+    if (slug) {
+      fetchArtworks();
+    }
+  }, [slug, fetchArtworks]);
 
   const openModal = (mode, artwork = null) => {
     setModalMode(mode);
@@ -177,12 +175,12 @@ export default function AdminOeuvresPage() {
 
     try {
       setUploading(true);
-      const formData = new FormData();
-      formData.append("image", imageFile);
+      const form = new FormData();
+      form.append("image", imageFile); // "image" et non "file"
 
       const response = await fetch("/api/upload", {
         method: "POST",
-        body: formData,
+        body: form,
       });
 
       if (!response.ok) {
@@ -325,7 +323,24 @@ export default function AdminOeuvresPage() {
   return (
     <div>
       <div className="admin-page-header">
-        <h1 className="admin-page-title">Œuvres de {room?.title || slug}</h1>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px", // Réduire l'écart
+            marginBottom: "8px",
+          }}
+        >
+          <Link
+            href="/admin/salles"
+            className="admin-back-button"
+            // Supprimer tout le style inline, garder juste className
+          ></Link>
+
+          <h1 className="admin-page-title" style={{ margin: 0 }}>
+            Œuvres de {room?.title || slug}
+          </h1>
+        </div>
         <p className="admin-page-subtitle">
           Gérez les œuvres présentes dans cette salle
         </p>
@@ -531,7 +546,6 @@ export default function AdminOeuvresPage() {
                   className="admin-form-select"
                 >
                   <option value="active">Active</option>
-                  <option value="restricted">Accès restreint</option>
                   <option value="maintenance">En maintenance</option>
                 </select>
               </div>

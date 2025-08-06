@@ -4,6 +4,10 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Link from "next/link";
+import { FiHome } from "react-icons/fi";
+import { BiLogOut } from "react-icons/bi";
+import { MdOutlineRoomPreferences } from "react-icons/md";
+import { BsQuote } from "react-icons/bs";
 import "../../styles/pages/admin.css";
 
 export default function AdminLayout({ children }) {
@@ -36,47 +40,52 @@ export default function AdminLayout({ children }) {
 
   return (
     <div className="admin-fullscreen">
-      {/* Header admin fixe */}
       <header className="admin-header">
         <div className="admin-header-left">
           <h1 className="admin-header-title">L'iconodule - Administration</h1>
         </div>
         <div className="admin-header-right">
           <Link href="/accueil" className="admin-header-link">
-            <span className="admin-header-icon">🏠</span>
+            <FiHome className="w-5 h-5 mr-2" />
             Retour au site
           </Link>
-          <button 
-            onClick={handleLogout} 
+          <button
+            onClick={handleLogout}
             className="admin-header-link admin-header-logout"
           >
-            <span className="admin-header-icon">🚪</span>
+            <BiLogOut className="w-5 h-5 mr-2" />
             Déconnexion
           </button>
         </div>
       </header>
 
-      {/* Contenu principal avec sidebar */}
       <div className="admin-body">
         <aside className="admin-sidebar">
           <nav className="admin-nav">
             <ul>
               <li>
-                <Link href="/admin/salles" className="admin-nav-link">
-                  <span className="admin-nav-icon">🏛️</span>
+                <Link href="/admin/salles" className="flex items-center gap-2">
+                  <MdOutlineRoomPreferences className="w-5 h-5" />
                   Gestion des salles
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/admin/mementos"
+                  className="flex items-center gap-2"
+                >
+                  <BsQuote className="w-5 h-5" />
+                  Gestion des mementos
                 </Link>
               </li>
             </ul>
           </nav>
         </aside>
-        
+
         <main className="admin-main">
-          <div className="admin-content">
-            {children}
-          </div>
+          <div className="admin-content">{children}</div>
         </main>
       </div>
     </div>
   );
-} 
+}

@@ -1,4 +1,4 @@
-/* Header */
+/* ✅ Header embelli avec effets sophistiqués */
 .header-menu {
   position: sticky;
   top: 0;
@@ -6,32 +6,467 @@
   right: 0;
   width: 100%;
   padding: 0 1rem;
-  background-color: var(--header-background);
+  /* ✅ Gradient élégant au lieu de couleur unie */
+  background: linear-gradient(
+    135deg,
+    var(--header-background) 0%,
+    rgba(239, 235, 218, 0.95) 50%,
+    var(--header-background) 100%
+  );
   color: var(--foreground);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10; /* optionnel pour rester au-dessus du contenu */
+  z-index: 10;
+  height: 150px;
+  /* ✅ Bordure sophistiquée */
+  border-bottom: 3px solid transparent;
+  border-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--brown) 20%,
+      var(--border-brown) 50%,
+      var(--brown) 80%,
+      transparent 100%
+    )
+    1;
+  /* ✅ Ombre élégante */
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(191, 167, 106, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  /* ✅ Backdrop blur pour effet moderne */
+  backdrop-filter: blur(12px) saturate(1.2);
+  /* ✅ Transitions fluides */
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Footer */
+/* ✅ Effet de texture subtile sur la navbar */
+.header-menu::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    transparent 30%,
+    transparent 70%,
+    rgba(191, 167, 106, 0.03) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ✅ Effet de brillance au scroll */
+.header-menu.scrolled {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 235, 218, 0.98) 0%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(239, 235, 218, 0.98) 100%
+  );
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.15),
+    0 4px 16px rgba(191, 167, 106, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Footer harmonisé */
 .footer {
   width: 100%;
   padding: 0 1rem;
-  background-color: var(--header-background);
+  background: linear-gradient(
+    135deg,
+    var(--header-background) 0%,
+    rgba(239, 235, 218, 0.95) 50%,
+    var(--header-background) 100%
+  );
   color: var(--foreground);
   display: flex;
   align-items: center;
   justify-content: center;
+  border-top: 3px solid transparent;
+  border-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--brown) 20%,
+      var(--border-brown) 50%,
+      var(--brown) 80%,
+      transparent 100%
+    )
+    1;
+  box-shadow:
+    0 -4px 20px rgba(0, 0, 0, 0.1),
+    0 -2px 8px rgba(191, 167, 106, 0.15);
+  backdrop-filter: blur(12px) saturate(1.2);
 }
 
-.header-menu {
-  top: 0;
-  height: 140px;
-  border-bottom: 1px solid var(--foreground);
-}
-
+/* ✅ Item actif embelli */
 .item-active {
   color: var(--active-menu-item);
+  /* ✅ Bordure plus sophistiquée */
   border-bottom: 2px solid var(--active-menu-item);
+  background: linear-gradient(
+    135deg,
+    rgba(191, 167, 106, 0.1) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(191, 167, 106, 0.05) 100%
+  );
+  border-radius: 8px 8px 0 0;
+  padding: 8px 16px;
+  position: relative;
+  /* ✅ Ombre subtile */
+  box-shadow:
+    0 2px 8px rgba(191, 167, 106, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transform: translateY(-1px);
+  z-index: 2;
+}
+
+/* ✅ Effet de brillance sur l'item actif */
+.item-active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 100%
+  );
+  border-radius: 8px 8px 0 0;
+  pointer-events: none;
+}
+
+/* ✅ Liens embellies */
+.header-link {
+  position: relative;
+  color: inherit;
+  text-decoration: none;
+  padding: 12px 20px;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  z-index: 2;
+  /* ✅ Effet de profondeur subtil */
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+/* ✅ Effet de fond au hover */
+.header-link:not(.item-active):hover {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.15) 0%,
+    rgba(191, 167, 106, 0.08) 50%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.1),
+    0 2px 6px rgba(191, 167, 106, 0.15);
+  color: var(--active-menu-item);
+}
+
+/* ✅ Barre animée au hover UNIQUEMENT - AMÉLIORÉE */
+.header-link:not(.item-active)::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  width: 0%;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--brown),
+    var(--border-brown),
+    var(--brown)
+  );
+  opacity: 0;
+  transform: translateX(-50%);
+  transition:
+    width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 0.3s ease;
+  /* ✅ Effet de brillance */
+  box-shadow: 0 2px 8px rgba(191, 167, 106, 0.4);
+}
+
+.header-link:not(.item-active):hover::after,
+.header-link:not(.item-active):focus::after {
+  width: 80%;
+  opacity: 1;
+}
+
+/* ✅ Effet de pulsation subtile pour les liens */
+.header-link:not(.item-active):hover {
+  animation: linkPulse 0.6s ease-out;
+}
+
+@keyframes linkPulse {
+  0% {
+    transform: translateY(-1px) scale(1);
+  }
+  50% {
+    transform: translateY(-2px) scale(1.02);
+  }
+  100% {
+    transform: translateY(-1px) scale(1);
+  }
+}
+
+/* ✅ Suppression du focus par défaut ET personnalisation */
+.header-link:focus {
+  outline: none; /* ✅ Supprime le focus par défaut */
+  /* ✅ Focus personnalisé plus discret */
+  background: linear-gradient(
+    135deg,
+    rgba(191, 167, 106, 0.1) 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    rgba(191, 167, 106, 0.05) 100%
+  );
+  box-shadow:
+    0 0 0 2px rgba(191, 167, 106, 0.3),
+    0 2px 8px rgba(191, 167, 106, 0.2);
+  border-radius: 8px;
+}
+
+/* ✅ Focus encore plus discret si vous préférez */
+.header-link:focus-visible {
+  outline: none;
+  background: rgba(191, 167, 106, 0.05);
+  box-shadow: inset 0 0 0 1px rgba(191, 167, 106, 0.2);
+}
+
+/* ✅ Suppression complète du focus (non recommandé pour l'accessibilité) */
+.header-link:focus,
+.header-link:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* ✅ Pour tous les éléments si nécessaire */
+button:focus,
+a:focus,
+input:focus {
+  outline: none;
+}
+
+/* ✅ Ou globalement (attention à l'accessibilité) */
+* {
+  outline: none !important;
+}
+
+/* ✅ Responsive embelli */
+@media (max-width: 768px) {
+  .header-menu {
+    height: 120px;
+    padding: 0 0.5rem;
+  }
+
+  .header-link {
+    padding: 10px 16px;
+    font-size: 0.95rem;
+  }
+
+  .item-active {
+    padding: 6px 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-menu {
+    height: 100px;
+    padding: 0 0.25rem;
+  }
+
+  .header-link {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  .item-active {
+    padding: 4px 8px;
+  }
+}
+
+/* ✅ États pour JavaScript (scroll, etc.) */
+.header-menu.shadow-enhanced {
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.2),
+    0 6px 20px rgba(191, 167, 106, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* ✅ Titre principal embelli - L'iconodule */
+.main-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #3a342a;
+  font-family: "EB Garamond", serif;
+  text-align: center;
+  position: relative;
+  letter-spacing: -0.02em;
+  /* ✅ Gradient sophistiqué pour le texte */
+  background: linear-gradient(
+    135deg,
+    #3a342a 0%,
+    #5d5249 20%,
+    #6b5d4f 40%,
+    #3a342a 60%,
+    #4a3d2f 80%,
+    #3a342a 100%
+  );
+  background-size: 300% 300%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* ✅ Animation subtile du gradient */
+  animation: titleGradientShift 12s ease-in-out infinite;
+  transform-style: preserve-3d;
+  z-index: 3;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ✅ Animation du gradient de couleur */
+@keyframes titleGradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  33% {
+    background-position: 50% 0%;
+  }
+  66% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ✅ Effet décoratif sophistiqué autour du titre */
+.main-title::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 130%;
+  height: 130%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(191, 167, 106, 0.08) 0%,
+    rgba(191, 167, 106, 0.04) 30%,
+    rgba(255, 255, 255, 0.03) 60%,
+    transparent 80%
+  );
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0.9;
+}
+
+/* ✅ Effet de profondeur avec second halo */
+.main-title::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 110%;
+  height: 110%;
+  background: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 25%,
+    transparent 75%,
+    rgba(191, 167, 106, 0.05) 100%
+  );
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0.6;
+}
+
+/* ✅ Effet au focus pour l'accessibilité */
+.main-title:focus {
+  outline: 3px solid rgba(191, 167, 106, 0.4);
+  outline-offset: 8px;
+  border-radius: 12px;
+}
+
+/* ✅ Responsive sophistiqué pour le titre */
+@media (max-width: 1200px) {
+  .main-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-title {
+    font-size: 2.2rem;
+    letter-spacing: -0.01em;
+  }
+
+  .main-title::before {
+    width: 140%;
+    height: 140%;
+  }
+}
+
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 1.8rem;
+    letter-spacing: 0;
+  }
+
+  .main-title::before,
+  .main-title::after {
+    width: 150%;
+    height: 150%;
+  }
+}
+
+/* ✅ État spécial pour les interactions */
+.main-title.enhanced {
+  background: linear-gradient(
+    135deg,
+    #2d251d 0%,
+    #5d5249 20%,
+    #8b7355 40%,
+    #3a342a 60%,
+    #6b5d4f 80%,
+    #2d251d 100%
+  );
+  background-size: 500% 500%;
+  animation: titleGradientShift 3s ease-in-out infinite;
+}
+
+/* ✅ Classe pour animations JavaScript */
+.main-title.animate-in {
+  animation:
+    titleSlideIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+    titleGradientShift 12s ease-in-out infinite 1s;
+}
+
+@keyframes titleSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px) rotateY(-30deg);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateX(10px) rotateY(5deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) rotateY(0deg);
+  }
 }
