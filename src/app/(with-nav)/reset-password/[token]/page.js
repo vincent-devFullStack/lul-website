@@ -1,41 +1,60 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import "@/styles/pages/forgot-password.css";
 
-export default function ForgotPassword() {
+export default function ResetPassword() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [pin, setPin] = useState("");
+  const params = useParams();
+  const { token } = params;
+
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!token) {
+      setMessage("❌ Lien de réinitialisation invalide.");
+      router.push("/login");
+    }
+  }, [token, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage(null);
+
+    if (password !== confirmPassword) {
+      setMessage("❌ Les mots de passe ne correspondent pas.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setMessage("❌ Le mot de passe doit contenir au moins 6 caractères.");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/forgot-password", {
+      const res = await fetch(`/api/reset-password/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, pin }),
+        body: JSON.stringify({ password }),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setMessage(
-          "✅ Un email de réinitialisation a été envoyé à votre adresse."
-        );
+        setMessage("✅ Mot de passe réinitialisé avec succès !");
         setTimeout(() => router.push("/login"), 3000);
       } else {
         setMessage(`❌ ${data.error || "Erreur inconnue."}`);
       }
     } catch {
-      setMessage("❌ Une erreur réseau est survenue.");
+      setMessage("❌ Erreur réseau.");
     } finally {
       setIsLoading(false);
     }
@@ -43,28 +62,30 @@ export default function ForgotPassword() {
 
   return (
     <div className="forgot-password-container rounded-lg">
-      <h1 className="text-2xl font-bold">Mot de passe oublié ?</h1>
+      <h1 className="text-2xl font-bold">Nouveau mot de passe</h1>
 
       <form onSubmit={handleSubmit} className="forgot-password-form">
         <div className="forgot-password-form-item">
-          <label htmlFor="email">Adresse email</label>
+          <label htmlFor="password">Nouveau mot de passe</label>
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="password"
+            placeholder="Nouveau mot de passe"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
+            minLength={6}
           />
         </div>
 
         <div className="forgot-password-form-item">
-          <label htmlFor="pin">PIN Administrateur</label>
+          <label htmlFor="confirmPassword">Confirmation du mot de passe</label>
           <input
             type="password"
-            placeholder="Code PIN administrateur"
-            value={pin}
-            onChange={(e) => setPin(e.target.value)}
+            placeholder="Confirmation du mot de passe"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required
+            minLength={6}
           />
         </div>
 
@@ -77,7 +98,7 @@ export default function ForgotPassword() {
             className="forgot-password-form-item-submit"
             disabled={isLoading}
           >
-            {isLoading ? "Envoi..." : "Envoyer le lien"}
+            {isLoading ? "Réinitialisation..." : "Réinitialiser"}
           </button>
         </div>
 

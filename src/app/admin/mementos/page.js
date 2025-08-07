@@ -101,8 +101,6 @@ export default function Memento() {
       imageUrl: formData.imageUrl,
     };
 
-    console.log("Données envoyées:", dataToSend); // ✅ Debug
-
     try {
       const res = await fetch("/api/memento", {
         method: modalMode === "add" ? "POST" : "PUT",
