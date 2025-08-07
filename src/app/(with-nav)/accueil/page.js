@@ -19,19 +19,17 @@ export default function AccueilPlanInteractif() {
   const [initialized, setInitialized] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  // Détection mobile/desktop
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024); // Utilise le breakpoint lg de Tailwind
+      setIsMobile(window.innerWidth < 1024);
     };
-    
+
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Optimisation du chargement des salles
   useEffect(() => {
     const fetchSalles = async () => {
       if (initialized) return;
@@ -87,7 +85,6 @@ export default function AccueilPlanInteractif() {
     }, 600);
   };
 
-  // Composant Liste Mobile des Salles
   const MobileRoomsList = () => (
     <div className="lg:hidden min-h-screen border-1 border-[var(--brown)] rounded-lg bg-gradient-to-b from-[var(--header-background)] to-[var(--login-background)] w-full overflow-x-hidden">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -102,7 +99,7 @@ export default function AccueilPlanInteractif() {
 
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {sortedAndFilteredSalles
-            .filter(salle => salle.status !== "maintenance")
+            .filter((salle) => salle.status !== "maintenance")
             .map((salle) => (
               <div
                 key={salle._id}
@@ -119,19 +116,29 @@ export default function AccueilPlanInteractif() {
                     </p>
                     <div className="flex items-center text-xs text-[var(--brown)] font-medium">
                       <span>Visiter la salle</span>
-                      <svg className="w-4 h-4 ml-2 transition-transform duration-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      <svg
+                        className="w-4 h-4 ml-2 transition-transform duration-200 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
                       </svg>
                     </div>
                   </div>
-                  
-                  {/* Indicateur visuel pour les salles avec œuvres */}
+
                   {salle.artworks && salle.artworks.length > 0 && (
                     <div className="mt-4 pt-4 border-t border-[rgba(191,167,106,0.2)]">
                       <div className="flex items-center text-xs text-[var(--brown)]">
                         <div className="w-2 h-2 bg-[var(--brown)] rounded-full mr-2 flex-shrink-0"></div>
                         <span className="break-words">
-                          {salle.artworks.length} œuvre{salle.artworks.length > 1 ? 's' : ''} à découvrir
+                          {salle.artworks.length} œuvre
+                          {salle.artworks.length > 1 ? "s" : ""} à découvrir
                         </span>
                       </div>
                     </div>
@@ -141,15 +148,16 @@ export default function AccueilPlanInteractif() {
             ))}
         </div>
 
-        {/* Salles en maintenance */}
-        {sortedAndFilteredSalles.some(salle => salle.status === "maintenance") && (
+        {sortedAndFilteredSalles.some(
+          (salle) => salle.status === "maintenance"
+        ) && (
           <div className="mt-8 w-full">
             <h2 className="text-lg sm:text-xl font-semibold text-[var(--foreground)] mb-4 px-2">
               Salles temporairement fermées
             </h2>
             <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
               {sortedAndFilteredSalles
-                .filter(salle => salle.status === "maintenance")
+                .filter((salle) => salle.status === "maintenance")
                 .map((salle) => (
                   <div
                     key={salle._id}
@@ -185,14 +193,12 @@ export default function AccueilPlanInteractif() {
     });
   }, [salles]);
 
-  // ✅ Pas d'affichage de chargement, retourne null pendant le loading
   if (loading) {
     return null;
   }
 
   return (
     <>
-      {/* Overlay de transition global */}
       <div
         className={`fixed inset-0 transition-opacity duration-600 ease-in-out pointer-events-none ${
           isTransitioning ? "opacity-100" : "opacity-0"
@@ -203,7 +209,6 @@ export default function AccueilPlanInteractif() {
         }}
       />
 
-      {/* Affichage conditionnel : Mobile vs Desktop */}
       {isMobile ? (
         <MobileRoomsList />
       ) : (
@@ -284,7 +289,6 @@ export default function AccueilPlanInteractif() {
             })}
           </div>
 
-          {/* Tooltip Component - Desktop uniquement */}
           {tooltip.show && !isTransitioning && (
             <div
               className="fixed z-[999] bg-gray-900 text-white px-3 py-2 rounded-lg shadow-xl border border-gray-700 max-w-sm pointer-events-none"

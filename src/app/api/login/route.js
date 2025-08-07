@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { SignJWT } from "jose"; // ✅ UNIFORMISATION VERS JOSE
+import { SignJWT } from "jose";
 import User from "@/lib/models/User";
 import { connectToDatabase } from "@/lib/mongodb";
 
@@ -35,7 +35,6 @@ export async function POST(req) {
       );
     }
 
-    // ✅ Génération du token JWT avec JOSE (uniformisé)
     const token = await new SignJWT({
       id: user._id,
       email: user.email,
@@ -45,7 +44,6 @@ export async function POST(req) {
       .setExpirationTime("1d")
       .sign(SECRET);
 
-    // ✅ Création de la réponse avec le cookie sécurisé
     const response = NextResponse.json({ success: true });
 
     response.cookies.set("token", token, {

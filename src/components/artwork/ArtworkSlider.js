@@ -19,26 +19,26 @@ export default function ArtworkSlider({ artworks = [] }) {
     if (isAnimating) return;
 
     setIsAnimating(true);
-    setSlideDirection("slide-right"); // ✅ Slide vers la droite pour previous
+    setSlideDirection("slide-right");
     setCurrentIndex((prev) => (prev === 0 ? artworks.length - 1 : prev - 1));
 
     setTimeout(() => {
       setIsAnimating(false);
       setSlideDirection("");
-    }, 500); // ✅ Augmenté pour l'animation slide
+    }, 500);
   };
 
   const next = () => {
     if (isAnimating) return;
 
     setIsAnimating(true);
-    setSlideDirection("slide-left"); // ✅ Slide vers la gauche pour next
+    setSlideDirection("slide-left");
     setCurrentIndex((prev) => (prev === artworks.length - 1 ? 0 : prev + 1));
 
     setTimeout(() => {
       setIsAnimating(false);
       setSlideDirection("");
-    }, 500); // ✅ Augmenté pour l'animation slide
+    }, 500);
   };
 
   const currentArtwork = artworks[currentIndex];
@@ -53,16 +53,13 @@ export default function ArtworkSlider({ artworks = [] }) {
 
   return (
     <div className="w-full flex flex-col items-center justify-center relative py-12">
-      {/* Section image avec flèches */}
       <div className="relative flex items-center justify-center">
         <button
           className={`previous-button ${isAnimating ? "clicked" : ""}`}
           onClick={previous}
           disabled={isAnimating}
-        >
-        </button>
+        ></button>
 
-        {/* ✅ Container avec animation slide */}
         <div className={`room-picture ${slideDirection}`}>
           <Image
             src={currentArtwork.imageUrl || "/fallback.webp"}
@@ -70,7 +67,7 @@ export default function ArtworkSlider({ artworks = [] }) {
             fill
             style={{ objectFit: "contain" }}
             priority
-            key={currentIndex} // ✅ Force le re-render pour l'animation
+            key={currentIndex}
           />
         </div>
 
@@ -78,11 +75,9 @@ export default function ArtworkSlider({ artworks = [] }) {
           className={`next-button ${isAnimating ? "clicked" : ""}`}
           onClick={next}
           disabled={isAnimating}
-        >
-        </button>
+        ></button>
       </div>
 
-      {/* ✅ Section information avec animation synchronisée */}
       <div className={`artwork-info ${slideDirection}`}>
         <h2 className="artwork-title">{currentArtwork.title}</h2>
         <div className="artwork-description">{currentArtwork.description}</div>

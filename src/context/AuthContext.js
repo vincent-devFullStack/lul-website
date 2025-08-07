@@ -6,7 +6,7 @@ const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true); // ✅ STATE MANQUANT AJOUTÉ
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -18,7 +18,7 @@ export function AuthProvider({ children }) {
         setIsAuthenticated(false);
       })
       .finally(() => {
-        setLoading(false); // ✅ LOADING GÉRÉ CORRECTEMENT
+        setLoading(false);
       });
   }, []);
 

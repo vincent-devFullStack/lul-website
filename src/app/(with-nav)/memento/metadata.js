@@ -1,4 +1,3 @@
-// Pas de directive "use client" ici
 export const metadata = {
   title: "Mémento | L'iconodule",
   description:

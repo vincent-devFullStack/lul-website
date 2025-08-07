@@ -4,8 +4,6 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 
 /**
- * Composant d'upload d'image professionnel et réutilisable
- *
  * @param {Object} props
  * @param {string} props.currentImageUrl - URL de l'image actuelle (optionnel)
  * @param {Function} props.onImageSelected - Callback appelé quand une image est sélectionnée
@@ -32,7 +30,7 @@ export default function ImageUpload({
   };
 
   const validateFile = (file) => {
-    const maxSize = 5 * 1024 * 1024; // 5MB
+    const maxSize = 5 * 1024 * 1024;
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
     if (!allowedTypes.includes(file.type)) {
@@ -70,25 +68,21 @@ export default function ImageUpload({
       validateFile(file);
       setUploading(true);
 
-      // Preview immédiat
       const previewUrl = URL.createObjectURL(file);
       setPreview(previewUrl);
 
-      // Upload vers le serveur
       const uploadResult = await uploadFile(file);
 
-      // Nettoyer l'URL temporaire et utiliser l'URL serveur
       URL.revokeObjectURL(previewUrl);
       setPreview(uploadResult.imageUrl);
 
-      // Notifier le parent
       if (onImageSelected) {
         onImageSelected(uploadResult.imageUrl, uploadResult);
       }
     } catch (err) {
       console.error("Erreur upload:", err);
       setError(err.message);
-      setPreview(currentImageUrl); // Revenir à l'image précédente
+      setPreview(currentImageUrl);
     } finally {
       setUploading(false);
     }
@@ -151,14 +145,13 @@ export default function ImageUpload({
       />
 
       {preview ? (
-        // Zone avec image
         <div className="image-upload-preview">
           <Image
             src={preview}
             alt="Aperçu"
             className="image-upload-image"
-            width={500} // spécifiez une largeur
-            height={300} // spécifiez une hauteur
+            width={500}
+            height={300}
           />
           <div className="image-upload-overlay">
             <button
@@ -180,7 +173,6 @@ export default function ImageUpload({
           </div>
         </div>
       ) : (
-        // Zone de drop/upload
         <div
           className={`image-upload-dropzone ${dragActive ? "active" : ""} ${disabled ? "disabled" : ""}`}
           onDragEnter={handleDrag}

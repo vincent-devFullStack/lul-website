@@ -22,7 +22,7 @@ export default function Register() {
     setMessage(null);
 
     if (password !== confirm) {
-      setMessage("❌ Les mots de passe ne correspondent pas.");
+      setMessage("Les mots de passe ne correspondent pas.");
       return;
     }
 
@@ -43,13 +43,13 @@ export default function Register() {
       const data = await res.json();
 
       if (res.ok) {
-        login(); // ← on se connecte d’abord via AuthContext
-        router.push("/accueil"); // ← ensuite on redirige
+        login();
+        router.push("/accueil");
       } else {
-        setMessage(`❌ ${data.error || "Erreur inconnue"}`);
+        setMessage(`${data.error || "Erreur inconnue"}`);
       }
     } catch (err) {
-      setMessage("❌ Erreur réseau.");
+      setMessage("Erreur réseau.");
     } finally {
       setIsLoading(false);
     }

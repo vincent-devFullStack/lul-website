@@ -10,15 +10,6 @@ export default function ClientWrapper({ children }) {
 
   const isEntryPage = pathname === "/";
   const isAdminPage = pathname.startsWith("/admin");
-  // const isAccueilPage = pathname === "/accueil";
-
-  // useEffect(() => {
-  //   if (isAccueilPage) {
-  //     document.body.classList.add("no-responsive");
-  //   } else {
-  //     document.body.classList.remove("no-responsive");
-  //   }
-  // }, [isAccueilPage]);
 
   return (
     <>

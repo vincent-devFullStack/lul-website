@@ -309,44 +309,6 @@ main {
   }
 }
 
-/* Responsive header/footer - SUPPRIMÉ car conflictuel avec Tailwind
-@media (max-width: 770px) {
-  body,
-  html,
-  #__next {
-    min-width: 0;
-    width: 100%;
-  }
-  .plan-container {
-    display: none;
-  }
-
-  .header-menu,
-  .footer {
-    position: relative;
-    height: auto;
-    width: 100%;
-    padding: 1rem;
-    flex-direction: column;
-    text-align: center;
-  }
-} */
-
-/* Règles CSS orphelines corrigées
-.footer-nav {
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.footer-nav-item {
-  font-size: 0.9rem;
-}
-
-.main-container {
-  padding: 1rem;
-} */
-
 /* Curseur personnalisé pour les éléments avec la classe .arrow-cursor */
 .arrow-cursor {
   cursor:
@@ -355,13 +317,13 @@ main {
     auto;
 }
 
-/* ✅ Container du bouton de retour */
+/* Container du bouton de retour */
 .back-button-container {
   display: flex;
   justify-content: center;
 }
 
-/* ✅ Style du bouton de retour */
+/* Style du bouton de retour */
 .back-button {
   display: inline-flex;
   align-items: center;
@@ -371,7 +333,6 @@ main {
   font-size: 1rem;
   font-weight: 600;
   font-family: "EB Garamond", serif;
-  /* ✅ Style harmonisé avec vos autres boutons */
   background: linear-gradient(
     135deg,
     rgba(235, 227, 204, 0.6) 0%,
@@ -391,14 +352,12 @@ main {
   overflow: hidden;
 }
 
-/* ✅ Flèche de retour */
 .back-arrow {
   font-size: 1rem;
   transition: transform 0.3s ease;
   font-weight: 400;
 }
 
-/* ✅ Effet de brillance */
 .back-button::before {
   content: "";
   position: absolute;
@@ -420,7 +379,6 @@ main {
   left: 100%;
 }
 
-/* ✅ Effet hover */
 .back-button:hover {
   background: linear-gradient(
     135deg,
@@ -437,12 +395,10 @@ main {
   text-shadow: 0 1px 3px rgba(255, 255, 255, 0.95);
 }
 
-/* ✅ Animation de la flèche au hover */
 .back-button:hover .back-arrow {
   transform: translateX(-4px);
 }
 
-/* ✅ Focus pour accessibilité */
 .back-button:focus {
   outline: none;
   box-shadow:
@@ -452,7 +408,6 @@ main {
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
-/* ✅ Responsive */
 @media (max-width: 768px) {
   .back-button-container {
     padding-top: 1.5rem;
@@ -487,18 +442,14 @@ main {
   }
 }
 
-/* ✅ Cherchez ces règles et modifiez-les */
 @media (min-width: 40rem) {
   .main-container {
-    padding-inline: calc(var(--spacing) * 6); /* ✅ PROBLÈME ICI */
+    padding-inline: calc(var(--spacing) * 6);
   }
 }
 
-/* ✅ REMPLACEZ par : */
 @media (min-width: 40rem) {
   .main-container {
-    padding-inline: calc(var(--spacing) * 2); /* ✅ Réduit le padding */
+    padding-inline: calc(var(--spacing) * 2);
   }
 }
-
-/* ✅ Ou supprimez complètement cette règle */

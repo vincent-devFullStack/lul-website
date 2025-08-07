@@ -1,8 +1,3 @@
-/* Admin Fullscreen Layout 
- * Architecture: Layout admin qui prend contrôle total de la page
- * Structure: admin-fullscreen > admin-header + admin-body > sidebar + main
- * Évite les conflits avec Navigation/Footer du site principal
- */
 .admin-fullscreen {
   position: fixed;
   top: 0;
@@ -12,7 +7,7 @@
   background-color: var(--login-background);
   display: flex;
   flex-direction: column;
-  z-index: 9999; /* Au-dessus de tout le reste */
+  z-index: 9999;
 }
 
 /* Header admin */
@@ -106,7 +101,7 @@
 /* Sidebar dans le contexte admin fullscreen */
 .admin-sidebar {
   width: 280px;
-  background-color: rgba(179, 162, 121, 0.1); /* Plus subtil que la navbar */
+  background-color: rgba(179, 162, 121, 0.1);
   border-right: 1px solid var(--login-form-input-border);
   padding: 24px;
   overflow-y: auto;
@@ -198,7 +193,7 @@
   transition: all 0.2s ease;
   cursor: pointer;
   min-width: 300px;
-  overflow: hidden; /* 🔥 Ajout essentiel */
+  overflow: hidden;
 }
 
 .room-card:hover {
@@ -221,7 +216,7 @@
 
 .room-card-actions {
   display: flex;
-  flex-wrap: wrap; /* Permet le retour à la ligne */
+  flex-wrap: wrap;
   gap: 12px;
   justify-content: flex-start;
 }
@@ -379,7 +374,6 @@
   resize: vertical;
 }
 
-/* Masquer complètement l'input file original */
 .admin-form-file {
   position: absolute;
   left: -9999px;
@@ -428,7 +422,6 @@
   line-height: 1.4;
 }
 
-/* Modal */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -486,7 +479,6 @@
   margin-top: 24px;
 }
 
-/* Messages */
 .message {
   padding: 12px 16px;
   border-radius: 4px;
@@ -505,7 +497,6 @@
   border: 1px solid #f5c6cb;
 }
 
-/* Memento Cards - styles spécifiques */
 .admin-memento-card {
   background: linear-gradient(
     135deg,
@@ -549,7 +540,7 @@
 .memento-image img {
   width: 100%;
   height: 100%;
-  object-fit: contain; /* Change de cover à contain pour voir l'image entière */
+  object-fit: contain;
   object-position: center;
 }
 
@@ -590,7 +581,6 @@
   flex-shrink: 0;
 }
 
-/* Boutons spécifiques aux mementos - override les styles généraux */
 .memento-actions .admin-btn {
   background: var(--brown) !important;
   color: white !important;
@@ -652,10 +642,9 @@
   border-bottom-color: #d4c4a8;
 }
 
-/* Responsive pour fullscreen layout */
 @media (max-width: 768px) {
   .admin-fullscreen {
-    position: relative; /* Pas de fixed sur mobile */
+    position: relative;
     height: auto;
     min-height: 100vh;
   }
@@ -693,7 +682,7 @@
   }
   .artwork-actions {
     width: 100%;
-    justify-content: space-between; /* ou center */
+    justify-content: space-between;
   }
 }
 
@@ -713,9 +702,9 @@
   background-position: center;
   text-decoration: none;
   flex-shrink: 0;
-  transform: scaleX(-1); /* Ajout ici */
+  transform: scaleX(-1);
 }
 
 .admin-back-button:hover {
-  transform: scaleX(-1) translateX(4px); /* Combinaison des deux */
+  transform: scaleX(-1) translateX(4px);
 }

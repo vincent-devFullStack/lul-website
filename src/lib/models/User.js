@@ -23,5 +23,4 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Empêche de redéclarer le modèle si déjà existant (hot reload en dev)
 export default mongoose.models.User || mongoose.model("User", userSchema);

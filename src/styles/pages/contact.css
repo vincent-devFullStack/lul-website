@@ -1,4 +1,4 @@
-/* ✅ Wrapper principal */
+/* Wrapper principal */
 .contact-wrapper {
   display: flex;
   justify-content: center;
@@ -8,7 +8,7 @@
   width: 100%;
 }
 
-/* ✅ CONTAINER PRINCIPAL */
+/* CONTAINER PRINCIPAL */
 .contact-container {
   display: flex;
   gap: 24px;
@@ -29,7 +29,7 @@
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* ✅ CONTENT LAYOUT */
+/* CONTENT LAYOUT */
 .contact-content {
   display: flex;
   gap: 40px;
@@ -38,7 +38,7 @@
   min-height: 400px;
 }
 
-/* ✅ Section texte */
+/* Section texte */
 .contact-text-section {
   flex: 1;
 
@@ -46,17 +46,17 @@
   transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
 }
 
-/* ✅ Titre "Contact :" */
+/* Titre "Contact :" */
 .contact-title {
   font-size: 2rem;
   font-weight: 600;
   color: var(--foreground);
   margin-bottom: 1rem;
-  margin-top: 0; /* ✅ Supprimé margin-top pour Contact: */
+  margin-top: 0;
   font-family: "EB Garamond", serif;
 }
 
-/* ✅ Container animation machine à écrire */
+/* Container animation machine à écrire */
 .typewriter-container {
   min-height: 520px;
   min-width: 345px;
@@ -73,7 +73,7 @@
     0 2px 8px rgba(191, 167, 106, 0.5);
 }
 
-/* ✅ Texte machine à écrire - DÉFINITION UNIQUE */
+/* Texte machine à écrire - DÉFINITION UNIQUE */
 .typewriter-text {
   font-size: 1rem;
   line-height: 1.8;
@@ -86,7 +86,7 @@
   padding-right: 1rem;
 }
 
-/* ✅ Styles pour la nouvelle définition */
+/* Styles pour la nouvelle définition */
 .typewriter-text strong {
   color: #3b3b3b;
   font-weight: 700;
@@ -100,7 +100,7 @@
   opacity: 0.8;
 }
 
-/* ✅ Curseur clignotant */
+/* Curseur clignotant */
 .typewriter-cursor {
   color: var(--brown);
   font-weight: bold;
@@ -119,7 +119,7 @@
   }
 }
 
-/* ✅ FORMULAIRE */
+/* FORMULAIRE */
 .contact-form {
   display: flex;
   flex-direction: column;
@@ -174,7 +174,7 @@ textarea:focus {
   box-shadow: 0 4px 12px rgba(191, 167, 106, 0.3);
 }
 
-/* ✅ IMAGE */
+/* IMAGE */
 .contact-image-wrapper {
   flex: 1.5;
   display: flex;
@@ -198,7 +198,7 @@ textarea:focus {
   transform: scale(1.05) rotate(2deg);
 }
 
-/* ✅ ANIMATIONS FADE IN UP */
+/* ANIMATIONS FADE IN UP */
 .fade-in-up-initial {
   opacity: 0;
   transform: translateY(40px);
@@ -224,7 +224,6 @@ textarea:focus {
   }
 }
 
-/* ✅ RESPONSIVE - Media queries adaptées aux nouvelles modifications */
 @media (max-width: 1100px) {
   .contact-wrapper {
     width: 90%;
@@ -252,20 +251,19 @@ textarea:focus {
     padding: 0 10px;
   }
 
-  /* ✅ Typewriter container responsive */
   .typewriter-container {
-    min-height: 400px; /* ✅ RÉDUIT pour tablettes */
-    min-width: 100%; /* ✅ Prend toute la largeur */
+    min-height: 400px;
+    min-width: 100%;
     padding: 1.2rem;
   }
 
   .contact-title {
-    font-size: 1.8rem; /* ✅ ADAPTÉ pour tablettes */
+    font-size: 1.8rem;
     margin-bottom: 1.2rem;
   }
 
   .typewriter-text {
-    font-size: 0.95rem; /* ✅ LÉGÈREMENT plus grand */
+    font-size: 0.95rem;
     line-height: 1.7;
   }
 
@@ -275,13 +273,13 @@ textarea:focus {
 
   .contact-image-wrapper {
     order: 3;
-    min-height: 350px; /* ✅ AUGMENTÉ pour image plus grande */
-    max-width: 350px; /* ✅ AUGMENTÉ */
-    flex: none; /* ✅ Pas de flex sur tablettes */
+    min-height: 350px;
+    max-width: 350px;
+    flex: none;
   }
 
   .contact-image {
-    width: 100%; /* ✅ Image prend toute la largeur du wrapper */
+    width: 100%;
     max-width: 350px;
   }
 }
@@ -298,42 +296,41 @@ textarea:focus {
     padding: 16px;
   }
 
-  /* ✅ Typewriter container mobile */
   .typewriter-container {
-    min-height: 320px; /* ✅ RÉDUIT pour mobile */
+    min-height: 320px;
     min-width: 100%;
     padding: 1rem;
   }
 
   .contact-title {
-    font-size: 1.5rem; /* ✅ RÉDUIT pour mobile */
+    font-size: 1.5rem;
     margin-bottom: 1rem;
-    border-bottom-width: 2px; /* ✅ Bordure plus fine */
+    border-bottom-width: 2px;
   }
 
   .contact-title::after {
-    width: 40px; /* ✅ Trait décoratif plus court */
+    width: 40px;
   }
 
   .typewriter-text {
-    font-size: 0.9rem; /* ✅ ADAPTÉ pour mobile */
+    font-size: 0.9rem;
     line-height: 1.6;
-    text-indent: 0.5rem; /* ✅ Indentation réduite */
+    text-indent: 0.5rem;
   }
 
   .typewriter-text strong {
-    font-size: 1.05em; /* ✅ Proportion maintenue */
+    font-size: 1.05em;
   }
 
   .typewriter-text em {
-    font-size: 0.85em; /* ✅ Proportion maintenue */
-    margin: 0.6rem 0 1rem 0; /* ✅ Marges réduites */
+    font-size: 0.85em;
+    margin: 0.6rem 0 1rem 0;
     padding-left: 0.8rem;
   }
 
   .contact-image-wrapper {
-    min-height: 280px; /* ✅ AUGMENTÉ pour image plus grande */
-    max-width: 280px; /* ✅ AUGMENTÉ */
+    min-height: 280px;
+    max-width: 280px;
   }
 
   .contact-image {
@@ -354,28 +351,27 @@ textarea:focus {
     padding: 12px;
   }
 
-  /* ✅ Typewriter container très petit écran */
   .typewriter-container {
-    min-height: 280px; /* ✅ COMPACT pour très petit écran */
+    min-height: 280px;
     min-width: 100%;
     padding: 0.8rem;
   }
 
   .contact-title {
-    font-size: 1.3rem; /* ✅ COMPACT */
+    font-size: 1.3rem;
     margin-bottom: 0.8rem;
-    text-transform: none; /* ✅ Pas de majuscules sur mobile */
-    letter-spacing: 0.05em; /* ✅ Espacement réduit */
+    text-transform: none;
+    letter-spacing: 0.05em;
   }
 
   .contact-title::after {
-    width: 30px; /* ✅ Trait encore plus court */
+    width: 30px;
   }
 
   .typewriter-text {
-    font-size: 0.85rem; /* ✅ Plus petit pour mobile */
+    font-size: 0.85rem;
     line-height: 1.5;
-    text-indent: 0; /* ✅ Pas d'indentation sur mobile */
+    text-indent: 0;
     padding-right: 0.5rem;
   }
 
@@ -391,8 +387,8 @@ textarea:focus {
   }
 
   .contact-image-wrapper {
-    min-height: 220px; /* ✅ RÉDUIT mais encore visible */
-    max-width: 220px; /* ✅ RÉDUIT */
+    min-height: 220px;
+    max-width: 220px;
   }
 
   .contact-image {
@@ -412,10 +408,9 @@ textarea:focus {
   }
 }
 
-/* ✅ Media query spéciale pour iPad en mode paysage */
 @media (max-width: 1024px) and (min-width: 769px) and (orientation: landscape) {
   .contact-content {
-    flex-direction: row; /* ✅ Garde la disposition horizontale en paysage */
+    flex-direction: row;
     gap: 20px;
   }
 
@@ -484,7 +479,6 @@ textarea:focus {
   margin-left: 2px;
 }
 
-/* Style pour le bouton lors de l'envoi */
 .contact-form button.submitting {
   background-color: #cccccc;
   cursor: not-allowed;

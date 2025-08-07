@@ -36,12 +36,20 @@ export default function Login() {
           router.push("/accueil");
         }, 1500);
       } else {
-        setMessage(`❌ ${data.error || "Erreur inconnue"}`);
+        setMessage(`❌ ${data.error || "Erreur inconnue"}`); // ✅ Ajout de l'emoji ❌
       }
     } catch (err) {
-      console.error("❌ Erreur réseau ou serveur :", err);
-      setMessage("❌ Erreur réseau ou serveur.");
+      console.error("Erreur réseau ou serveur :", err);
+      setMessage("❌ Erreur réseau ou serveur."); // ✅ Ajout de l'emoji ❌
     }
+  };
+
+  // ✅ Fonction pour déterminer la couleur du message
+  const getMessageClass = () => {
+    if (!message) return "";
+    if (message.includes("✅")) return "text-green-600"; // ✅ Vert pour succès
+    if (message.includes("❌")) return "text-red-600"; // ❌ Rouge pour erreur
+    return "text-gray-600"; // ⚪ Gris par défaut
   };
 
   return (
@@ -72,7 +80,9 @@ export default function Login() {
       </form>
 
       {message && (
-        <p className="text-sm text-center mt-4 text-red-600">{message}</p>
+        <p className={`text-sm text-center mt-4 ${getMessageClass()}`}>
+          {message}
+        </p>
       )}
 
       <div className="login-links text-[15px] text-gray-800 mt-2">

@@ -1,8 +1,7 @@
-/* Footer */
 .footer {
-  height: 130px; /* Hauteur réduite */
+  height: 130px;
   border-top: 1px solid var(--foreground);
-  width: 100%; /* Ajoute cette ligne si tu veux forcer la pleine largeur */
+  width: 100%;
 }
 
 .footer-content {
@@ -22,7 +21,7 @@
 .footer-nav-item {
   color: var(--foreground);
   transition: color 0.3s ease-in-out;
-  font-size: 0.8rem; /* <-- ici : le slash est une erreur */
+  font-size: 0.8rem;
 }
 
 .footer-nav-item:hover {
@@ -34,7 +33,7 @@
   flex-direction: column;
   justify-content: center;
   text-align: center;
-  font-size: 0.8rem; /* réduit la taille du texte */
-  line-height: 1.2; /* ajuste l'espacement */
-  margin-top: 0.5rem; /* un petit espace au-dessus */
+  font-size: 0.8rem;
+  line-height: 1.2;
+  margin-top: 0.5rem;
 }

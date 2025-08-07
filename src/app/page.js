@@ -29,7 +29,6 @@ export default function Home() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      {/* Overlay de fondu */}
       <div
         className={`absolute inset-0 bg-black transition-opacity duration-700 ease-in-out ${
           isTransitioning ? "opacity-60" : "opacity-0"
@@ -37,7 +36,6 @@ export default function Home() {
         style={{ zIndex: 10 }}
       />
 
-      {/* Lien invisible sur toute la page */}
       <div
         className="absolute inset-0 block z-20"
         onClick={handleClick}

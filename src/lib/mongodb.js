@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import cloudinary from "@/lib/cloudinary"; // 🔁 utilisé dans deleteArtworkFromRoom
+import cloudinary from "@/lib/cloudinary";
 
 const uri = process.env.MONGODB_URI;
 if (!uri) throw new Error("Veuillez définir MONGODB_URI dans .env.local");
@@ -18,7 +18,6 @@ export async function connectToDatabase() {
   return cached.conn;
 }
 
-// Schémas
 const ArtworkSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
@@ -26,7 +25,7 @@ const ArtworkSchema = new mongoose.Schema(
     imageUrl: { type: String, required: true },
   },
   { timestamps: true }
-); // ✅ Ajout timestamps
+);
 
 const ContentSchema = new mongoose.Schema(
   {
@@ -36,7 +35,7 @@ const ContentSchema = new mongoose.Schema(
     imageUrl: { type: String, default: null },
   },
   { timestamps: true }
-); // ✅ Ajout timestamps
+);
 
 const RoomSchema = new mongoose.Schema(
   {
@@ -59,14 +58,14 @@ const RoomSchema = new mongoose.Schema(
     artworks: [ArtworkSchema],
   },
   { timestamps: true }
-); // ✅ Ajout timestamps
+);
 
 const MementoSchema = new mongoose.Schema(
   {
     quote: { type: String, required: true },
     author: { type: String, required: true },
     role: { type: String, required: true },
-    link: { type: String, required: false, default: null }, // ✅ Champ link avec default
+    link: { type: String, required: false, default: null },
     imageUrl: { type: String, required: true },
   },
   { timestamps: true }

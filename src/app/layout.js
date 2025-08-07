@@ -2,7 +2,6 @@ import "@/styles/base/globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import ClientWrapper from "@/components/layout/ClientWrapper";
 
-// C'est votre description par défaut pour toutes les pages
 export const metadata = {
   metadataBase: new URL("https://www.iconodule.fr"),
   title: {
@@ -53,7 +52,6 @@ export default function RootLayout({ children }) {
         />
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="icon" href="/favicon.ico" />
-        {/* Autres meta tags, polices, etc. */}
       </head>
       <body className="flex flex-col min-h-screen bg-gray-50">
         <AuthProvider>

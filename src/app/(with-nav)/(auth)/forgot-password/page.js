@@ -41,6 +41,14 @@ export default function ForgotPassword() {
     }
   };
 
+  // ✅ Fonction pour déterminer la couleur du message
+  const getMessageClass = () => {
+    if (!message) return "";
+    if (message.includes("✅")) return "text-green-600";
+    if (message.includes("❌")) return "text-red-600";
+    return "text-gray-700";
+  };
+
   return (
     <div className="forgot-password-container rounded-lg">
       <h1 className="text-2xl font-bold">Mot de passe oublié ?</h1>
@@ -82,7 +90,11 @@ export default function ForgotPassword() {
         </div>
 
         {message && (
-          <p className="text-sm text-center mt-3 text-gray-700">{message}</p>
+          <p
+            className={`text-sm text-center mt-3 font-medium ${getMessageClass()}`}
+          >
+            {message}
+          </p>
         )}
       </form>
     </div>

@@ -17,7 +17,7 @@ export default function ResetPassword() {
 
   useEffect(() => {
     if (!token) {
-      setMessage("❌ Lien de réinitialisation invalide.");
+      setMessage("Lien de réinitialisation invalide.");
       router.push("/login");
     }
   }, [token, router]);
@@ -27,12 +27,12 @@ export default function ResetPassword() {
     setMessage(null);
 
     if (password !== confirmPassword) {
-      setMessage("❌ Les mots de passe ne correspondent pas.");
+      setMessage("Les mots de passe ne correspondent pas.");
       return;
     }
 
     if (password.length < 6) {
-      setMessage("❌ Le mot de passe doit contenir au moins 6 caractères.");
+      setMessage("Le mot de passe doit contenir au moins 6 caractères.");
       return;
     }
 
@@ -48,13 +48,13 @@ export default function ResetPassword() {
       const data = await res.json();
 
       if (res.ok) {
-        setMessage("✅ Mot de passe réinitialisé avec succès !");
+        setMessage("Mot de passe réinitialisé avec succès !");
         setTimeout(() => router.push("/login"), 3000);
       } else {
-        setMessage(`❌ ${data.error || "Erreur inconnue."}`);
+        setMessage(`${data.error || "Erreur inconnue."}`);
       }
     } catch {
-      setMessage("❌ Erreur réseau.");
+      setMessage("Erreur réseau.");
     } finally {
       setIsLoading(false);
     }

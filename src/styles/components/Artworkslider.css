@@ -490,17 +490,17 @@
   .room-picture {
     width: 100vw;
     height: 300px;
-    padding: 20px; /* ✅ Identique à about.css responsive */
+    padding: 20px;
   }
 
   .room-picture img {
-    border-radius: 16px !important; /* ✅ Identique à about.css responsive */
-    padding: 8px 8px 20px 8px !important; /* ✅ Identique à about.css responsive */
+    border-radius: 16px !important;
+    padding: 8px 8px 20px 8px !important;
     border: 3px solid #efebda !important;
   }
 
   .room-picture::before {
-    top: 15px; /* ✅ Identique à about.css responsive */
+    top: 15px;
     left: 15px;
     right: 15px;
     bottom: 15px;
@@ -508,7 +508,7 @@
   }
 
   .room-picture::after {
-    top: 8px; /* ✅ Identique à about.css responsive */
+    top: 8px;
     left: 8px;
     right: 8px;
     bottom: 8px;
@@ -547,7 +547,6 @@
     padding: 15px;
   }
 
-  /* ✅ Animations adaptées pour mobile */
   @keyframes slideLeft {
     0% {
       transform: translateX(50%);
@@ -571,13 +570,12 @@
   }
 }
 
-/* ✅ Très petits écrans IDENTIQUE à about.css */
 @media (max-width: 480px) {
   .room-picture {
-    padding: 15px; /* ✅ Identique à about.css */
+    padding: 15px;
   }
 
   .room-picture img {
-    border-radius: 12px !important; /* ✅ Identique à about.css */
+    border-radius: 12px !important;
   }
 }

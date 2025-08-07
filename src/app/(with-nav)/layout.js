@@ -1,10 +1,8 @@
 export default function WithNavLayout({ children }) {
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Navbar pleine largeur */}
       <div className="w-full"></div>
 
-      {/* Contenu principal centré avec max-width */}
       <main className="flex-1 pt-10">
         <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col px-4 py-8 justify-center items-center">
@@ -13,7 +11,6 @@ export default function WithNavLayout({ children }) {
         </div>
       </main>
 
-      {/* Footer pleine largeur */}
       <div className="w-full"></div>
     </div>
   );

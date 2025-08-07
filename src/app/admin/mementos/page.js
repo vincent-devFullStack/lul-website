@@ -12,7 +12,7 @@ export default function Memento() {
     quote: "",
     author: "",
     role: "",
-    link: "", // Nouveau champ
+    link: "",
     imageUrl: "",
   });
   const [uploading, setUploading] = useState(false);
@@ -38,11 +38,12 @@ export default function Memento() {
   const closeModal = () => {
     setModalOpen(false);
     setFormData({ quote: "", author: "", role: "", link: "", imageUrl: "" });
-    setMessage(null);
+    // ✅ NE PAS reset le message ici (comme les salles)
+    // setMessage(null); // ❌ Supprimé
   };
 
   useEffect(() => {
-    fetch("/api/memento") // Changé de "/api/mementos" à "/api/memento"
+    fetch("/api/memento")
       .then((res) => res.json())
       .then(setMementos);
   }, []);
@@ -91,6 +92,7 @@ export default function Memento() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUploading(true);
+    setMessage(null); // ✅ Reset du message
 
     const dataToSend = {
       ...(modalMode === "edit" && { id: formData._id }),
@@ -115,7 +117,17 @@ export default function Memento() {
           r.json()
         );
         setMementos(updatedMementos);
-        setMessage({ type: "success", text: "Memento enregistré !" });
+
+        // ✅ Message avec le même format que les salles
+        const successText =
+          modalMode === "edit"
+            ? "Memento modifié avec succès"
+            : "Memento ajouté avec succès";
+
+        setMessage({ type: "success", text: successText });
+
+        // ✅ Auto-disparition après 5 secondes (comme les salles)
+        setTimeout(() => setMessage(null), 5000);
       } else {
         const data = await res.json();
         setMessage({ type: "error", text: data.error || "Erreur" });
@@ -127,7 +139,6 @@ export default function Memento() {
     }
   };
 
-  // ✅ AJOUTER CETTE FONCTION MANQUANTE
   const handleDelete = async (id) => {
     if (!confirm("Êtes-vous sûr de vouloir supprimer ce memento ?")) {
       return;
@@ -141,12 +152,16 @@ export default function Memento() {
       });
 
       if (res.ok) {
-        // Rafraîchir la liste
         const updatedMementos = await fetch("/api/memento").then((r) =>
           r.json()
         );
         setMementos(updatedMementos);
-        setMessage({ type: "success", text: "Memento supprimé avec succès !" });
+
+        // ✅ Message avec le même format que les salles
+        setMessage({ type: "success", text: "Memento supprimé avec succès" });
+
+        // ✅ Auto-disparition après 5 secondes (comme les salles)
+        setTimeout(() => setMessage(null), 5000);
       } else {
         const data = await res.json();
         setMessage({
@@ -159,6 +174,22 @@ export default function Memento() {
     }
   };
 
+  // ✅ Version Tailwind harmonisée
+  const getMessageClass = () => {
+    if (!message) return "";
+
+    const baseClasses =
+      "mt-4 p-3 rounded-lg border text-sm font-medium text-center";
+
+    if (message.text.includes("✅")) {
+      return `${baseClasses} bg-green-100 border-green-300 text-green-800`; // ✅ Comme les salles
+    }
+    if (message.text.includes("❌")) {
+      return `${baseClasses} bg-red-100 border-red-300 text-red-800`; // ❌ Rouge
+    }
+    return `${baseClasses} bg-gray-100 border-gray-300 text-gray-800`; // ⚪ Neutre
+  };
+
   return (
     <div>
       <div className="admin-page-header">
@@ -167,6 +198,11 @@ export default function Memento() {
           Ajoutez, modifiez ou supprimez vos citations et auteurs
         </p>
       </div>
+
+      {/* ✅ Message AVANT les boutons (comme les salles) */}
+      {message && (
+        <div className={`message message-${message.type}`}>{message.text}</div>
+      )}
 
       <div style={{ marginBottom: 24 }}>
         <button className="admin-btn" onClick={() => openModal("add")}>
@@ -301,7 +337,7 @@ export default function Memento() {
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
-                    className="admin-form-file" // Changé de admin-form-input à admin-form-file
+                    className="admin-form-file"
                     id="file-upload-button"
                   />
                   <label
@@ -344,14 +380,15 @@ export default function Memento() {
                   className="admin-btn"
                   disabled={uploading || !formData.imageUrl}
                 >
-                  {uploading ? "Enregistrement..." : "Ajouter"}
+                  {uploading
+                    ? modalMode === "edit"
+                      ? "Modification..."
+                      : "Enregistrement..."
+                    : modalMode === "edit"
+                      ? "Modifier"
+                      : "Ajouter"}
                 </button>
               </div>
-              {message && (
-                <div className={`message message-${message.type}`}>
-                  {message.text}
-                </div>
-              )}
             </form>
           </div>
         </div>

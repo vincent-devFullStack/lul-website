@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  poweredByHeader: false, // Supprime le header X-Powered-By
-  compress: true, // Compression Gzip
+  poweredByHeader: false,
+  compress: true,
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60,

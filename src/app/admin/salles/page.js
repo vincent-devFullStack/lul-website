@@ -10,7 +10,6 @@ export default function AdminSallesPage() {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
-  // Room edit modal state
   const [roomModalOpen, setRoomModalOpen] = useState(false);
   const [editingRoom, setEditingRoom] = useState(null);
   const [roomFormData, setRoomFormData] = useState({
@@ -90,7 +89,6 @@ export default function AdminSallesPage() {
         text: "Informations de la salle mises à jour avec succès",
       });
 
-      // Mettre à jour la liste des salles
       setRooms((prevRooms) =>
         prevRooms.map((room) =>
           room.slug === editingRoom.slug ? result.room : room
@@ -99,7 +97,6 @@ export default function AdminSallesPage() {
 
       closeRoomModal();
 
-      // Clear message after 5 seconds
       setTimeout(() => setMessage(null), 5000);
     } catch (err) {
       setError(err.message);
@@ -191,7 +188,6 @@ export default function AdminSallesPage() {
         </div>
       )}
 
-      {/* Modal de modification de salle */}
       {roomModalOpen && (
         <div className="modal-overlay" onClick={closeRoomModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>

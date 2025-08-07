@@ -32,7 +32,7 @@ export async function middleware(request) {
     }
   }
 
-  return NextResponse.next(); // tout le reste passe
+  return NextResponse.next();
 }
 
 // Active les routes protégées ET la racine

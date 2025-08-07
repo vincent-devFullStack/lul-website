@@ -20,11 +20,9 @@ export default function Contact() {
     error: null,
   });
 
-  // ✅ NOUVELLE définition du contact
   const contactText =
     "<strong>nom masculin</strong><br><br><em>(latin contactus, de contingere, toucher)</em><br><br>1. État ou position de deux corps ou substances qui se touchent<br><br>2. État ou action de personnes qui sont en relation, qui communiquent entre elles<br><br>3. Personne avec qui on est en relation, avec qui on entre en rapport pour se procurer quelque chose, pour obtenir des renseignements";
 
-  // Gestion des changements de formulaire
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -32,11 +30,9 @@ export default function Contact() {
     });
   };
 
-  // Soumission du formulaire
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation côté client
     if (!formData.name || !formData.email || !formData.message) {
       setStatus({
         submitting: false,
@@ -74,7 +70,6 @@ export default function Contact() {
         error: null,
       });
 
-      // Réinitialiser le formulaire
       setFormData({
         name: "",
         prenom: "",
@@ -83,7 +78,6 @@ export default function Contact() {
         message: "",
       });
 
-      // Message de succès qui disparaît après 5 secondes
       setTimeout(() => {
         setStatus((prev) => ({ ...prev, submitted: false }));
       }, 5000);
@@ -96,7 +90,7 @@ export default function Contact() {
     }
   };
 
-  // ✅ Effect pour déclencher l'animation fade in up
+  // Effect pour déclencher l'animation fade in up
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(true);
@@ -105,7 +99,6 @@ export default function Contact() {
     return () => clearTimeout(timer);
   }, []);
 
-  // ✅ Effect pour l'animation machine à écrire
   useEffect(() => {
     if (!isVisible) return;
 
@@ -117,7 +110,7 @@ export default function Contact() {
         if (currentIndex < contactText.length) {
           setTypewriterText(contactText.slice(0, currentIndex + 1));
           currentIndex++;
-          timeoutId = setTimeout(typeNextChar, 30); // Vitesse de frappe
+          timeoutId = setTimeout(typeNextChar, 30);
         }
       };
 
@@ -142,9 +135,7 @@ export default function Contact() {
         >
           <div className="contact-content">
             <div className="contact-text-section">
-              {/* ✅ Texte avec animation machine à écrire */}
               <div className="typewriter-container">
-                {/* ✅ Titre "Contact :" souligné */}
                 <h3 className="contact-title">Contact :</h3>
                 <p
                   className="typewriter-text"
@@ -157,7 +148,6 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* ✅ Formulaire au centre */}
             <form className="contact-form" onSubmit={handleSubmit}>
               {status.error && (
                 <div className="form-error-message">{status.error}</div>
@@ -236,7 +226,6 @@ export default function Contact() {
               </button>
             </form>
 
-            {/* ✅ Image à droite du formulaire */}
             <div className="contact-image-wrapper">
               <Image
                 src="/assets/enveloppe.webp"

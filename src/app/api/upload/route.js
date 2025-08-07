@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { withAuth } from "@/lib/auth";
 import cloudinary from "@/lib/cloudinary";
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const ALLOWED_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 const ALLOWED_FOLDERS = ["artworks", "mementos"];
 
@@ -10,9 +10,8 @@ export const POST = withAuth(async (request) => {
   try {
     const formData = await request.formData();
     const file = formData.get("image");
-    const folder = formData.get("folder") || "artworks"; // Par défaut "artworks"
+    const folder = formData.get("folder") || "artworks";
 
-    // Vérifications de base
     if (!file) {
       return NextResponse.json(
         { error: "Aucun fichier envoyé" },
@@ -44,12 +43,11 @@ export const POST = withAuth(async (request) => {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Upload to Cloudinary (as base64)
     const base64String = buffer.toString("base64");
     const dataURI = `data:${file.type};base64,${base64String}`;
 
     const result = await cloudinary.uploader.upload(dataURI, {
-      folder, // Utilise le dossier spécifié
+      folder,
     });
 
     return NextResponse.json({

@@ -22,7 +22,6 @@ export default function About() {
   const [initialized, setInitialized] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
-  // Charger le contenu depuis l'API
   useEffect(() => {
     const fetchContent = async () => {
       if (initialized) return;
@@ -50,7 +49,6 @@ export default function About() {
     fetchContent();
   }, [initialized]);
 
-  // Fonction pour sauvegarder les modifications
   const handleSave = async () => {
     if (!editTitle.trim()) {
       setMessage({ type: "error", text: "Le titre est requis" });
@@ -152,7 +150,7 @@ export default function About() {
     return { type: "info", message: `${length} caractères - Texte long` };
   };
 
-  // ✅ Effect pour déclencher l'animation fade in up
+  //Effect pour déclencher l'animation fade in up
   useEffect(() => {
     if (!loading) {
       const timer = setTimeout(() => {
@@ -163,7 +161,6 @@ export default function About() {
     }
   }, [loading]);
 
-  // ✅ Pas d'affichage de chargement, retourne null pendant le loading
   if (loading) {
     return null;
   }

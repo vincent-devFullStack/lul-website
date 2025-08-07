@@ -317,7 +317,6 @@ input:focus {
   text-align: center;
   position: relative;
   letter-spacing: -0.02em;
-  /* ✅ Gradient sophistiqué pour le texte */
   background: linear-gradient(
     135deg,
     #3a342a 0%,
@@ -332,14 +331,12 @@ input:focus {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
-  /* ✅ Animation subtile du gradient */
   animation: titleGradientShift 12s ease-in-out infinite;
   transform-style: preserve-3d;
   z-index: 3;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* ✅ Animation du gradient de couleur */
 @keyframes titleGradientShift {
   0%,
   100% {
@@ -353,7 +350,6 @@ input:focus {
   }
 }
 
-/* ✅ Effet décoratif sophistiqué autour du titre */
 .main-title::before {
   content: "";
   position: absolute;
@@ -374,7 +370,6 @@ input:focus {
   opacity: 0.9;
 }
 
-/* ✅ Effet de profondeur avec second halo */
 .main-title::after {
   content: "";
   position: absolute;
@@ -395,14 +390,12 @@ input:focus {
   opacity: 0.6;
 }
 
-/* ✅ Effet au focus pour l'accessibilité */
 .main-title:focus {
   outline: 3px solid rgba(191, 167, 106, 0.4);
   outline-offset: 8px;
   border-radius: 12px;
 }
 
-/* ✅ Responsive sophistiqué pour le titre */
 @media (max-width: 1200px) {
   .main-title {
     font-size: 2.5rem;
@@ -434,7 +427,6 @@ input:focus {
   }
 }
 
-/* ✅ État spécial pour les interactions */
 .main-title.enhanced {
   background: linear-gradient(
     135deg,
@@ -449,7 +441,6 @@ input:focus {
   animation: titleGradientShift 3s ease-in-out infinite;
 }
 
-/* ✅ Classe pour animations JavaScript */
 .main-title.animate-in {
   animation:
     titleSlideIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,

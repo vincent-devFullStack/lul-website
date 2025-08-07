@@ -39,7 +39,6 @@ export default async function RoomPage(props) {
 
   return (
     <div className="container mx-auto px-4">
-      {/* ✅ AJOUT : Bouton de retour */}
       <div className="back-button-container mb-6">
         <Link href="/accueil" className="back-button">
           <span className="back-arrow">←</span>
@@ -53,7 +52,6 @@ export default async function RoomPage(props) {
         </h1>
       </div>
 
-      {/* Ce composant affiche déjà les images */}
       <ArtworkSlider artworks={room?.artworks || []} />
 
       <script

@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { connectToDatabase, getMementoModel } from "@/lib/mongodb";
 import { withAuth } from "@/lib/auth";
 
-// GET all mementos
 export async function GET() {
   await connectToDatabase();
   const Memento = getMementoModel();
@@ -10,15 +9,13 @@ export async function GET() {
   return NextResponse.json(mementos);
 }
 
-// POST, PUT, DELETE by ID
-export const dynamic = "force-dynamic"; // Pour Next.js App Router
+export const dynamic = "force-dynamic";
 
 export const POST = withAuth(async (req) => {
   await connectToDatabase();
   const Memento = getMementoModel();
   const body = await req.json();
 
-  // ✅ MODIFIÉ : Link retiré des champs obligatoires
   if (!body.quote || !body.author || !body.role || !body.imageUrl) {
     return NextResponse.json(
       { error: "Les champs citation, auteur, rôle et image sont requis" },
@@ -30,7 +27,7 @@ export const POST = withAuth(async (req) => {
     quote: body.quote,
     author: body.author,
     role: body.role,
-    link: body.link || null, // ✅ Déjà correct, reste facultatif
+    link: body.link || null,
     imageUrl: body.imageUrl,
   });
   return NextResponse.json(memento, { status: 201 });
@@ -54,7 +51,7 @@ export const PUT = withAuth(async (req) => {
       quote: body.quote,
       author: body.author,
       role: body.role,
-      link: body.link || null, // ✅ Inclure le champ link
+      link: body.link || null,
       imageUrl: body.imageUrl,
       updatedAt: new Date(),
     },

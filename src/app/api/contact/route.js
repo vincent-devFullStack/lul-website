@@ -5,7 +5,6 @@ export async function POST(request) {
   try {
     const { name, prenom, societe, email, message } = await request.json();
 
-    // Validation basique
     if (!name || !email || !message) {
       return NextResponse.json(
         { error: "Nom, email et message sont obligatoires" },
@@ -13,9 +12,8 @@ export async function POST(request) {
       );
     }
 
-    // Configuration du transporteur d'emails
     const transporter = nodemailer.createTransport({
-      host: "mail.lit.o2switch.net", // ← C'est celui à utiliser chez O2Switch
+      host: "mail.lit.o2switch.net",
       port: 465,
       secure: true,
       auth: {
@@ -24,7 +22,6 @@ export async function POST(request) {
       },
     });
 
-    // Options du message
     const mailOptions = {
       from: `"Formulaire L'iconodule" <noreply@iconodule.fr>`,
       to: "contact@iconodule.fr",
@@ -49,7 +46,6 @@ export async function POST(request) {
       `,
     };
 
-    // Envoi de l'email
     await transporter.sendMail(mailOptions);
 
     return NextResponse.json({ success: true });

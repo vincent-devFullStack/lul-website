@@ -13,7 +13,6 @@ const eslintConfig = [
   ...compat.extends("next/core-web-vitals"),
 
   {
-    // Désactivation de la règle bloquante pour les caractères non échappés
     rules: {
       "react/no-unescaped-entities": "off",
     },

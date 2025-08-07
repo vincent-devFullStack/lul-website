@@ -7,7 +7,6 @@ export default function AdminHomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Redirection automatique vers la gestion des salles
     router.replace("/admin/salles");
   }, [router]);
 

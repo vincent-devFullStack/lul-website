@@ -3,10 +3,6 @@ import { jwtVerify } from "jose";
 
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
-/**
- * Middleware de vérification JWT réutilisable pour les routes API
- * USAGE: const { isValid, user, response } = await verifyJWT(request);
- */
 export async function verifyJWT(request) {
   const token = request.cookies.get("token")?.value;
 
@@ -41,19 +37,14 @@ export async function verifyJWT(request) {
   }
 }
 
-/**
- * HOC pour protéger automatiquement une route API
- * USAGE: export const PUT = withAuth(async (request, { params }) => { ... });
- */
 export function withAuth(handler) {
   return async function (request, context) {
     const { isValid, user, response } = await verifyJWT(request);
-    
+
     if (!isValid) {
       return response;
     }
 
-    // Injecter l'utilisateur dans le contexte pour la route
     return handler(request, { ...context, user });
   };
 }

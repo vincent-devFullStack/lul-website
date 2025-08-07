@@ -142,11 +142,9 @@ export default function AdminOeuvresPage() {
         text: "Informations de la salle mises à jour avec succès",
       });
 
-      // Mettre à jour les données locales
       setRoom(result.room);
       closeRoomModal();
 
-      // Clear message after 5 seconds
       setTimeout(() => setMessage(null), 5000);
     } catch (err) {
       setError(err.message);
@@ -165,7 +163,6 @@ export default function AdminOeuvresPage() {
       const previewUrl = URL.createObjectURL(file);
       setImagePreview(previewUrl);
 
-      // Clear imageUrl when uploading new file
       setFormData((prev) => ({ ...prev, imageUrl: "" }));
     }
   };
@@ -176,7 +173,7 @@ export default function AdminOeuvresPage() {
     try {
       setUploading(true);
       const form = new FormData();
-      form.append("image", imageFile); // "image" et non "file"
+      form.append("image", imageFile);
 
       const response = await fetch("/api/upload", {
         method: "POST",
@@ -203,7 +200,6 @@ export default function AdminOeuvresPage() {
     try {
       let imageUrl = formData.imageUrl;
 
-      // Upload new image if one was selected
       if (imageFile) {
         imageUrl = await uploadImage();
       }
@@ -253,7 +249,6 @@ export default function AdminOeuvresPage() {
       closeModal();
       await fetchArtworks();
 
-      // Clear message after 5 seconds
       setTimeout(() => setMessage(null), 5000);
     } catch (err) {
       setError(err.message);
@@ -285,7 +280,6 @@ export default function AdminOeuvresPage() {
 
       await fetchArtworks();
 
-      // Clear message after 5 seconds
       setTimeout(() => setMessage(null), 5000);
     } catch (err) {
       setError(err.message);
@@ -327,15 +321,11 @@ export default function AdminOeuvresPage() {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "12px", // Réduire l'écart
+            gap: "12px",
             marginBottom: "8px",
           }}
         >
-          <Link
-            href="/admin/salles"
-            className="admin-back-button"
-            // Supprimer tout le style inline, garder juste className
-          ></Link>
+          <Link href="/admin/salles" className="admin-back-button"></Link>
 
           <h1 className="admin-page-title" style={{ margin: 0 }}>
             Œuvres de {room?.title || slug}
@@ -495,7 +485,6 @@ export default function AdminOeuvresPage() {
         </div>
       )}
 
-      {/* Modal de modification de salle */}
       {roomModalOpen && (
         <div className="modal-overlay" onClick={closeRoomModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>

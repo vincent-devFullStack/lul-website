@@ -42,21 +42,15 @@ export default function Navigation() {
 
   return (
     <>
-      {/* Header principal - Design mobile-first */}
       <nav className="header-menu sticky top-0 left-0 right-0 w-full shadow-lg z-50">
         <div className="w-full flex md:justify-between lg:justify-center px-4">
-          
-          {/* Layout Desktop Original - Structure en colonne avec titre centré */}
           <div className="hidden lg:flex flex-col items-center justify-center h-[120px]">
-            
-            {/* Titre centré en haut */}
             <div className="flex justify-center mb-3">
               <Link href="/" className="main-title" tabIndex="0">
                 L'iconodule
               </Link>
             </div>
 
-            {/* Navigation horizontale en bas */}
             <div className="flex justify-center items-center space-x-10 mb-2">
               {navItems.map((item) => (
                 <Link
@@ -73,7 +67,6 @@ export default function Navigation() {
               ))}
             </div>
 
-            {/* Auth Desktop - Position absolue en haut à droite */}
             {isAuthenticated && (
               <div className="absolute top-5 right-5 flex items-center space-x-6">
                 <Link
@@ -106,18 +99,17 @@ export default function Navigation() {
             )}
           </div>
 
-          {/* Layout Mobile - Titre à gauche, bouton à droite avec espacement maximum */}
           <div className="flex lg:hidden items-center h-16 md:h-20 w-full">
-            
-            {/* Logo/Titre complètement à gauche */}
-            <Link href="/" className="main-title text-xl sm:text-2xl md:text-3xl flex-shrink-0" tabIndex="0">
+            <Link
+              href="/"
+              className="main-title text-xl sm:text-2xl md:text-3xl flex-shrink-0"
+              tabIndex="0"
+            >
               L'iconodule
             </Link>
 
-            {/* Espaceur qui prend tout l'espace disponible */}
             <div className="flex-grow"></div>
 
-            {/* Bouton Menu Mobile - complètement à droite */}
             <button
               onClick={toggleMobileMenu}
               className="p-2 rounded-lg bg-[rgba(191,167,106,0.1)] hover:bg-[rgba(191,167,106,0.2)] transition-all duration-300 z-50 flex-shrink-0"
@@ -134,25 +126,27 @@ export default function Navigation() {
         </div>
       </nav>
 
-      {/* Menu Mobile - Drawer/Sidebar */}
-      <div className={`lg:hidden fixed inset-0 z-40 transition-opacity duration-300 ${
-        mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-      }`}>
-        
-        {/* Overlay */}
-        <div 
+      <div
+        className={`lg:hidden fixed inset-0 z-40 transition-opacity duration-300 ${
+          mobileMenuOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      >
+        <div
           className="fixed inset-0 bg-black/50 transition-opacity duration-300"
           onClick={closeMobileMenu}
         />
 
-        {/* Drawer */}
-        <div className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gradient-to-b from-[var(--header-background)] via-white to-[var(--login-background)] shadow-xl transform transition-transform duration-300 ease-out ${
-          mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}>
-          
-          {/* Header du drawer */}
+        <div
+          className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gradient-to-b from-[var(--header-background)] via-white to-[var(--login-background)] shadow-xl transform transition-transform duration-300 ease-out ${
+            mobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
           <div className="flex items-center justify-between p-6 border-b border-[rgba(191,167,106,0.2)]">
-            <span className="text-lg font-semibold text-[var(--foreground)]">Menu</span>
+            <span className="text-lg font-semibold text-[var(--foreground)]">
+              Menu
+            </span>
             <button
               onClick={closeMobileMenu}
               className="p-2 rounded-lg hover:bg-[rgba(191,167,106,0.1)] transition-colors duration-200"
@@ -161,7 +155,6 @@ export default function Navigation() {
             </button>
           </div>
 
-          {/* Navigation Links */}
           <div className="px-6 py-4 space-y-2">
             {navItems.map((item, index) => (
               <Link
@@ -174,7 +167,7 @@ export default function Navigation() {
                     : "text-[var(--foreground)] hover:bg-[rgba(191,167,106,0.1)] hover:text-[var(--active-menu-item)]"
                 }`}
                 style={{
-                  animationDelay: mobileMenuOpen ? `${index * 100}ms` : '0ms'
+                  animationDelay: mobileMenuOpen ? `${index * 100}ms` : "0ms",
                 }}
               >
                 {item.name}
@@ -182,10 +175,8 @@ export default function Navigation() {
             ))}
           </div>
 
-          {/* Séparateur */}
           <div className="mx-6 border-t border-[rgba(191,167,106,0.2)]"></div>
 
-          {/* Auth Section */}
           <div className="px-6 py-4 space-y-2">
             {isAuthenticated ? (
               <>
@@ -218,7 +209,6 @@ export default function Navigation() {
             )}
           </div>
 
-          {/* Footer du drawer */}
           <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[rgba(191,167,106,0.1)] to-transparent">
             <p className="text-xs text-[var(--foreground)] opacity-70 text-center">
               L'iconodule © 2025

@@ -2,10 +2,9 @@
 
 import Image from "next/image";
 import { useEffect } from "react";
-import "@/styles/components/MementoModal.css"; // ✅ Importez le CSS
+import "@/styles/components/MementoModal.css";
 
 export default function MementoModal({ memento, onClose }) {
-  // Fermeture avec la touche Escape
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape") onClose();
@@ -34,7 +33,6 @@ export default function MementoModal({ memento, onClose }) {
           <div className="modal-author">{memento.author}</div>
           <div className="modal-role">{memento.role}</div>
 
-          {/* ✅ AJOUT : Lien vers le site */}
           {memento.link && (
             <div className="modal-link">
               <a

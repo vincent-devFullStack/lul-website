@@ -1,4 +1,3 @@
-// app/api/forgot-password/route.js
 import { NextResponse } from "next/server";
 import User from "@/lib/models/User";
 import { connectToDatabase } from "@/lib/mongodb";
@@ -31,11 +30,9 @@ export async function POST(req) {
       );
     }
 
-    // Générer un token unique
     const token = uuidv4();
-    const expiration = Date.now() + 1000 * 60 * 15; // 15 minutes
+    const expiration = Date.now() + 1000 * 60 * 15;
 
-    // Sauvegarder le token dans la base de données
     user.resetToken = token;
     user.resetTokenExpires = expiration;
     await user.save();
@@ -57,7 +54,6 @@ export async function POST(req) {
 
     const resetUrl = `${baseUrl}/reset-password/${token}`;
 
-    // ✅ Options du message
     const mailOptions = {
       from: `"L'iconodule - Sécurité" <contact@iconodule.fr>`,
       to: email,
@@ -120,7 +116,6 @@ export async function POST(req) {
       `,
     };
 
-    // ✅ Envoi de l'email
     await transporter.sendMail(mailOptions);
 
     return NextResponse.json({
