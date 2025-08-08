@@ -157,7 +157,7 @@ export default function CreditsArtistiques() {
         ))}
 
         <div className="credits-footer">
-          <h2>Informations générales</h2>
+          <h2>..Informations générales</h2>
           <div className="credits-summary">
             <p>
               <strong>Total des contributeurs :</strong> {credits.length}{" "}

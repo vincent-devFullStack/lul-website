@@ -14,7 +14,9 @@
 .footer-nav {
   display: flex;
   flex-direction: row;
-  gap: 80px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 24px;
   margin-bottom: 20px;
 }
 
@@ -22,6 +24,7 @@
   color: var(--foreground);
   transition: color 0.3s ease-in-out;
   font-size: 0.8rem;
+  padding: 0 5px;
 }
 
 .footer-nav-item:hover {

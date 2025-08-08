@@ -78,11 +78,18 @@ export default function Login() {
 
       let ok = await login(); // appelle /api/me
       if (!ok) {
-        await new Promise((r) => setTimeout(r, 150));
+        await new Promise((r) => setTimeout(r, 500));
         ok = await login();
       }
       if (!ok) {
-        setMessage("❌ Connexion en cours, réessayez.");
+        setMessage(
+          "Connexion en cours, vous allez être redirigé vers la page d'accueil, sinon actualisez la page."
+        );
+
+        // ⏳ Attendre 3s puis forcer un reload
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
         return;
       }
 
