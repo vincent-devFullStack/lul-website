@@ -7,17 +7,19 @@ const Footer = () => {
       <div className="footer-content">
         <div className="footer-nav text-lg">
           <div className="footer-nav-item">
-            <Link href="/">Mentions légales</Link>
+            <Link href="/mentions-legales">Mentions légales</Link>
           </div>
           <div className="footer-nav-item">
-            <Link href="/">Politique de confidentialité</Link>
+            <Link href="/politique-confidentialite">
+              Politique de confidentialité
+            </Link>
           </div>
           <div className="footer-nav-item">
-            <Link href="/">Crédits artistiques</Link>
+            <Link href="/credits-artistiques">Crédits artistiques</Link>
           </div>
         </div>
         <div className="footer-copyrights">
-          <p>© 2025 Damien Mourot & Vincent Silvestri.</p>
+          <p>© 2025 L’Iconodule</p>
           <p> All Rights Reserved.</p>
           <p>Designed & Developed with Next.js</p>
         </div>

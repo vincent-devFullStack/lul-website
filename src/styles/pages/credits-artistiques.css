@@ -1,0 +1,350 @@
+/* ✅ Container principal harmonisé avec mentions légales */
+.credits-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* ✅ Animation fade-in identique aux autres pages */
+.fade-in-up-initial {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.fade-in-up-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ✅ Contenu avec le même style que about.css */
+.credits-content {
+  background: linear-gradient(
+    145deg,
+    var(--header-background) 0%,
+    rgba(255, 255, 255, 0.95) 100%
+  );
+  border-radius: 24px;
+  padding: 3rem;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.05),
+    0 1px 0 rgba(255, 255, 255, 0.2) inset;
+  backdrop-filter: blur(10px);
+  position: relative;
+}
+
+/* ✅ Titre principal harmonisé */
+.credits-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--foreground);
+  font-family: "EB Garamond", serif;
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.credits-title::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--brown) 20%,
+    var(--border-brown) 50%,
+    var(--brown) 80%,
+    transparent 100%
+  );
+  border-radius: 2px;
+}
+
+/* ✅ Introduction */
+.credits-intro {
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+.credits-intro p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--foreground);
+  opacity: 0.9;
+  font-style: italic;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ✅ Loading state */
+.credits-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  font-size: 1.1rem;
+  color: var(--foreground);
+}
+
+/* ✅ Sections d'artistes */
+.credit-section {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(191, 167, 106, 0.2);
+}
+
+.credit-section:last-of-type {
+  border-bottom: none;
+  margin-bottom: 2rem;
+}
+
+/* ✅ Nom de l'artiste */
+.credit-artist-name {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--brown);
+  font-family: "EB Garamond", serif;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.credit-artist-name::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    var(--brown) 0%,
+    var(--border-brown) 100%
+  );
+  border-radius: 2px;
+}
+
+/* ✅ Badge créateur */
+.credit-creator-badge {
+  font-size: 0.8rem;
+  color: var(--border-brown);
+  font-weight: 500;
+  font-style: italic;
+}
+
+/* ✅ Détails de l'artiste */
+.credit-details {
+  margin-left: 1rem;
+  color: var(--foreground);
+}
+
+.credit-details p {
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.credit-details p:last-child {
+  margin-bottom: 0;
+}
+
+/* ✅ Section citation */
+.credit-quote-section {
+  margin: 1.5rem 0;
+}
+
+.credit-quote-text {
+  margin: 0.5rem 0 0 1rem;
+  padding: 1rem 1.5rem;
+  background: rgba(191, 167, 106, 0.08);
+  border-left: 3px solid var(--brown);
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--foreground);
+  opacity: 0.95;
+}
+
+/* ✅ Mise en forme du texte */
+.credit-details strong {
+  color: var(--brown);
+  font-weight: 600;
+}
+
+/* ✅ Date */
+.credit-date {
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* ✅ Liens harmonisés */
+.credit-link {
+  color: var(--brown);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.credit-link:hover {
+  color: var(--border-brown);
+  border-bottom-color: var(--border-brown);
+}
+
+/* ✅ Footer des crédits */
+.credits-footer {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid rgba(191, 167, 106, 0.3);
+}
+
+.credits-footer h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--brown);
+  font-family: "EB Garamond", serif;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.credits-footer h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    var(--brown) 0%,
+    var(--border-brown) 100%
+  );
+  border-radius: 2px;
+}
+
+/* ✅ Résumé */
+.credits-summary {
+  margin-left: 1rem;
+  margin-bottom: 2rem;
+}
+
+.credits-summary p {
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+
+/* ✅ Date de mise à jour */
+.credits-last-update {
+  text-align: center;
+  font-style: italic;
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(191, 167, 106, 0.2);
+}
+
+/* ✅ Responsive harmonisé */
+@media (max-width: 768px) {
+  .credits-container {
+    padding: 1rem;
+  }
+
+  .credits-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .credits-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .credit-artist-name {
+    font-size: 1.2rem;
+  }
+
+  .credit-details {
+    margin-left: 0.5rem;
+  }
+
+  .credit-details p {
+    font-size: 0.95rem;
+  }
+
+  .credits-footer h2 {
+    font-size: 1.1rem;
+    padding-left: 0.5rem;
+  }
+
+  .credits-summary {
+    margin-left: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .credits-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .credits-title {
+    font-size: 1.75rem;
+  }
+
+  .credit-artist-name {
+    font-size: 1.1rem;
+    padding-left: 0.5rem;
+  }
+
+  .credit-details {
+    margin-left: 0;
+  }
+
+  .credits-footer h2 {
+    padding-left: 0;
+  }
+
+  .credits-summary {
+    margin-left: 0;
+  }
+}
+
+/* ✅ Animation au scroll pour les sections */
+@media (prefers-reduced-motion: no-preference) {
+  .credit-section {
+    animation: fadeInSection 0.6s ease-out forwards;
+  }
+
+  .credit-section:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  .credit-section:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+  .credit-section:nth-child(4) {
+    animation-delay: 0.3s;
+  }
+  .credit-section:nth-child(5) {
+    animation-delay: 0.4s;
+  }
+}
+
+@keyframes fadeInSection {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

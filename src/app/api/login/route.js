@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { SignJWT } from "jose";
-import User from "@/lib/models/User";
+import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
+import User from "@/lib/models/User";
 
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
@@ -17,7 +17,7 @@ export async function POST(req) {
     await connectToDatabase();
 
     const normalizedEmail = String(email).toLowerCase().trim();
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const user = await User.findOne({ email: normalizedEmail });
 
     if (!user) {
       return NextResponse.json(
@@ -41,17 +41,22 @@ export async function POST(req) {
     })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
-      .setExpirationTime("1d")
+      .setExpirationTime("24h") // ✅ Durée claire
       .sign(SECRET);
 
-    const response = NextResponse.json({ success: true });
+    // ✅ Retourner le token dans la réponse JSON
+    const response = NextResponse.json({
+      success: true,
+      token: token, // ✅ Token dans la réponse
+    });
 
+    // ✅ Aussi définir le cookie côté serveur
     response.cookies.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      maxAge: 60 * 60 * 24, // 1 jour
+      maxAge: 60 * 60 * 24, // 24h
     });
 
     return response;

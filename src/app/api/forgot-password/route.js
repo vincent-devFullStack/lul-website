@@ -42,7 +42,7 @@ export async function POST(req) {
       port: 465,
       secure: true,
       auth: {
-        user: "contact@iconodule.fr",
+        user: "admin@iconodule.fr",
         pass: process.env.EMAIL_PASSWORD_RESET,
       },
     });
@@ -55,7 +55,7 @@ export async function POST(req) {
     const resetUrl = `${baseUrl}/reset-password/${token}`;
 
     const mailOptions = {
-      from: `"L'iconodule - Sécurité" <contact@iconodule.fr>`,
+      from: `"L'iconodule - Sécurité" <admin@iconodule.fr>`,
       to: email,
       subject: "Réinitialisation de votre mot de passe - L'iconodule",
       text: `

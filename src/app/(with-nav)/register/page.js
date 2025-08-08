@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import "../../../../styles/pages/register.css";
+import "../../../styles/pages/register.css";
+import "../../../styles/pages/forgot-password.css";
 
 export default function Register() {
   const router = useRouter();

@@ -198,15 +198,7 @@ export default function Navigation() {
                   Se déconnecter
                 </button>
               </>
-            ) : (
-              <Link
-                href="/login"
-                onClick={closeMobileMenu}
-                className="block px-4 py-3 rounded-lg font-medium text-[var(--active-menu-item)] hover:bg-[rgba(191,167,106,0.1)] hover:text-[var(--brown)] transition-all duration-200"
-              >
-                Se connecter
-              </Link>
-            )}
+            ) : null}
           </div>
 
           <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[rgba(191,167,106,0.1)] to-transparent">

@@ -15,7 +15,7 @@
   display: flex;
   flex-direction: row;
   gap: 80px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .footer-nav-item {
@@ -35,5 +35,4 @@
   text-align: center;
   font-size: 0.8rem;
   line-height: 1.2;
-  margin-top: 0.5rem;
 }
