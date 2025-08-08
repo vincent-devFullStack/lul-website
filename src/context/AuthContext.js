@@ -1,5 +1,11 @@
 "use client";
-import { createContext, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
 
 const AuthContext = createContext();
@@ -9,15 +15,34 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const { canUseAuth, loading: consentLoading } = useCookieConsent();
 
-  // utilitaire
-  const checkMe = async () => {
+  const checkMe = useCallback(async () => {
     try {
-      const res = await fetch("/api/me", { credentials: "include" });
-      setIsAuthenticated(res.ok);
+      const res = await fetch("/api/me", {
+        credentials: "include",
+        cache: "no-store",
+      });
+      const ok = res.ok;
+      setIsAuthenticated(ok);
+      return ok;
     } catch {
       setIsAuthenticated(false);
+      return false;
     }
-  };
+  }, []);
+
+  const login = useCallback(async () => {
+    if (!canUseAuth()) return false;
+    // On attend que le serveur nous reconnaisse AVANT de continuer
+    return await checkMe();
+  }, [canUseAuth, checkMe]);
+
+  const logout = useCallback(async () => {
+    try {
+      await fetch("/api/logout", { method: "POST", credentials: "include" });
+    } finally {
+      setIsAuthenticated(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (consentLoading) return;
@@ -30,22 +55,7 @@ export function AuthProvider({ children }) {
       await checkMe();
       setLoading(false);
     })();
-  }, [canUseAuth, consentLoading]);
-
-  // On ignore tout "token" côté client : c'est le serveur qui gère
-  const login = () => {
-    // Le cookie httpOnly a été posé par l'API /api/login : on se contente de marquer l'état
-    setIsAuthenticated(true);
-    return true;
-  };
-
-  const logout = async () => {
-    try {
-      await fetch("/api/logout", { method: "POST", credentials: "include" });
-    } finally {
-      setIsAuthenticated(false);
-    }
-  };
+  }, [canUseAuth, consentLoading, checkMe]);
 
   return (
     <AuthContext.Provider

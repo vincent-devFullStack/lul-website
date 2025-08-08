@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
 import Link from "next/link";
-import "../../../styles/pages/login.css";
+import styles from "@/styles/pages/login.module.css";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -16,18 +16,15 @@ export default function Login() {
   const { login, isAuthenticated, loading } = useAuth();
   const { canUseAuth } = useCookieConsent();
 
-  // ✅ Redirection si déjà connecté - MAIS pas immédiatement
   useEffect(() => {
     if (!loading && isAuthenticated) {
-      console.log("👤 Utilisateur déjà connecté, redirection vers /accueil");
-      router.replace("/accueil"); // ✅ Utiliser replace au lieu de push
+      router.replace("/accueil");
     }
   }, [isAuthenticated, loading, router]);
 
-  // ✅ Ne pas afficher la page si en cours de chargement ou déjà connecté
   if (loading) {
     return (
-      <div className="login-container rounded-lg">
+      <div className={`${styles["login-container"]} rounded-lg`}>
         <div className="text-center">
           <p>Vérification de l'authentification...</p>
         </div>
@@ -35,10 +32,9 @@ export default function Login() {
     );
   }
 
-  // ✅ Si déjà connecté, ne pas afficher le formulaire
   if (isAuthenticated) {
     return (
-      <div className="login-container rounded-lg">
+      <div className={`${styles["login-container"]} rounded-lg`}>
         <div className="text-center">
           <p>Vous êtes déjà connecté. Redirection...</p>
         </div>
@@ -48,13 +44,11 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (isSubmitting) return; // ✅ Empêcher les soumissions multiples
+    if (isSubmitting) return;
 
     setIsSubmitting(true);
     setMessage(null);
 
-    // ✅ Vérifier le consentement aux cookies
     if (!canUseAuth()) {
       setMessage(
         "❌ Vous devez accepter les cookies fonctionnels pour vous connecter."
@@ -64,56 +58,57 @@ export default function Login() {
     }
 
     try {
-      console.log("🔄 Tentative de connexion...");
-
       const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({ email, password }),
+        cache: "no-store",
       });
 
-      const data = await res.json();
-      console.log("📡 Réponse API:", { status: res.status, data });
-
-      if (res.ok && data.token) {
-        const loginSuccess = login(data.token);
-        if (loginSuccess) {
-          setMessage("✅ Connexion réussie.");
-          console.log("🎉 Connexion réussie, redirection vers /accueil");
-
-          // ✅ Attendre un peu puis rediriger
-          setTimeout(() => {
-            router.replace("/accueil");
-          }, 1000);
-        } else {
-          setMessage(
-            "❌ Impossible de se connecter : cookies fonctionnels requis."
-          );
-        }
-      } else {
-        setMessage(`❌ ${data.error || "Erreur inconnue"}`);
+      if (!res.ok) {
+        let err = "Erreur inconnue";
+        try {
+          const data = await res.json();
+          err = data?.error || err;
+        } catch {}
+        setMessage(`❌ ${err}`);
+        return;
       }
+
+      let ok = await login(); // appelle /api/me
+      if (!ok) {
+        await new Promise((r) => setTimeout(r, 150));
+        ok = await login();
+      }
+      if (!ok) {
+        setMessage("❌ Connexion en cours, réessayez.");
+        return;
+      }
+
+      setMessage("✅ Connexion réussie.");
+      router.replace("/accueil");
+      router.refresh();
     } catch (err) {
-      console.error("❌ Erreur réseau ou serveur :", err);
+      console.error(err);
       setMessage("❌ Erreur réseau ou serveur.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // ✅ Fonction pour déterminer la couleur du message
-  const getMessageClass = () => {
-    if (!message) return "";
-    if (message.includes("✅")) return "text-green-600";
-    if (message.includes("❌")) return "text-red-600";
-    return "text-gray-600";
-  };
+  const msgClass = !message
+    ? ""
+    : message.includes("✅")
+      ? "text-green-600"
+      : message.includes("❌")
+        ? "text-red-600"
+        : "text-gray-600";
 
   return (
-    <div className="login-container rounded-lg">
+    <div className={`${styles["login-container"]} rounded-lg`}>
       <h1 className="text-2xl font-bold">Se connecter</h1>
 
-      {/* ✅ Avertissement cookies */}
       {!canUseAuth() && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
           <p className="text-yellow-800 text-sm">
@@ -130,8 +125,8 @@ export default function Login() {
         </div>
       )}
 
-      <form className="login-form" onSubmit={handleSubmit}>
-        <div className="login-form-item">
+      <form className={styles["login-form"]} onSubmit={handleSubmit}>
+        <div className={styles["login-form-item"]}>
           <label htmlFor="email">Email</label>
           <input
             type="email"
@@ -142,7 +137,7 @@ export default function Login() {
             disabled={isSubmitting}
           />
         </div>
-        <div className="login-form-item">
+        <div className={styles["login-form-item"]}>
           <label htmlFor="password">Mot de passe</label>
           <input
             type="password"
@@ -159,12 +154,10 @@ export default function Login() {
       </form>
 
       {message && (
-        <p className={`text-sm text-center mt-4 ${getMessageClass()}`}>
-          {message}
-        </p>
+        <p className={`text-sm text-center mt-4 ${msgClass}`}>{message}</p>
       )}
 
-      <div className="login-links text-[15px] text-gray-800 mt-2">
+      <div className="text-[15px] text-gray-800 mt-2">
         <p>
           <Link href="/register">Créer un compte</Link>
         </p>
