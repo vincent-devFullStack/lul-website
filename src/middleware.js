@@ -1,60 +1,66 @@
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
+const COOKIE_NAME = "token";
 const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
 
-  // ✅ Routes protégées
-  if (pathname.startsWith("/admin")) {
-    const token = request.cookies.get("token")?.value;
+  // Petits utilitaires
+  const setSecurityHeaders = (res) => {
+    res.headers.set("Permissions-Policy", "interest-cohort=()");
+    res.headers.set("X-Frame-Options", "DENY");
+    res.headers.set("X-Content-Type-Options", "nosniff");
+    return res;
+  };
 
+  const getToken = () => request.cookies.get(COOKIE_NAME)?.value;
+
+  // 1) Zones protégées: /admin/*
+  if (pathname.startsWith("/admin")) {
+    const token = getToken();
     if (!token) {
-      console.log("🚫 Accès admin sans token, redirection vers /login");
+      // Pas de session → login
       return NextResponse.redirect(new URL("/login", request.url));
     }
-
     try {
       await jwtVerify(token, JWT_SECRET);
-      console.log("✅ Token valide pour admin");
-      return NextResponse.next();
-    } catch (error) {
-      console.log("❌ Token invalide pour admin, nettoyage et redirection");
-      const response = NextResponse.redirect(new URL("/login", request.url));
-      response.cookies.delete("token");
-      return response;
+      return setSecurityHeaders(NextResponse.next());
+    } catch {
+      // Token invalide/expiré → nettoyer + login
+      const res = NextResponse.redirect(new URL("/login", request.url));
+      res.cookies.delete(COOKIE_NAME);
+      return setSecurityHeaders(res);
     }
   }
 
-  // ✅ Redirection si déjà connecté et sur page login
+  // 2) Page /login: si déjà connecté, rediriger vers /accueil
   if (pathname === "/login") {
-    const token = request.cookies.get("token")?.value;
-
+    const token = getToken();
     if (token) {
       try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
         const now = Math.floor(Date.now() / 1000);
-
-        if (payload.exp > now) {
-          return NextResponse.redirect(new URL("/accueil", request.url));
+        if (payload?.exp > now) {
+          return setSecurityHeaders(
+            NextResponse.redirect(new URL("/accueil", request.url))
+          );
         }
-      } catch (error) {
-        console.log("❌ Token invalide sur /login, nettoyage");
-        const response = NextResponse.next();
-        response.cookies.delete("token");
-        return response;
+      } catch {
+        // Token invalide → laisser accéder au login et nettoyer le cookie
+        const res = NextResponse.next();
+        res.cookies.delete(COOKIE_NAME);
+        return setSecurityHeaders(res);
       }
     }
   }
 
-  const response = NextResponse.next();
-  response.headers.set("Permissions-Policy", "interest-cohort=()");
-  response.headers.set("X-Frame-Options", "DENY");
-  response.headers.set("X-Content-Type-Options", "nosniff");
-  return response;
+  // 3) Par défaut
+  return setSecurityHeaders(NextResponse.next());
 }
 
+// On ne touche qu'à /admin/* et /login (les APIs restent libres)
 export const config = {
   matcher: ["/admin/:path*", "/login"],
 };

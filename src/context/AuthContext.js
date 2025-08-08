@@ -1,4 +1,5 @@
 "use client";
+
 import {
   createContext,
   useContext,
@@ -15,9 +16,13 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const { canUseAuth, loading: consentLoading } = useCookieConsent();
 
+  // Origin absolue pour éviter tout souci de base path/host
+  const getBase = () =>
+    typeof window !== "undefined" ? window.location.origin : "";
+
   const checkMe = useCallback(async () => {
     try {
-      const res = await fetch("/api/me", {
+      const res = await fetch(`${getBase()}/api/me`, {
         credentials: "include",
         cache: "no-store",
       });
@@ -32,29 +37,54 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async () => {
     if (!canUseAuth()) return false;
-    // On attend que le serveur nous reconnaisse AVANT de continuer
-    return await checkMe();
+    return await checkMe(); // on attend la confirmation serveur
   }, [canUseAuth, checkMe]);
 
   const logout = useCallback(async () => {
     try {
-      await fetch("/api/logout", { method: "POST", credentials: "include" });
+      await fetch(`${getBase()}/api/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
     } finally {
       setIsAuthenticated(false);
     }
   }, []);
 
+  // Check initial une fois le consentement connu
   useEffect(() => {
     if (consentLoading) return;
+
     if (!canUseAuth()) {
       setIsAuthenticated(false);
       setLoading(false);
       return;
     }
+
+    let cancelled = false;
     (async () => {
-      await checkMe();
-      setLoading(false);
+      const ok = await checkMe();
+      if (!cancelled) setLoading(false);
+      return ok;
     })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [canUseAuth, consentLoading, checkMe]);
+
+  // Resync quand l’onglet revient en focus (session expirée/renouvelée)
+  useEffect(() => {
+    if (consentLoading || !canUseAuth()) return;
+    const onFocus = () => {
+      checkMe();
+    };
+    window.addEventListener("focus", onFocus);
+    window.addEventListener("visibilitychange", onFocus);
+    return () => {
+      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("visibilitychange", onFocus);
+    };
   }, [canUseAuth, consentLoading, checkMe]);
 
   return (

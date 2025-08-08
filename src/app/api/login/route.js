@@ -4,14 +4,21 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/mongodb";
 import User from "@/lib/models/User";
 
+// Evite tout cache côté Vercel/Next
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
+
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
-// (Optionnel) Forcer runtime Node si besoin de compat bcrypt en prod
+// (optionnel) si besoin de forcer le runtime Node pour bcrypt en prod
 // export const runtime = "nodejs";
 
+const noStore = { "Cache-Control": "no-store" };
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
 export async function POST(req) {
-  // 1) Défense basique
-  if (req.method !== "POST") {
+  // Sécurité basique (même si Next route POST uniquement)
+  if (req.method && req.method !== "POST") {
     return NextResponse.json(
       { error: "Méthode non autorisée" },
       { status: 405, headers: noStore }
@@ -43,25 +50,25 @@ export async function POST(req) {
   try {
     await connectToDatabase();
 
-    // 2) Lookup + comparaison
-    const user = await User.findOne({ email }).lean(); // lean = perf, pas de méthodes
-    // Ne révèle pas si l'email existe (anti user-enumeration)
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      await sleep(300); // petit délai constant pour rendre l’attaque timing moins triviale
+    // Lookup + comparaison (sans révéler si l'email existe)
+    const user = await User.findOne({ email }).lean();
+    const ok = user && (await bcrypt.compare(password, user.password));
+    if (!ok) {
+      await sleep(300); // lissage timing
       return NextResponse.json(
         { error: "Email ou mot de passe incorrect." },
         { status: 401, headers: noStore }
       );
     }
 
-    // 3) JWT
-    const token = await new SignJWT({ id: user._id, email: user.email })
+    // JWT minimal
+    const token = await new SignJWT({ id: String(user._id), email: user.email })
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
       .setExpirationTime("24h")
       .sign(SECRET);
 
-    // 4) Réponse + cookie httpOnly
+    // Réponse + cookie httpOnly (unique source de vérité)
     const res = NextResponse.json(
       { success: true },
       { status: 200, headers: noStore }
@@ -82,7 +89,3 @@ export async function POST(req) {
     );
   }
 }
-
-// Utilitaires
-const noStore = { "Cache-Control": "no-store" };
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
