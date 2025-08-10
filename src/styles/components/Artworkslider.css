@@ -1,7 +1,8 @@
+/* ========== Frame principal ========== */
 .room-picture {
   width: 900px;
   height: 600px;
-  overflow: hidden; /* ✅ Important pour masquer le slide */
+  overflow: hidden; /* masque le slide */
   position: relative;
   margin: 0 auto;
   display: flex;
@@ -9,20 +10,29 @@
   align-items: center;
   border-radius: 19px;
   transition: transform 0.3s ease;
-  /* ✅ Padding identique à about.css */
-  padding: 80px; /* ✅ Même valeur que about.css */
+  padding: 80px; /* desktop */
+  touch-action: pan-y; /* scroll vertical ok, swipe horizontal custom */
+  cursor: grab;
+  box-sizing: border-box; /* évite que le padding fasse déborder */
 }
 
-/* ✅ Cadre décoratif IDENTIQUE à about.css */
+/* Le wrapper Next/Image doit rester sous les cadres décoratifs */
+.room-picture > span {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+}
+
+/* Cadre décoratif (1) */
 .room-picture::before {
   content: "";
   position: absolute;
-  top: 30px; /* ✅ Identique à about.css */
+  top: 30px;
   left: 30px;
   right: 30px;
   bottom: 30px;
   border: 2px solid rgba(191, 167, 106, 0.4);
-  border-radius: 20px; /* ✅ Identique à about.css */
+  border-radius: 20px;
   pointer-events: none;
   background: linear-gradient(
     135deg,
@@ -34,16 +44,16 @@
   z-index: 1;
 }
 
-/* ✅ Second cadre IDENTIQUE à about.css */
+/* Cadre décoratif (2) */
 .room-picture::after {
   content: "";
   position: absolute;
-  top: 12px; /* ✅ Identique à about.css */
+  top: 12px;
   left: 12px;
   right: 12px;
   bottom: 12px;
   border: 1px solid rgba(125, 113, 84, 0.2);
-  border-radius: 24px; /* ✅ Identique à about.css */
+  border-radius: 24px;
   pointer-events: none;
   box-shadow:
     0 4px 12px rgba(0, 0, 0, 0.05),
@@ -51,26 +61,25 @@
   z-index: 1;
 }
 
-/* ✅ Style de l'image IDENTIQUE à about.css */
+/* Image (via Next/Image) */
 .room-picture img {
-  border-radius: 20px !important; /* ✅ Identique à about.css */
+  border-radius: 20px !important;
   box-shadow:
     0 25px 50px rgba(0, 0, 0, 0.18),
-    /* ✅ Identique à about.css */ 0 12px 25px rgba(0, 0, 0, 0.12),
+    0 12px 25px rgba(0, 0, 0, 0.12),
     0 4px 12px rgba(125, 113, 84, 0.25) !important;
-  border: 5px solid #efebda !important; /* ✅ Identique à about.css */
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important; /* ✅ Identique à about.css */
+  border: 5px solid #efebda !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
   position: relative;
   z-index: 2;
   background: #efebda !important;
-  /* ✅ Padding IDENTIQUE à about.css */
-  padding: 12px 12px 30px 12px !important; /* ✅ Identique à about.css */
+  padding: 12px 12px 30px 12px !important;
   object-fit: contain !important;
   border-color: rgba(209, 181, 110, 0.8) !important;
 }
 
-/* ✅ Effet de reflet IDENTIQUE à about.css */
-.room-picture img::before {
+/* Reflet : appliqué au SPAN wrapper (pas au <img>) */
+.room-picture > span::before {
   content: "";
   position: absolute;
   top: 0;
@@ -82,33 +91,30 @@
     rgba(255, 255, 255, 0.1) 0%,
     transparent 100%
   );
-  border-radius: 16px 16px 0 0; /* ✅ Identique à about.css */
+  border-radius: 16px 16px 0 0;
   pointer-events: none;
-  border-color: rgba(191, 167, 106, 0.8) !important;
   z-index: 3;
 }
 
-/* ✅ Effet hover IDENTIQUE à about.css */
+/* Effet hover image */
 .room-picture:hover img {
-  transform: scale(1.005) !important; /* ✅ Identique à about.css */
+  transform: scale(1.005) !important;
   box-shadow:
     0 30px 60px rgba(0, 0, 0, 0.22),
-    /* ✅ Identique à about.css */ 0 15px 30px rgba(0, 0, 0, 0.18),
+    0 15px 30px rgba(0, 0, 0, 0.18),
     0 6px 15px rgba(125, 113, 84, 0.35) !important;
   border-color: rgba(191, 167, 106, 0.8) !important;
-  filter: brightness(1.03) contrast(1.01) !important; /* ✅ Identique à about.css */
+  filter: brightness(1.03) contrast(1.01) !important;
 }
 
-/* ✅ Animations de slide */
+/* Animations de slide */
 .room-picture.slide-left {
   animation: slideLeft 0.5s ease-in-out;
 }
-
 .room-picture.slide-right {
   animation: slideRight 0.5s ease-in-out;
 }
 
-/* ✅ Keyframes pour slide vers la gauche */
 @keyframes slideLeft {
   0% {
     transform: translateX(100%);
@@ -122,8 +128,6 @@
     opacity: 1;
   }
 }
-
-/* ✅ Keyframes pour slide vers la droite */
 @keyframes slideRight {
   0% {
     transform: translateX(-100%);
@@ -138,13 +142,14 @@
   }
 }
 
+/* ========== Boutons précédent / suivant ========== */
 .previous-button,
 .next-button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: transparent; /* ✅ GARDE transparent */
-  border: none; /* ✅ SUPPRIME la bordure */
+  background: transparent;
+  border: none;
   border-radius: 50%;
   cursor: pointer;
   padding: 12px;
@@ -155,81 +160,64 @@
   align-items: center;
   justify-content: center;
   transition: transform 0.3s ease;
-  /* ✅ SUPPRIME backdrop-filter et border */
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  /* ✅ SUPPRIME tout effet de fond */
-  outline: none; /* ✅ Supprime l'outline au focus */
+  outline: none;
 }
 
 .previous-button {
   left: -100px;
   background-image: url("/assets/left.webp");
 }
-
-.previous-button:hover {
-  transform: translateY(-50%) translateX(-18px);
-  /* ✅ Pas d'effet de fond au hover */
-}
-
 .next-button {
   right: -100px;
   background-image: url("/assets/right.webp");
 }
 
+.previous-button:hover {
+  transform: translateY(-50%) translateX(-18px);
+}
 .next-button:hover {
   transform: translateY(-50%) translateX(18px);
-  /* ✅ Pas d'effet de fond au hover */
 }
 
-/* ✅ SUPPRIME tous les effets de fond au focus et active */
 .previous-button:focus,
 .next-button:focus,
 .previous-button:active,
 .next-button:active {
   background-color: transparent !important;
-  background: transparent !important;
   outline: none !important;
   border: none !important;
   box-shadow: none !important;
 }
 
-/* ✅ Animation au clic pour les boutons - SANS FOND */
+/* Animation clic + retour */
 .previous-button.clicked {
   transform: translateY(-50%) translateX(-18px) !important;
   animation: clickReturn 0.5s ease-out forwards;
-  background-color: transparent !important; /* ✅ Force transparent */
 }
-
 .next-button.clicked {
   transform: translateY(-50%) translateX(18px) !important;
   animation: clickReturn 0.5s ease-out forwards;
-  background-color: transparent !important; /* ✅ Force transparent */
 }
-
-/* ✅ Keyframes pour le retour en position initiale des boutons */
 @keyframes clickReturn {
   0% {
-    /* Position déplacée (identique au hover) */
   }
   70% {
-    /* Maintient la position déplacée */
   }
   100% {
     transform: translateY(-50%) translateX(0) !important;
   }
 }
 
-/* ✅ État désactivé pendant l'animation - SANS FOND */
 .previous-button:disabled,
 .next-button:disabled {
   pointer-events: none;
   opacity: 0.7;
-  background-color: transparent !important;
 }
 
-/* Style pour la section description avec effet harmonisé */
+/* ========== Bloc infos oeuvre ========== */
 .artwork-info {
   margin: 2rem auto 0 auto;
   width: 100%;
@@ -246,19 +234,14 @@
   box-shadow:
     0 12px 30px rgba(0, 0, 0, 0.1),
     0 4px 15px rgba(0, 0, 0, 0.05);
-  background: #efebda; /* ✅ Même couleur que about */
+  background: #efebda;
   backdrop-filter: blur(10px);
   position: relative;
 }
-
-/* ✅ Effet de texture subtile sur la section info */
 .artwork-info::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.1) 0%,
@@ -269,13 +252,10 @@
   pointer-events: none;
   border-radius: 16px;
 }
-
-/* ✅ Animation pour la section info */
 .artwork-info.slide-left,
 .artwork-info.slide-right {
   animation: fadeInUp 0.5s ease-in-out 0.2s both;
 }
-
 @keyframes fadeInUp {
   0% {
     opacity: 0;
@@ -288,8 +268,9 @@
 }
 
 .artwork-title {
-  font-size: 2rem;
-  color: #3a342a; /* ✅ Couleur harmonisée avec about */
+  font-size: 1.25rem;
+  line-height: 1.3;
+  color: #3a342a;
   font-family: "EB Garamond", serif;
   margin-bottom: 1rem;
   text-align: center;
@@ -299,8 +280,6 @@
   position: relative;
   z-index: 2;
 }
-
-/* ✅ Effet décoratif sous le titre */
 .artwork-title::after {
   content: "";
   position: absolute;
@@ -319,9 +298,9 @@
 }
 
 .artwork-description {
-  font-size: 1.1rem;
-  line-height: 1.8;
-  color: #3a342a; /* ✅ Couleur harmonisée */
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #3a342a;
   text-align: center;
   margin-bottom: 1.5rem;
   max-width: 700px;
@@ -336,7 +315,7 @@
   z-index: 2;
 }
 
-/* Titre de la page */
+/* ========== Titre de page ========== */
 .room-page-title {
   font-size: 3rem;
   font-weight: 700;
@@ -346,7 +325,6 @@
   margin-bottom: 1rem;
   position: relative;
   letter-spacing: -0.02em;
-  /* ✅ Effet de texture élégant */
   background: linear-gradient(
     135deg,
     #3a342a 0%,
@@ -362,12 +340,9 @@
   text-shadow:
     0 4px 8px rgba(58, 52, 42, 0.3),
     0 2px 4px rgba(255, 255, 255, 0.1);
-  /* ✅ Animation subtile du gradient */
   animation: gradientShift 8s ease-in-out infinite;
   transform-style: preserve-3d;
 }
-
-/* ✅ Animation du gradient de couleur */
 @keyframes gradientShift {
   0%,
   100% {
@@ -377,14 +352,12 @@
     background-position: 100% 50%;
   }
 }
-
-/* ✅ Effet décoratif sophistiqué sous le titre */
 .room-page-title::before {
   content: "";
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translateX(-50%) translateY(-50%);
+  transform: translate(-50%, -50%);
   width: 120%;
   height: 120%;
   background: radial-gradient(
@@ -398,181 +371,125 @@
   opacity: 0.8;
   animation: pulse 4s ease-in-out infinite;
 }
-
-/* ✅ Animation de pulsation pour le fond */
 @keyframes pulse {
   0%,
   100% {
-    transform: translateX(-100%) translateY(-100%) scale(1);
+    transform: translate(-100%, -100%) scale(1);
     opacity: 0.6;
   }
   50% {
-    transform: translateX(-100%) translateY(-100%) scale(1.1);
+    transform: translate(-100%, -100%) scale(1.1);
     opacity: 0.8;
   }
 }
 
-/* ✅ Animation de brillance pour la ligne */
-@keyframes lineGlow {
-  0% {
-    box-shadow:
-      0 2px 8px rgba(191, 167, 106, 0.3),
-      0 1px 3px rgba(0, 0, 0, 0.1);
-    transform: translateX(-50%) scaleX(1);
-  }
-  100% {
-    box-shadow:
-      0 4px 16px rgba(191, 167, 106, 0.5),
-      0 2px 6px rgba(0, 0, 0, 0.15);
-    transform: translateX(-50%) scaleX(1.1);
-  }
-}
-
-/* ✅ Effet au hover sur le titre */
+/* Hover titre */
 .room-page-title:hover {
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.room-page-title:hover::after {
-  width: 400px;
-  transition: width 0.5s ease;
+/* ========== États d’interaction du conteneur ========== */
+.room-picture.dragging {
+  cursor: grabbing;
 }
 
-/* ✅ Container du titre avec effet de profondeur */
-.room-title-container {
-  position: relative;
-  padding: 2rem 0;
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* ✅ Effet de brillance au chargement */
-.room-page-title.fade-in {
-  animation:
-    titleReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards,
-    gradientShift 8s ease-in-out infinite 1.2s;
-}
-
-@keyframes titleReveal {
-  0% {
-    opacity: 0;
-    transform: translateY(30px) scale(0.9);
-    filter: blur(4px);
-  }
-  50% {
-    opacity: 0.7;
-    transform: translateY(10px) scale(0.95);
-    filter: blur(1px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-}
-
-/* ✅ Responsive adapté IDENTIQUE à about.css */
+/* ========== Responsive ========== */
 @media (max-width: 1200px) {
-  .room-picture {
-    width: 700px;
-    height: 500px;
-    padding: 60px; /* ✅ Proportionnel */
+  .previous-button,
+  .next-button {
+    display: none;
   }
+
+  .room-picture {
+    width: 650px;
+    height: 500px;
+    padding: 60px;
+  }
+
   .artwork-info {
     max-width: 700px;
     padding: 1rem;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
+  .previous-button,
+  .next-button {
+    display: none;
+  }
+
   .room-picture {
-    width: 100vw;
-    height: 300px;
-    padding: 20px;
+    width: 100%;
+    height: 350px !important;
+    aspect-ratio: 3 / 4;
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .room-picture::before,
+  .room-picture::after {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    border-radius: 12px;
   }
 
   .room-picture img {
-    border-radius: 16px !important;
-    padding: 8px 8px 20px 8px !important;
-    border: 3px solid #efebda !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block;
   }
 
-  .room-picture::before {
-    top: 15px;
-    left: 15px;
-    right: 15px;
-    bottom: 15px;
-    border-radius: 16px;
-  }
-
-  .room-picture::after {
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
-    border-radius: 20px;
-  }
-
-  .previous-button,
-  .next-button {
-    width: 60px;
-    height: 60px;
-    background-color: transparent !important;
-    border: none !important;
-  }
-
-  .previous-button {
-    left: -50px;
-  }
-
-  .next-button {
-    right: -50px;
-  }
-
-  .artwork-info {
-    max-width: 95vw;
-    padding: 0.5rem;
-  }
-
+  /* Typo du bloc d’infos sous l’image */
   .artwork-title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    line-height: 1.3;
   }
-
   .artwork-description {
     font-size: 1rem;
     line-height: 1.6;
-    max-width: 90vw;
-    padding: 15px;
   }
 
-  @keyframes slideLeft {
-    0% {
-      transform: translateX(50%);
-      opacity: 0;
+  @media (max-width: 768px) {
+    .artwork-title {
+      font-size: 1.05rem;
     }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
+    .artwork-description {
+      font-size: 0.95rem;
     }
   }
 
-  @keyframes slideRight {
-    0% {
-      transform: translateX(-50%);
-      opacity: 0;
+  @media (max-width: 480px) {
+    .artwork-title {
+      font-size: 1rem;
     }
-    100% {
-      transform: translateX(0);
-      opacity: 1;
+    .artwork-description {
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .artwork-title {
+      font-size: 1rem;
+    }
+    .artwork-description {
+      font-size: 0.9rem;
     }
   }
 }
 
 @media (max-width: 480px) {
+  .previous-button,
+  .next-button {
+    display: none;
+  }
+
   .room-picture {
-    padding: 15px;
+    padding: 12px;
+    aspect-ratio: 3 / 4;
   }
 
   .room-picture img {

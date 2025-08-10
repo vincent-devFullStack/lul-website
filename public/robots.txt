@@ -1,9 +1,15 @@
-# *
 User-agent: *
-Allow: /
+Allow: /$
+Allow: /accueil$
+Disallow: /
 
-# Host
-Host: https://www.iconodule.fr
+# Bloquages explicites 
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
 
-# Sitemaps
+# Sitemap
 Sitemap: https://www.iconodule.fr/sitemap.xml

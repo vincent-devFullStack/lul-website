@@ -36,12 +36,12 @@ export default function Home() {
             : "scale-105"
           : isMobile
             ? "scale-98"
-            : "scale-100" // ✅ réduction sur mobile
+            : "scale-100"
       } ${isMobile ? "h-[100svh]" : "h-screen"}`}
       style={{
         backgroundImage: "url('/assets/hero.webp')",
         backgroundSize: "cover",
-        backgroundPosition: isMobile ? "top center" : "center", // ✅ cadrage mobile
+        backgroundPosition: isMobile ? "top center" : "center",
         backgroundRepeat: "no-repeat",
       }}
     >
