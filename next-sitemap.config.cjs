@@ -1,10 +1,11 @@
-const lastmod = new Date().toISOString();
+const lastmod = new Date().toISOString().split(".")[0] + "Z";
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: "https://www.iconodule.fr",
   outDir: "public",
   generateRobotsTxt: true,
+  autoLastmod: false,
 
   transform: async (config, path) => {
     if (path === "/" || path === "/accueil") {
@@ -19,7 +20,6 @@ module.exports = {
   },
 
   additionalPaths: async () => [],
-
   exclude: ["/admin/*", "/api/*"],
 
   robotsTxtOptions: {
