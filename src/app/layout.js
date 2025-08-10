@@ -17,7 +17,7 @@ export const metadata = {
     "iconodule",
     "exposition virtuelle",
   ],
-  alternates: { canonical: "https://www.iconodule.fr" }, // (petit bonus SEO)
+  alternates: { canonical: "https://www.iconodule.fr" },
   robots: { index: true, follow: true },
   openGraph: {
     type: "website",

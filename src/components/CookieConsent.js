@@ -1,37 +1,23 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { needsConsent, writeConsent } from "@/lib/consent";
 import "@/styles/components/cookie-consent.css";
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
+  // Affiche la bannière uniquement si aucun consentement n'est stocké
   useEffect(() => {
-    // ✅ Vérifier si l'utilisateur a déjà fait un choix
-    const consent = localStorage.getItem("cookie-consent");
-    if (!consent) {
-      // ✅ Délai pour laisser charger la page
-      const timer = setTimeout(() => {
-        setShowBanner(true);
-      }, 1000);
-      return () => clearTimeout(timer);
+    if (typeof window === "undefined") return;
+    if (needsConsent()) {
+      const t = setTimeout(() => setShowBanner(true), 500);
+      return () => clearTimeout(t);
     }
   }, []);
 
-  const acceptAll = () => {
-    localStorage.setItem(
-      "cookie-consent",
-      JSON.stringify({
-        necessary: true,
-        functional: true,
-        analytics: false,
-        marketing: false,
-      })
-    );
-    setShowBanner(false);
-
-    // ✅ Recharger seulement si nécessaire
+  const reloadIfAuthPage = () => {
     if (
       window.location.pathname.startsWith("/admin") ||
       window.location.pathname === "/login"
@@ -40,36 +26,25 @@ export default function CookieConsent() {
     }
   };
 
+  const acceptAll = () => {
+    writeConsent({ functional: true });
+    setShowBanner(false);
+    reloadIfAuthPage();
+  };
+
   const rejectAll = () => {
-    localStorage.setItem(
-      "cookie-consent",
-      JSON.stringify({
-        necessary: true,
-        functional: false,
-        analytics: false,
-        marketing: false,
-      })
-    );
+    writeConsent({ functional: false }); // écriture unifiée (clé v2)
     setShowBanner(false);
     clearNonNecessaryCookies();
 
-    // ✅ Redirection intelligente
+    // Redirige hors admin si l’auth n’est plus utilisable
     if (window.location.pathname.startsWith("/admin")) {
       window.location.href = "/accueil";
     }
-    // ✅ Pas de rechargement systématique
   };
 
   const savePreferences = (preferences) => {
-    localStorage.setItem(
-      "cookie-consent",
-      JSON.stringify({
-        necessary: true,
-        functional: preferences.functional,
-        analytics: false,
-        marketing: false,
-      })
-    );
+    writeConsent({ functional: !!preferences.functional });
     setShowBanner(false);
     setShowDetails(false);
 
@@ -77,22 +52,16 @@ export default function CookieConsent() {
       clearNonNecessaryCookies();
       if (window.location.pathname.startsWith("/admin")) {
         window.location.href = "/accueil";
+        return;
       }
     }
 
-    // ✅ Recharger seulement si on est sur des pages qui nécessitent l'auth
-    if (
-      window.location.pathname.startsWith("/admin") ||
-      window.location.pathname === "/login"
-    ) {
-      window.location.reload();
-    }
+    reloadIfAuthPage();
   };
 
   const clearNonNecessaryCookies = () => {
-    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    // ✅ Ne supprime plus tout
-    // localStorage.clear();
+    // supprime le token d’auth si présent
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;";
   };
 
   if (!showBanner) return null;
@@ -101,7 +70,7 @@ export default function CookieConsent() {
     <>
       <div className="cookie-overlay" />
 
-      <div className="cookie-banner">
+      <div className="cookie-banner" role="dialog" aria-modal="true">
         <div className="cookie-content">
           <div className="cookie-header">
             <h3 className="cookie-title">🍪 Gestion des cookies</h3>
@@ -110,14 +79,15 @@ export default function CookieConsent() {
           <div className="cookie-text">
             <p>
               Nous utilisons des cookies pour améliorer votre expérience sur
-              L'Iconodule. Certains cookies sont <strong>nécessaires</strong> au
-              fonctionnement du site (navigation, sécurité), d'autres sont{" "}
+              L&apos;Iconodule. Certains cookies sont{" "}
+              <strong>nécessaires</strong> au fonctionnement du site
+              (navigation, sécurité), d&apos;autres sont{" "}
               <strong>fonctionnels</strong> (authentification, préférences).
             </p>
             <p className="cookie-info">
               <strong>
-                Nous n'utilisons aucun cookie de tracking, publicité ou analyse
-                comportementale.
+                Nous n&apos;utilisons aucun cookie de tracking, publicité ou
+                analyse comportementale.
               </strong>
             </p>
           </div>
@@ -164,7 +134,6 @@ export default function CookieConsent() {
         </div>
       </div>
 
-      {/* ✅ Modal simplifiée */}
       {showDetails && (
         <CookieDetailsModal
           onSave={savePreferences}
@@ -176,13 +145,9 @@ export default function CookieConsent() {
 }
 
 function CookieDetailsModal({ onSave, onClose }) {
-  const [preferences, setPreferences] = useState({
-    functional: true,
-  });
+  const [preferences, setPreferences] = useState({ functional: true });
 
-  const handleSave = () => {
-    onSave(preferences);
-  };
+  const handleSave = () => onSave(preferences);
 
   return (
     <div className="cookie-modal-overlay">
@@ -195,7 +160,6 @@ function CookieDetailsModal({ onSave, onClose }) {
         </div>
 
         <div className="cookie-modal-content">
-          {/* ✅ Cookies nécessaires */}
           <div className="cookie-category">
             <div className="cookie-category-header">
               <h4>Cookies nécessaires</h4>
@@ -214,7 +178,6 @@ function CookieDetailsModal({ onSave, onClose }) {
             </div>
           </div>
 
-          {/* ✅ Cookies fonctionnels */}
           <div className="cookie-category">
             <div className="cookie-category-header">
               <h4>Cookies fonctionnels</h4>
@@ -223,31 +186,28 @@ function CookieDetailsModal({ onSave, onClose }) {
                   type="checkbox"
                   checked={preferences.functional}
                   onChange={(e) =>
-                    setPreferences({
-                      functional: e.target.checked,
-                    })
+                    setPreferences({ functional: e.target.checked })
                   }
                 />
-                <span className="cookie-toggle-slider"></span>
+                <span className="cookie-toggle-slider" />
               </label>
             </div>
             <p>
-              Ces cookies permettent l'authentification et la mémorisation de
-              vos préférences.{" "}
-              <strong>Nécessaires pour accéder à l'administration.</strong>
+              Ces cookies permettent l&apos;authentification et la mémorisation
+              de vos préférences.{" "}
+              <strong>Nécessaires pour accéder à l&apos;administration.</strong>
             </p>
             <div className="cookie-examples">
-              <strong>Exemples :</strong> Token d'authentification, préférences
-              utilisateur
+              <strong>Exemples :</strong> Token d&apos;authentification,
+              préférences utilisateur
             </div>
           </div>
 
-          {/* ✅ Note explicative */}
           <div className="cookie-note">
             <p>
-              <strong>Note :</strong> Ce site n'utilise aucun cookie d'analyse,
-              de tracking ou de marketing. Seuls les cookies essentiels et
-              fonctionnels sont employés.
+              <strong>Note :</strong> Ce site n&apos;utilise aucun cookie
+              d&apos;analyse, de tracking ou de marketing. Seuls les cookies
+              essentiels et fonctionnels sont employés.
             </p>
           </div>
         </div>
