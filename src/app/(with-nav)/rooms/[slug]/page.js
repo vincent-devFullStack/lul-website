@@ -1,42 +1,81 @@
+// src/app/(with-nav)/rooms/[slug]/page.js
 export const dynamic = "force-dynamic";
 
 import { getAllRoomSlugs, getRoomBySlug } from "@/lib/mongodb";
 import ArtworkSlider from "@/components/artwork/ArtworkSlider";
 import Link from "next/link";
-import Image from "next/image";
 
+// --- SSG des slugs ---
 export async function generateStaticParams() {
   const slugs = await getAllRoomSlugs();
   return slugs.map((slug) => ({ slug }));
 }
 
-export async function generateMetadata(props) {
-  const { slug } = await props.params;
+// --- <head> dynamique ---
+export async function generateMetadata({ params }) {
+  const { slug } = params;
   const room = await getRoomBySlug(slug);
 
+  const titleBase = room?.name || room?.title || slug;
+  const description =
+    room?.description || "Explorez cette salle de notre musée virtuel";
+  const ogImage = room?.artworks?.[0]?.imageUrl || "/assets/default-room.jpg";
+
   return {
-    title: `${room?.name || room?.title || slug} | L'iconodule`,
-    description:
-      room?.description || "Explorez cette salle de notre musée virtuel",
+    title: `${titleBase} | L'iconodule`,
+    description,
     openGraph: {
-      title: `${room?.name || room?.title || slug}`,
-      description:
-        room?.description || "Explorez cette salle de notre musée virtuel",
+      title: titleBase,
+      description,
       images: [
         {
-          url: room?.artworks?.[0]?.imageUrl || "/assets/default-room.jpg",
+          url: ogImage,
           width: 1200,
           height: 630,
-          alt: `${room?.name || room?.title || slug} - L'iconodule`,
+          alt: `${titleBase} - L'iconodule`,
         },
       ],
     },
   };
 }
 
-export default async function RoomPage(props) {
-  const { slug } = await props.params;
+// --- Page ---
+export default async function RoomPage({ params }) {
+  const { slug } = params;
   const room = await getRoomBySlug(slug);
+
+  // ✅ rendre les œuvres sérialisables pour le composant client
+  const artworks = (room?.artworks ?? []).map((a) => ({
+    id:
+      a?._id?.toString?.() ??
+      (typeof a?._id !== "undefined" ? String(a._id) : ""),
+    title: a?.title ?? "",
+    description: a?.description ?? "",
+    imageUrl: a?.imageUrl ?? "",
+    // ajoute d'autres champs PRIMITIFS si besoin
+  }));
+
+  const titleBase = room?.name || room?.title || slug;
+
+  // JSON-LD propre (pas d’ObjectId / fonctions)
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: titleBase,
+    description: room?.description || "Salle du musée virtuel",
+  };
+
+  if (artworks[0]) {
+    jsonLd.mainEntity = {
+      "@type": "VisualArtwork",
+      name: artworks[0].title || titleBase,
+      creator: {
+        "@type": "Person",
+        name: room?.artworks?.[0]?.artist || "Artiste",
+      },
+      image: artworks[0].imageUrl || undefined,
+    };
+  }
 
   return (
     <div className="container mx-auto px-2">
@@ -49,29 +88,16 @@ export default async function RoomPage(props) {
 
       <div className="text-center mb-1">
         <h1 className="room-page-title text-5xl sm:text-6xl md:text-7xl font-serif font-semibold text-gray-800 mb-2">
-          {room?.name || room?.title || slug}
+          {titleBase}
         </h1>
       </div>
 
-      <ArtworkSlider artworks={room?.artworks || []} />
+      <ArtworkSlider artworks={artworks} />
 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            name: room?.name || slug,
-            description: room?.description || "Salle du musée virtuel",
-            mainEntity: room?.artworks?.[0] && {
-              "@type": "VisualArtwork",
-              name: room.artworks[0].title,
-              creator: {
-                "@type": "Person",
-                name: room.artworks[0].artist || "Artiste",
-              },
-            },
-          }),
+          __html: JSON.stringify(jsonLd),
         }}
       />
     </div>

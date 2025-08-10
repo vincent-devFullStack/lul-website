@@ -2,7 +2,20 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import "../../styles/components/Artworkslider.css";
+
+// Chargement dynamique du slider (n'est pas inclus au chargement initial)
+const DynamicArtworkSlider = dynamic(
+  () => import("@/components/artwork/ArtworkSlider"),
+  {
+    loading: () => (
+      <div className="w-full h-60 flex justify-center items-center">
+        <div className="w-8 h-8 border-4 border-gray-300 border-t-gray-800 rounded-full animate-spin"></div>
+      </div>
+    ),
+  }
+);
 
 export default function ArtworkSlider({ artworks = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);

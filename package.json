@@ -36,7 +36,9 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^15.4.6",
     "@tailwindcss/postcss": "^4",
+    "critters": "^0.0.23",
     "eslint": "^9",
     "eslint-config-next": "15.4.1",
     "tailwindcss": "^4"

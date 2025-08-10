@@ -9,20 +9,24 @@ let cached = global.mongoose || { conn: null, promise: null };
 export async function connectToDatabase() {
   if (cached.conn) return cached.conn;
   if (!cached.promise) {
-    cached.promise = mongoose.connect(uri, {
-      bufferCommands: false,
-    });
+    cached.promise = mongoose.connect(uri, { bufferCommands: false });
   }
   cached.conn = await cached.promise;
   global.mongoose = cached;
   return cached.conn;
 }
 
+/* =========================
+   Schemas & Models
+========================= */
+
 const ArtworkSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
     imageUrl: { type: String, required: true },
+    // Ajouté car tu le projetais déjà dans tes requêtes
+    artist: { type: String, default: "" },
   },
   { timestamps: true }
 );
@@ -93,6 +97,10 @@ function getContentModel() {
   return ContentModel;
 }
 
+/* =========================
+   Sérialisation (ObjectId -> string)
+========================= */
+
 function serializeMongoObject(obj) {
   if (!obj) return null;
   return JSON.parse(
@@ -100,6 +108,7 @@ function serializeMongoObject(obj) {
       if (
         value &&
         typeof value === "object" &&
+        value.constructor &&
         value.constructor.name === "ObjectId"
       ) {
         return value.toString();
@@ -109,12 +118,27 @@ function serializeMongoObject(obj) {
   );
 }
 
-// ======== ROOM CRUD ==========
+/* =========================
+   ROOM CRUD
+========================= */
 
 export async function getRoomBySlug(slug) {
   await connectToDatabase();
   const Room = getRoomModel();
-  const room = await Room.findOne({ slug }).lean();
+
+  // On récupère les champs utiles, en lean() pour éviter les documents Mongoose,
+  // puis on sérialise pour convertir tous les ObjectId (dont artworks._id) en string.
+  const room = await Room.findOne(
+    { slug },
+    {
+      slug: 1,
+      name: 1,
+      title: 1,
+      description: 1,
+      artworks: 1, // garde tout l'objet œuvres (title, description, imageUrl, artist, _id)
+    }
+  ).lean();
+
   return serializeMongoObject(room);
 }
 
@@ -150,7 +174,9 @@ export async function updateRoom(slug, updateData) {
   return serializeMongoObject(room);
 }
 
-// ======== ARTWORK CRUD ==========
+/* =========================
+   ARTWORK CRUD
+========================= */
 
 export async function addArtworkToRoom(slug, artworkData) {
   await connectToDatabase();
@@ -221,7 +247,9 @@ export async function deleteArtworkFromRoom(slug, artworkId) {
   return { success: true, deletedId: artworkId };
 }
 
-// ======== CONTENT CRUD ==========
+/* =========================
+   CONTENT CRUD
+========================= */
 
 export async function getContentByType(type) {
   await connectToDatabase();
@@ -233,10 +261,7 @@ export async function getContentByType(type) {
 export async function createOrUpdateContent(type, data) {
   await connectToDatabase();
   const Content = getContentModel();
-  const updateData = {
-    ...data,
-    updatedAt: new Date(),
-  };
+  const updateData = { ...data, updatedAt: new Date() };
 
   const content = await Content.findOneAndUpdate({ type }, updateData, {
     new: true,
