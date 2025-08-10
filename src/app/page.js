@@ -49,16 +49,16 @@ export default function Home() {
         {/* Bouton retravaillé */}
         <button
           onClick={handleEnter}
-          className="group relative overflow-hidden rounded-full border border-[#aa9980]/60 bg-[#544a39]/30 px-8 py-3 text-sm font-light tracking-widest text-[#f0e9df] backdrop-blur-md transition-all duration-300 hover:bg-[#433a2d]/50 hover:border-[#cbb99e]/70 hover:shadow-[0_0_15px_rgba(170,153,128,0.3)] focus:outline-none focus:ring-2 focus:ring-[#cbb99e]/30"
+          className="group relative overflow-hidden rounded-full border border-[#aa9980]/60 bg-[#544a39]/30 px-8 py-3 text-sm font-light tracking-widest text-[#f0e9df] backdrop-blur-md transition-all duration-300 hover:bg-[#433a2d]/50 hover:border-[#cbb99e]/70 hover:shadow-[0_0_15px_rgba(170,153,128,0.3)] focus:outline-none focus:ring-2 focus:ring-[#cbb99e]/30 cursor-pointer"
           aria-label="Entrer dans le site"
         >
-          <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1">
+          <span className="relative z-10 transition-transform duration-300 group-hover:translate-x-1 cursor-pointer">
             Entrer
           </span>
 
           {/* Effet de brillance au survol */}
           <span
-            className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#f0e9df]/10 to-transparent opacity-0 transition-all duration-700 group-hover:translate-x-full group-hover:opacity-100"
+            className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#f0e9df]/10 to-transparent opacity-0 transition-all duration-700 group-hover:translate-x-full group-hover:opacity-100 cursor-pointer"
             aria-hidden="true"
           />
         </button>
