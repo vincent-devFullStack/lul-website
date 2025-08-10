@@ -3,7 +3,6 @@ Allow: /$
 Allow: /accueil$
 Disallow: /
 
-# Bloquages explicites 
 Disallow: /admin/
 Disallow: /api/
 Disallow: /login
@@ -11,5 +10,4 @@ Disallow: /register
 Disallow: /forgot-password
 Disallow: /reset-password
 
-# Sitemap
-Sitemap: https://www.iconodule.fr/sitemap.xml
+Sitemap: https://www.iconodule.fr/sitemap-0.xml
