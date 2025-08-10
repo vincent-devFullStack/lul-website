@@ -1,12 +1,9 @@
-// Server Component
-export const revalidate = 3600; // ISR: régénère au plus tôt toutes les 1h
+export const revalidate = 3600;
 
-import { getAllRooms } from "@/lib/mongodb"; // on va direct en DB (plus rapide que passer par /api)
-import AccueilPlanInteractif from "./components/PlanClient"; // client component
+import { getAllRooms } from "@/lib/mongodb";
+import AccueilPlanInteractif from "./components/PlanClient";
 
 export default async function AccueilPage() {
-  // Charge les salles côté serveur => HTML prêt tout de suite (meilleur LCP)
-  const salles = await getAllRooms(); // [{ _id, slug, name, description, coordinates, status, artworks, ... }]
-
+  const salles = await getAllRooms();
   return <AccueilPlanInteractif salles={salles} />;
 }
