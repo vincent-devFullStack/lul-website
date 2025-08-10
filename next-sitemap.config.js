@@ -1,7 +1,7 @@
 const lastmod = new Date().toISOString().split(".")[0] + "Z";
 
 /** @type {import('next-sitemap').IConfig} */
-export default {
+const config = {
   siteUrl: "https://www.iconodule.fr",
   outDir: "public",
   generateRobotsTxt: true,
@@ -38,3 +38,5 @@ export default {
     ],
   },
 };
+
+export default config;
