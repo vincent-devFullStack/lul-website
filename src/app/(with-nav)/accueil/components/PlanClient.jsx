@@ -32,6 +32,18 @@ export default function AccueilPlanInteractif({ salles }) {
     });
   }, [salles]);
 
+  // Pré-fetch global des pages de salles (limité pour éviter un burst réseau)
+  useEffect(() => {
+    if (!salles?.length) return;
+    const toPrefetch = salles
+      .filter((s) => s?.slug && s.status !== "maintenance")
+      .slice(0, 10); // ← ajuste ce nombre si tu veux
+
+    for (const s of toPrefetch) {
+      router.prefetch(`/rooms/${s.slug}`);
+    }
+  }, [salles, router]);
+
   const handleMouseEnter = useCallback(
     (salle, event) => {
       const rect = event.currentTarget.getBoundingClientRect();
@@ -41,7 +53,8 @@ export default function AccueilPlanInteractif({ salles }) {
         x: rect.right + 10,
         y: rect.top + rect.height / 2,
       });
-      // petit bonus perf: précharger la page
+
+      // Pré-fetch au survol (desktop)
       if (salle?.slug) router.prefetch(`/rooms/${salle.slug}`);
     },
     [router]
@@ -80,9 +93,9 @@ export default function AccueilPlanInteractif({ salles }) {
             .filter((s) => s.status !== "maintenance")
             .map((salle) => (
               <button
-                key={salle._id || salle.slug}
+                key={salle.slug || salle._id}
                 onClick={(e) => handleRoomClick(e, salle.slug)}
-                className="text-left bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-4 sm:p-6 cursor-pointer border border-[rgba(191,167,106,0.2)] hover:border-[var(--brown)] transform hover:scale-[1.02] w-full"
+                className="text-left bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-4 sm:p-6 cursor-pointer border border-[rgba(191,167,106,0.2)] hover:border-[var(--brown)] transform hover:scale-[1.02)] w-full"
               >
                 <div className="flex flex-col h-full">
                   <div className="flex-1">
@@ -136,7 +149,7 @@ export default function AccueilPlanInteractif({ salles }) {
                 .filter((s) => s.status === "maintenance")
                 .map((salle) => (
                   <div
-                    key={salle._id || salle.slug}
+                    key={salle.slug || salle._id}
                     className="bg-gray-100 rounded-lg p-4 opacity-60 w-full"
                   >
                     <h3 className="text-base font-medium text-gray-600 mb-1 break-words">
@@ -161,7 +174,9 @@ export default function AccueilPlanInteractif({ salles }) {
   return (
     <>
       <div
-        className={`fixed inset-0 transition-opacity duration-600 ease-in-out pointer-events-none ${isTransitioning ? "opacity-100" : "opacity-0"}`}
+        className={`fixed inset-0 transition-opacity duration-600 ease-in-out pointer-events-none ${
+          isTransitioning ? "opacity-100" : "opacity-0"
+        }`}
         style={{ backgroundColor: "#e3d4b4", zIndex: 9999 }}
       />
 
@@ -178,7 +193,6 @@ export default function AccueilPlanInteractif({ salles }) {
             fill
             style={{ objectFit: "contain" }}
             priority
-            loading="eager"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
             quality={95}
             placeholder="empty"
@@ -202,7 +216,7 @@ export default function AccueilPlanInteractif({ salles }) {
               if (status === "maintenance") {
                 return (
                   <div
-                    key={_id || slug}
+                    key={slug || _id}
                     aria-label={`${name} - ${description}`}
                     className="absolute flex justify-center items-center text-black font-semibold text-xs opacity-60 cursor-not-allowed"
                     style={{ top, left, width, height }}
@@ -222,7 +236,7 @@ export default function AccueilPlanInteractif({ salles }) {
 
               return (
                 <button
-                  key={_id || slug}
+                  key={slug || _id}
                   aria-label={`${name} - ${description}`}
                   className="absolute cursor-pointer bg-transparent flex justify-center items-center text-black font-semibold text-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brown)] rounded"
                   style={{ top, left, width, height }}

@@ -1,21 +1,17 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import dynamic from "next/dynamic";
+import { useEffect, useMemo, useState, useCallback } from "react";
+import NextImage from "next/image";
 import "../../styles/components/Artworkslider.css";
 
-// Chargement dynamique du slider (n'est pas inclus au chargement initial)
-const DynamicArtworkSlider = dynamic(
-  () => import("@/components/artwork/ArtworkSlider"),
-  {
-    loading: () => (
-      <div className="w-full h-60 flex justify-center items-center">
-        <div className="w-8 h-8 border-4 border-gray-300 border-t-gray-800 rounded-full animate-spin"></div>
-      </div>
-    ),
-  }
-);
+/** Optimise une URL Cloudinary: format & qualité automatiques + limite de largeur */
+function cldOptimize(url, w = 1600) {
+  if (!url || !url.includes("res.cloudinary.com")) return url;
+  return url.replace(
+    "/image/upload/",
+    `/image/upload/f_auto,q_auto,c_limit,w_${w}/`
+  );
+}
 
 export default function ArtworkSlider({ artworks = [] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -26,33 +22,46 @@ export default function ArtworkSlider({ artworks = [] }) {
   const [startX, setStartX] = useState(0);
   const [startY, setStartY] = useState(0);
 
-  if (!artworks || artworks.length === 0) {
+  // URLs optimisées (Cloudinary) mémoïsées
+  const optimizedArtworks = useMemo(
+    () =>
+      (artworks || []).map((a) => ({
+        ...a,
+        _optUrl: cldOptimize(a?.imageUrl, 1600),
+      })),
+    [artworks]
+  );
+
+  const len = optimizedArtworks.length;
+
+  if (!len) {
     return (
       <p className="text-center text-gray-600">Aucune œuvre à afficher.</p>
     );
   }
 
-  const previous = () => {
+  const previous = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
     setSlideDirection("slide-right");
-    setCurrentIndex((prev) => (prev === 0 ? artworks.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? len - 1 : prev - 1));
     setTimeout(() => {
       setIsAnimating(false);
       setSlideDirection("");
     }, 500);
-  };
+  }, [isAnimating, len]);
 
-  const next = () => {
+  const next = useCallback(() => {
     if (isAnimating) return;
     setIsAnimating(true);
     setSlideDirection("slide-left");
-    setCurrentIndex((prev) => (prev === artworks.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev === len - 1 ? 0 : prev + 1));
     setTimeout(() => {
       setIsAnimating(false);
       setSlideDirection("");
     }, 500);
-  };
+  }, [isAnimating, len]);
+
   // Swipe/drag mobile + pointer
   const SWIPE_THRESHOLD = 50; // px
   const MAX_DRAG = 120; // limite visuelle
@@ -98,15 +107,25 @@ export default function ArtworkSlider({ artworks = [] }) {
   };
   const onTouchEnd = () => endDrag();
 
-  const currentArtwork = artworks[currentIndex];
+  // Pré-chargement de l’image suivante et précédente
+  useEffect(() => {
+    if (len < 2) return;
+    const nextIdx = (currentIndex + 1) % len;
+    const prevIdx = (currentIndex - 1 + len) % len;
 
-  if (!currentArtwork?.imageUrl) {
-    return (
-      <p className="text-center text-red-600">
-        Image manquante pour cette œuvre.
-      </p>
-    );
-  }
+    [nextIdx, prevIdx].forEach((i) => {
+      const u = optimizedArtworks[i]?._optUrl;
+      if (!u) return;
+      // ⚠️ utiliser le constructeur natif du navigateur,
+      // pas le composant Next.js
+      const img = new window.Image();
+      img.src = u; // warm HTTP cache
+    });
+  }, [currentIndex, len, optimizedArtworks]);
+
+  const currentArtwork = optimizedArtworks[currentIndex];
+  const currentSrc = currentArtwork?._optUrl || "/fallback.webp";
+  const isFirst = currentIndex === 0;
 
   return (
     <div className="w-full flex flex-col items-center justify-center relative py-12">
@@ -116,10 +135,12 @@ export default function ArtworkSlider({ artworks = [] }) {
           onClick={previous}
           disabled={isAnimating}
           aria-label="Œuvre précédente"
-        ></button>
+        />
 
         <div
-          className={`room-picture ${slideDirection} ${isDragging ? "dragging" : ""}`}
+          className={`room-picture ${slideDirection} ${
+            isDragging ? "dragging" : ""
+          }`}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
@@ -130,17 +151,19 @@ export default function ArtworkSlider({ artworks = [] }) {
           style={{
             transform: isDragging ? `translateX(${dragX}px)` : undefined,
             transition: isDragging ? "none" : undefined,
-            touchAction: "pan-y", // laisse le scroll vertical
+            touchAction: "pan-y",
           }}
         >
-          <Image
-            src={currentArtwork.imageUrl || "/fallback.webp"}
-            alt={currentArtwork.title || "Œuvre sans titre"}
+          <NextImage
+            key={currentIndex}
+            src={currentSrc}
+            alt={currentArtwork?.title || "Œuvre sans titre"}
             fill
             style={{ objectFit: "contain" }}
-            priority
             sizes="(max-width: 1024px) 100vw, 900px"
-            key={currentIndex}
+            priority={isFirst}
+            fetchPriority={isFirst ? "high" : "auto"}
+            draggable={false}
           />
         </div>
 
@@ -149,13 +172,12 @@ export default function ArtworkSlider({ artworks = [] }) {
           onClick={next}
           disabled={isAnimating}
           aria-label="Œuvre suivante"
-        ></button>
+        />
       </div>
 
-      {/* Texte en dessous conservé */}
       <div className={`artwork-info ${slideDirection}`}>
-        <h2 className="artwork-title">{currentArtwork.title}</h2>
-        <div className="artwork-description">{currentArtwork.description}</div>
+        <h2 className="artwork-title">{currentArtwork?.title}</h2>
+        <div className="artwork-description">{currentArtwork?.description}</div>
       </div>
     </div>
   );

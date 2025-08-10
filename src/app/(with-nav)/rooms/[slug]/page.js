@@ -1,17 +1,18 @@
 export const dynamic = "force-dynamic";
 
 import { getAllRoomSlugs, getRoomBySlug } from "@/lib/mongodb";
-import ArtworkSlider from "@/components/artwork/ArtworkSlider";
+import ArtworkSliderClient from "@/components/artwork/ArtworkSliderClient";
 import Link from "next/link";
 
-// SSG optionnel (tu peux garder ou retirer suivant ton besoin)
+// (Optionnel) SSG des slugs connus, tu peux garder si tu veux ISR
 export async function generateStaticParams() {
-  const slugs = await getAllRoomSlugs(); // ["salle-1", ...]
+  const slugs = await getAllRoomSlugs();
   return slugs.map((slug) => ({ slug }));
 }
 
+// <head> dynamique
 export async function generateMetadata({ params }) {
-  const { slug } = await params; // ✅ important
+  const { slug } = await params; // Next 15: params doit être "await"
   const room = await getRoomBySlug(slug);
 
   const titleBase = room?.name || room?.title || slug;
@@ -37,15 +38,16 @@ export async function generateMetadata({ params }) {
   };
 }
 
+// Page (serveur)
 export default async function RoomPage({ params }) {
-  const { slug } = await params; // ✅ important
+  const { slug } = await params; // Next 15: params doit être "await"
   const room = await getRoomBySlug(slug);
 
-  // 🔐 Sérialiser les œuvres pour un composant client
+  // Sérialisation propre des œuvres (évite les objets non sérialisables)
   const artworks =
     room?.artworks?.map((a) => ({
       _id:
-        (a?._id && typeof a._id.toString === "function"
+        (a?._id && typeof a._id?.toString === "function"
           ? a._id.toString()
           : a?._id) || "",
       title: a?.title || "",
@@ -69,8 +71,10 @@ export default async function RoomPage({ params }) {
         </h1>
       </div>
 
-      <ArtworkSlider artworks={artworks} />
+      {/* ⬇️ Client wrapper qui charge le slider en lazy côté client */}
+      <ArtworkSliderClient artworks={artworks} />
 
+      {/* JSON-LD */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

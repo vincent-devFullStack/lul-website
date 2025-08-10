@@ -37,7 +37,7 @@ export default function Home() {
       />
 
       {/* Voile léger */}
-      <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
+      <div className="absolute inset-0 bg-black/10" aria-hidden="true" />
 
       {/* Contenu centré */}
       <div className="relative z-10 flex flex-col h-full items-center justify-center">

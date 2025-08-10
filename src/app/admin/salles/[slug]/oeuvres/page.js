@@ -555,6 +555,34 @@ export default function AdminOeuvresPage() {
           </div>
         </div>
       )}
+      <style jsx>{`
+        /* Une ligne d’œuvre = vignette | infos | actions */
+        /* Le bloc infos prend toute la place centrale */
+        .artwork-info {
+          min-width: 0;
+        }
+
+        /* Actions en colonne + padding vis-à-vis du texte */
+        .artwork-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          padding-left: 16px;
+        }
+
+        @media (max-width: 768px) {
+          .artwork-item {
+            grid-template-columns: 80px 1fr;
+          }
+          .artwork-actions {
+            grid-column: 1 / -1;
+            flex-direction: row;
+            padding-left: 0;
+            margin-top: 8px;
+            gap: 8px;
+          }
+        }
+      `}</style>
     </div>
   );
 }

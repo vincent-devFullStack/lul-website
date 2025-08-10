@@ -2,7 +2,6 @@ import { AuthProvider } from "@/context/AuthContext";
 import CookieConsent from "@/components/CookieConsent";
 import "@/styles/base/globals.css";
 
-// C'est votre description par défaut pour toutes les pages
 export const metadata = {
   metadataBase: new URL("https://www.iconodule.fr"),
   title: {
@@ -18,11 +17,8 @@ export const metadata = {
     "iconodule",
     "exposition virtuelle",
   ],
-  canonical: "https://www.iconodule.fr",
-  robots: {
-    index: true,
-    follow: true,
-  },
+  alternates: { canonical: "https://www.iconodule.fr" }, // (petit bonus SEO)
+  robots: { index: true, follow: true },
   openGraph: {
     type: "website",
     locale: "fr_FR",
@@ -45,8 +41,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fr">
       <head>
-        <title>L'Iconodule</title>
-        <meta name="description" content="Musée virtuel L'Iconodule" />
+        {/* Pré-connexion / DNS-prefetch vers Cloudinary pour gagner ~100–200ms au 1er hit */}
+        <link
+          rel="preconnect"
+          href="https://res.cloudinary.com"
+          crossOrigin=""
+        />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
       </head>
       <body className="flex flex-col min-h-screen bg-gray-50">
         <AuthProvider>
