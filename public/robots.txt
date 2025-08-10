@@ -7,8 +7,5 @@ Disallow: /register
 Disallow: /forgot-password
 Disallow: /reset-password
 
-# Host
-Host: https://www.iconodule.fr
-
 # Sitemaps
 Sitemap: https://www.iconodule.fr/sitemap.xml
