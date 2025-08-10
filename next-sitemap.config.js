@@ -1,11 +1,11 @@
 const lastmod = new Date().toISOString();
 
-const config = {
+/** @type {import('next-sitemap').IConfig} */
+module.exports = {
   siteUrl: "https://www.iconodule.fr",
   outDir: "public",
   generateRobotsTxt: true,
 
-  // N’inclure que "/" et "/accueil" dans le sitemap
   transform: async (config, path) => {
     if (path === "/" || path === "/accueil") {
       return {
@@ -15,42 +15,26 @@ const config = {
         lastmod,
       };
     }
-    return null; // exclut toutes les autres routes
+    return null;
   },
 
-  // Au cas où Next ne détecte pas “/accueil”, on l’ajoute explicitement
-  additionalPaths: async () => [
-    { loc: "/", changefreq: "daily", priority: 0.8, lastmod },
-    { loc: "/accueil", changefreq: "weekly", priority: 0.7, lastmod },
-  ],
+  additionalPaths: async () => [],
 
-  // Par sécurité, on exclut les sections non désirées
-  exclude: [
-    "/admin/*",
-    "/api/*",
-    "/rooms/*",
-    "/login",
-    "/register",
-    "/forgot-password",
-    "/reset-password",
-    "/about",
-    "/contact",
-    "/memento",
-    "/credits-artistiques",
-    "/mentions-legales",
-    "/politique-confidentialite",
-  ],
+  exclude: ["/admin/*", "/api/*"],
 
-  // Robots.txt: tout bloquer sauf “/” et “/accueil”
   robotsTxtOptions: {
     policies: [
       {
         userAgent: "*",
-        disallow: ["/"],
-        allow: ["/$", "/accueil$"],
+        disallow: [
+          "/admin/",
+          "/api/",
+          "/login",
+          "/register",
+          "/forgot-password",
+          "/reset-password",
+        ],
       },
     ],
   },
 };
-
-module.exports = config;

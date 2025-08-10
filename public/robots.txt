@@ -1,8 +1,4 @@
 User-agent: *
-Allow: /$
-Allow: /accueil$
-Disallow: /
-
 Disallow: /admin/
 Disallow: /api/
 Disallow: /login
@@ -10,4 +6,4 @@ Disallow: /register
 Disallow: /forgot-password
 Disallow: /reset-password
 
-Sitemap: https://www.iconodule.fr/sitemap-0.xml
+Sitemap: https://www.iconodule.fr/sitemap.xml
