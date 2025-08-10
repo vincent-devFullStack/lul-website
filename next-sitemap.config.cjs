@@ -1,13 +1,13 @@
 const lastmod = new Date().toISOString().split(".")[0] + "Z";
 
 /** @type {import('next-sitemap').IConfig} */
-const config = {
+module.exports = {
   siteUrl: "https://www.iconodule.fr",
   outDir: "public",
   generateRobotsTxt: true,
   autoLastmod: false,
 
-  transform: async (config, path) => {
+  transform: async (_config, path) => {
     if (path === "/" || path === "/accueil") {
       return {
         loc: path,
@@ -38,5 +38,3 @@ const config = {
     ],
   },
 };
-
-export default config;
