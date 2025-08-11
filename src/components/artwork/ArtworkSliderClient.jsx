@@ -2,12 +2,24 @@
 
 import dynamic from "next/dynamic";
 
-// Charge réellement le gros slider côté client uniquement
 const Slider = dynamic(() => import("./ArtworkSlider"), {
   ssr: false,
-  loading: () => <div className="h-64 bg-gray-100 animate-pulse" />,
+  loading: () => (
+    <div
+      className="animate-pulse bg-gray-100"
+      style={{
+        width: "min(90vw, 900px)",
+        aspectRatio: "3 / 4",
+        borderRadius: 8,
+      }}
+      role="status"
+      aria-live="polite"
+      aria-busy="true"
+      aria-label="Chargement du diaporama d’œuvres"
+    />
+  ),
 });
 
-export default function ArtworkSliderClient({ artworks }) {
+export default function ArtworkSliderClient({ artworks = [] }) {
   return <Slider artworks={artworks} />;
 }

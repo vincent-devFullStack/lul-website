@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
 const COOKIE_NAME = "token";
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "");
+const SECRET_STR = process.env.JWT_SECRET ?? "";
+const JWT_SECRET = new TextEncoder().encode(SECRET_STR);
 
-const NOINDEX_PATHS = [
+const NOINDEX_PREFIXES = [
   "/admin",
   "/login",
   "/register",
@@ -12,76 +13,75 @@ const NOINDEX_PATHS = [
   "/reset-password",
 ];
 
+const isNoindexPath = (pathname) =>
+  NOINDEX_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + "/"));
+
+function withHeaders(res, pathname) {
+  res.headers.set("X-Content-Type-Options", "nosniff");
+  res.headers.set("X-Frame-Options", "DENY");
+  res.headers.set("Permissions-Policy", "browsing-topics=()");
+  res.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.headers.set("Cross-Origin-Opener-Policy", "same-origin");
+  res.headers.set("Cross-Origin-Resource-Policy", "same-site");
+  if (isNoindexPath(pathname)) {
+    res.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
+  }
+  return res;
+}
+
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
-
-  // Petits utilitaires
-  const setSecurityHeaders = (res) => {
-    res.headers.set("Permissions-Policy", "interest-cohort=()");
-    res.headers.set("X-Frame-Options", "DENY");
-    res.headers.set("X-Content-Type-Options", "nosniff");
-    return res;
-  };
-
   const getToken = () => request.cookies.get(COOKIE_NAME)?.value;
 
-  // 1) Zones protégées: /admin/*
+  // 1) /admin : requiert un JWT valide
   if (pathname.startsWith("/admin")) {
     const token = getToken();
     if (!token) {
-      return NextResponse.redirect(new URL("/login", request.url));
+      const url = new URL("/login", request.url);
+      url.searchParams.set("next", pathname);
+      return withHeaders(NextResponse.redirect(url), pathname);
     }
     try {
       await jwtVerify(token, JWT_SECRET);
-      return setSecurityHeaders(NextResponse.next());
+      return withHeaders(NextResponse.next(), pathname);
     } catch {
-      const res = NextResponse.redirect(new URL("/login", request.url));
+      const url = new URL("/login", request.url);
+      url.searchParams.set("next", pathname);
+      const res = NextResponse.redirect(url);
       res.cookies.delete(COOKIE_NAME);
-      return setSecurityHeaders(res);
+      return withHeaders(res, pathname);
     }
   }
 
-  // 2) /login: si déjà connecté → /accueil
+  // 2) /login : si déjà connecté, redirige vers /accueil
   if (pathname === "/login") {
     const token = getToken();
     if (token) {
       try {
         const { payload } = await jwtVerify(token, JWT_SECRET);
         const now = Math.floor(Date.now() / 1000);
-        if (payload?.exp > now) {
-          return setSecurityHeaders(
-            NextResponse.redirect(new URL("/accueil", request.url))
-          );
+        if (payload?.exp && payload.exp > now) {
+          const url = new URL("/accueil", request.url);
+          return withHeaders(NextResponse.redirect(url), pathname);
         }
       } catch {
         const res = NextResponse.next();
         res.cookies.delete(COOKIE_NAME);
-        return setSecurityHeaders(res);
+        return withHeaders(res, pathname);
       }
     }
   }
 
-  // 3) SEO: noindex/noarchive sur certaines pages
-  const isNoindex = NOINDEX_PATHS.some(
-    (p) => pathname === p || pathname.startsWith(p + "/")
-  );
-  if (isNoindex) {
-    const res = NextResponse.next();
-    res.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
-    return setSecurityHeaders(res);
-  }
-
-  // 4) Par défaut
-  return setSecurityHeaders(NextResponse.next());
+  // 3) Par défaut
+  return withHeaders(NextResponse.next(), pathname);
 }
 
-// Exécuter le middleware aussi sur les pages marquées noindex
 export const config = {
   matcher: [
     "/admin/:path*",
     "/login",
     "/register",
     "/forgot-password",
-    "/reset-password",
+    "/reset-password/:path*", // couvre /reset-password/[token]
   ],
 };

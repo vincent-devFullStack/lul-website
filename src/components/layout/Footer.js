@@ -1,30 +1,40 @@
 import Link from "next/link";
 import "../../styles/layout/Footer.css";
 
-const Footer = () => {
+export default function Footer() {
+  const year = new Date().getFullYear();
+
   return (
-    <div className="footer bottom-0 left-0 right-0 font-medium">
+    <footer
+      className="footer bottom-0 left-0 right-0 font-medium"
+      role="contentinfo"
+    >
       <div className="footer-content">
-        <div className="footer-nav text-lg">
-          <div className="footer-nav-item">
-            <Link href="/mentions-legales">Mentions légales</Link>
-          </div>
-          <div className="footer-nav-item">
-            <Link href="/politique-confidentialite">
-              Politique de confidentialité
-            </Link>
-          </div>
-          <div className="footer-nav-item">
-            <Link href="/credits-artistiques">Crédits artistiques</Link>
-          </div>
-        </div>
+        <nav
+          className="footer-nav text-lg"
+          aria-label="Pages légales et crédits"
+        >
+          <ul>
+            <li className="footer-nav-item">
+              <Link href="/mentions-legales">Mentions légales</Link>
+            </li>
+            <li className="footer-nav-item">
+              <Link href="/politique-confidentialite">
+                Politique de confidentialité
+              </Link>
+            </li>
+            <li className="footer-nav-item">
+              <Link href="/credits-artistiques">Crédits artistiques</Link>
+            </li>
+          </ul>
+        </nav>
+
         <div className="footer-copyrights">
-          <p>© 2025 L’Iconodule</p>
-          <p> All Rights Reserved.</p>
-          <p>Designed & Developed with Next.js</p>
+          <p>© {year} L’Iconodule</p>
+          <p>Tous droits réservés.</p>
+          <p>Conçu & développé avec Next.js</p>
         </div>
       </div>
-    </div>
+    </footer>
   );
-};
-export default Footer;
+}

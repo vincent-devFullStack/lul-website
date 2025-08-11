@@ -1,15 +1,15 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 
 export default function ClientWrapper({ children }) {
   const pathname = usePathname();
 
-  const isEntryPage = pathname === "/";
-  const isAdminPage = pathname.startsWith("/admin");
+  const p = pathname || "/";
+  const isEntryPage = p === "/";
+  const isAdminPage = p.startsWith("/admin");
 
   return (
     <>

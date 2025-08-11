@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import "@/styles/pages/memento.css";
 
-export default function Memento() {
+export default function AdminMementos() {
   const [mementos, setMementos] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState("add");
+  const [modalMode, setModalMode] = useState("add"); // 'add' | 'edit'
   const [formData, setFormData] = useState({
     quote: "",
     author: "",
@@ -16,74 +16,95 @@ export default function Memento() {
     imageUrl: "",
   });
   const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
+
+  const resetForm = () =>
+    setFormData({ quote: "", author: "", role: "", link: "", imageUrl: "" });
+
+  const loadMementos = useCallback(async () => {
+    try {
+      const res = await fetch("/api/memento", { cache: "no-store" });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setMementos(Array.isArray(data) ? data : []);
+    } catch {
+      setMessage({
+        type: "error",
+        text: "❌ Erreur lors du chargement des mementos",
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    loadMementos();
+  }, [loadMementos]);
 
   const openModal = (mode, memento = null) => {
     setModalMode(mode);
     setModalOpen(true);
+    document.body.style.overflow = "hidden"; // bloque le scroll fond
+
     if (mode === "edit" && memento) {
       setFormData({
         _id: memento._id,
-        quote: memento.quote,
-        author: memento.author,
-        role: memento.role,
-        link: memento.link || "", // ✅ Fallback si pas de link
-        imageUrl: memento.imageUrl,
+        quote: memento.quote ?? "",
+        author: memento.author ?? "",
+        role: memento.role ?? "",
+        link: memento.link ?? "",
+        imageUrl: memento.imageUrl ?? "",
       });
     } else {
-      setFormData({ quote: "", author: "", role: "", link: "", imageUrl: "" });
+      resetForm();
     }
   };
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setModalOpen(false);
-    setFormData({ quote: "", author: "", role: "", link: "", imageUrl: "" });
-    // ✅ NE PAS reset le message ici (comme les salles)
-    // setMessage(null); // ❌ Supprimé
-  };
-
-  useEffect(() => {
-    fetch("/api/memento")
-      .then((res) => res.json())
-      .then(setMementos);
+    document.body.style.overflow = "";
+    resetForm();
+    // on garde le message visible comme sur la page salles
   }, []);
 
+  // ESC pour fermer la modale
+  useEffect(() => {
+    if (!modalOpen) return;
+    const onKey = (e) => e.key === "Escape" && closeModal();
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [modalOpen, closeModal]);
+
   const handleInputChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = async (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
     setUploading(true);
-    const form = new FormData();
-    form.append("image", file);
-    form.append("folder", "mementos");
-
     try {
+      const form = new FormData();
+      form.append("image", file);
+      form.append("folder", "mementos");
+
       const res = await fetch("/api/upload", {
         method: "POST",
         body: form,
+        cache: "no-store",
       });
       const data = await res.json();
 
-      if (res.ok && data.imageUrl) {
-        setFormData((prev) => ({
-          ...prev,
-          imageUrl: data.imageUrl,
-        }));
-      } else {
-        setMessage({
-          type: "error",
-          text: data.error || "Erreur upload image",
-        });
+      if (!res.ok || !data.imageUrl) {
+        throw new Error(data.error || "Upload échoué");
       }
-    } catch (error) {
-      setMessage({ type: "error", text: "Erreur lors de l'upload" });
+      setFormData((prev) => ({ ...prev, imageUrl: data.imageUrl }));
+    } catch {
+      setMessage({
+        type: "error",
+        text: "❌ Erreur lors de l'upload de l'image",
+      });
     } finally {
       setUploading(false);
     }
@@ -91,15 +112,15 @@ export default function Memento() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUploading(true);
-    setMessage(null); // ✅ Reset du message
+    setSaving(true);
+    setMessage(null);
 
-    const dataToSend = {
+    const payload = {
       ...(modalMode === "edit" && { id: formData._id }),
-      quote: formData.quote,
-      author: formData.author,
-      role: formData.role,
-      link: formData.link,
+      quote: formData.quote.trim(),
+      author: formData.author.trim(),
+      role: formData.role.trim(),
+      link: formData.link.trim(),
       imageUrl: formData.imageUrl,
     };
 
@@ -107,88 +128,67 @@ export default function Memento() {
       const res = await fetch("/api/memento", {
         method: modalMode === "add" ? "POST" : "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(dataToSend),
+        body: JSON.stringify(payload),
+        cache: "no-store",
       });
 
-      if (res.ok) {
-        closeModal();
-        // Rafraîchir la liste
-        const updatedMementos = await fetch("/api/memento").then((r) =>
-          r.json()
-        );
-        setMementos(updatedMementos);
+      const ok = res.ok;
+      const data = await res.json().catch(() => ({}));
+      if (!ok) throw new Error(data.error || "Erreur serveur");
 
-        // ✅ Message avec le même format que les salles
-        const successText =
+      closeModal();
+      await loadMementos();
+      setMessage({
+        type: "success",
+        text:
           modalMode === "edit"
-            ? "Memento modifié avec succès"
-            : "Memento ajouté avec succès";
-
-        setMessage({ type: "success", text: successText });
-
-        // ✅ Auto-disparition après 5 secondes (comme les salles)
-        setTimeout(() => setMessage(null), 5000);
-      } else {
-        const data = await res.json();
-        setMessage({ type: "error", text: data.error || "Erreur" });
-      }
-    } catch (error) {
-      setMessage({ type: "error", text: "Erreur lors de l'enregistrement" });
+            ? "✅ Memento modifié avec succès"
+            : "✅ Memento ajouté avec succès",
+      });
+      setTimeout(() => setMessage(null), 5000);
+    } catch (err) {
+      setMessage({
+        type: "error",
+        text: `❌ ${err.message || "Erreur lors de l'enregistrement"}`,
+      });
     } finally {
-      setUploading(false);
+      setSaving(false);
     }
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Êtes-vous sûr de vouloir supprimer ce memento ?")) {
-      return;
-    }
+    if (!confirm("Êtes-vous sûr de vouloir supprimer ce memento ?")) return;
 
     try {
       const res = await fetch("/api/memento", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
+        cache: "no-store",
       });
 
-      if (res.ok) {
-        const updatedMementos = await fetch("/api/memento").then((r) =>
-          r.json()
-        );
-        setMementos(updatedMementos);
+      const ok = res.ok;
+      const data = await res.json().catch(() => ({}));
+      if (!ok) throw new Error(data.error || "Erreur serveur");
 
-        // ✅ Message avec le même format que les salles
-        setMessage({ type: "success", text: "Memento supprimé avec succès" });
-
-        // ✅ Auto-disparition après 5 secondes (comme les salles)
-        setTimeout(() => setMessage(null), 5000);
-      } else {
-        const data = await res.json();
-        setMessage({
-          type: "error",
-          text: data.error || "Erreur lors de la suppression",
-        });
-      }
-    } catch (error) {
-      setMessage({ type: "error", text: "Erreur lors de la suppression" });
+      await loadMementos();
+      setMessage({ type: "success", text: "✅ Memento supprimé avec succès" });
+      setTimeout(() => setMessage(null), 5000);
+    } catch (err) {
+      setMessage({
+        type: "error",
+        text: `❌ ${err.message || "Erreur lors de la suppression"}`,
+      });
     }
   };
 
-  // ✅ Version Tailwind harmonisée
-  const getMessageClass = () => {
-    if (!message) return "";
-
-    const baseClasses =
-      "mt-4 p-3 rounded-lg border text-sm font-medium text-center";
-
-    if (message.text.includes("✅")) {
-      return `${baseClasses} bg-green-100 border-green-300 text-green-800`; // ✅ Comme les salles
-    }
-    if (message.text.includes("❌")) {
-      return `${baseClasses} bg-red-100 border-red-300 text-red-800`; // ❌ Rouge
-    }
-    return `${baseClasses} bg-gray-100 border-gray-300 text-gray-800`; // ⚪ Neutre
-  };
+  const messageClass = !message
+    ? ""
+    : message.type === "success"
+      ? "mt-4 p-3 rounded-lg border bg-green-100 border-green-300 text-green-800 text-sm font-medium text-center"
+      : message.type === "error"
+        ? "mt-4 p-3 rounded-lg border bg-red-100 border-red-300 text-red-800 text-sm font-medium text-center"
+        : "mt-4 p-3 rounded-lg border bg-gray-100 border-gray-300 text-gray-800 text-sm font-medium text-center";
 
   return (
     <div>
@@ -199,12 +199,9 @@ export default function Memento() {
         </p>
       </div>
 
-      {/* ✅ Message AVANT les boutons (comme les salles) */}
-      {message && (
-        <div className={`message message-${message.type}`}>{message.text}</div>
-      )}
+      {message && <div className={messageClass}>{message.text}</div>}
 
-      <div style={{ marginBottom: 24 }}>
+      <div className="mb-6">
         <button className="admin-btn" onClick={() => openModal("add")}>
           + Ajouter un memento
         </button>
@@ -215,7 +212,7 @@ export default function Memento() {
           <p>Aucun memento pour le moment.</p>
         </div>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        <div className="flex flex-col gap-4">
           {mementos.map((m) => (
             <div key={m._id} className="admin-memento-card">
               <div className="memento-image">
@@ -232,8 +229,9 @@ export default function Memento() {
                   }}
                 />
               </div>
+
               <div className="memento-content">
-                <blockquote className="memento-quote">"{m.quote}"</blockquote>
+                <blockquote className="memento-quote">“{m.quote}”</blockquote>
                 <div className="memento-author">{m.author}</div>
                 <div className="memento-role">{m.role}</div>
                 {m.link && (
@@ -249,6 +247,7 @@ export default function Memento() {
                   </div>
                 )}
               </div>
+
               <div className="memento-actions">
                 <button
                   className="admin-btn admin-btn-secondary"
@@ -269,22 +268,36 @@ export default function Memento() {
       )}
 
       {modalOpen && (
-        <div className="modal-overlay" onClick={closeModal}>
+        <div
+          className="modal-overlay"
+          onClick={closeModal}
+          aria-modal="true"
+          role="dialog"
+          aria-labelledby="memento-modal-title"
+        >
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h2 className="modal-title">
+              <h2 id="memento-modal-title" className="modal-title">
                 {modalMode === "add"
                   ? "Ajouter un memento"
                   : "Modifier le memento"}
               </h2>
-              <button onClick={closeModal} className="modal-close">
+              <button
+                onClick={closeModal}
+                className="modal-close"
+                aria-label="Fermer"
+              >
                 ×
               </button>
             </div>
+
             <form onSubmit={handleSubmit} className="admin-form">
               <div className="admin-form-group">
-                <label className="admin-form-label">Citation</label>
+                <label className="admin-form-label" htmlFor="quote">
+                  Citation
+                </label>
                 <textarea
+                  id="quote"
                   name="quote"
                   value={formData.quote}
                   onChange={handleInputChange}
@@ -294,9 +307,13 @@ export default function Memento() {
                   rows={3}
                 />
               </div>
+
               <div className="admin-form-group">
-                <label className="admin-form-label">Auteur</label>
+                <label className="admin-form-label" htmlFor="author">
+                  Auteur
+                </label>
                 <input
+                  id="author"
                   type="text"
                   name="author"
                   value={formData.author}
@@ -306,9 +323,13 @@ export default function Memento() {
                   placeholder="Ex : Pablo Picasso"
                 />
               </div>
+
               <div className="admin-form-group">
-                <label className="admin-form-label">Rôle</label>
+                <label className="admin-form-label" htmlFor="role">
+                  Rôle
+                </label>
                 <input
+                  id="role"
                   type="text"
                   name="role"
                   value={formData.role}
@@ -318,9 +339,13 @@ export default function Memento() {
                   placeholder="Ex : Peintre, Espagne"
                 />
               </div>
+
               <div className="admin-form-group">
-                <label className="admin-form-label">Lien (optionnel)</label>
+                <label className="admin-form-label" htmlFor="link">
+                  Lien (optionnel)
+                </label>
                 <input
+                  id="link"
                   type="url"
                   name="link"
                   value={formData.link}
@@ -329,34 +354,38 @@ export default function Memento() {
                   placeholder="Ex : https://fr.wikipedia.org/wiki/Pablo_Picasso"
                 />
               </div>
+
               <div className="admin-form-group">
-                <label className="admin-form-label">Image</label>
+                <label
+                  className="admin-form-label"
+                  htmlFor="file-upload-button"
+                >
+                  Image
+                </label>
 
                 <div className="admin-form-file-wrapper">
                   <input
+                    id="file-upload-button"
                     type="file"
                     accept="image/*"
                     onChange={handleImageChange}
                     className="admin-form-file"
-                    id="file-upload-button"
+                    disabled={uploading}
                   />
                   <label
                     htmlFor="file-upload-button"
                     className="admin-form-file-label"
                   >
                     <div className="admin-form-file-text">
-                      Cliquez pour choisir une image
+                      {uploading
+                        ? "Téléversement en cours…"
+                        : "Cliquez pour choisir une image"}
                     </div>
                   </label>
                 </div>
+
                 {formData.imageUrl && (
-                  <div
-                    style={{
-                      marginTop: 12,
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
+                  <div className="mt-3 flex justify-center">
                     <Image
                       src={formData.imageUrl}
                       alt="Aperçu"
@@ -367,6 +396,7 @@ export default function Memento() {
                   </div>
                 )}
               </div>
+
               <div className="modal-actions">
                 <button
                   type="button"
@@ -378,9 +408,9 @@ export default function Memento() {
                 <button
                   type="submit"
                   className="admin-btn"
-                  disabled={uploading || !formData.imageUrl}
+                  disabled={saving || !formData.imageUrl}
                 >
-                  {uploading
+                  {saving
                     ? modalMode === "edit"
                       ? "Modification..."
                       : "Enregistrement..."

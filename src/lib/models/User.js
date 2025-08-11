@@ -1,3 +1,4 @@
+// src/lib/models/User.js
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
@@ -6,6 +7,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      index: true,
+      trim: true,
+      lowercase: true,
     },
     password: {
       type: String,
@@ -14,13 +18,24 @@ const userSchema = new mongoose.Schema(
     resetToken: {
       type: String,
       default: null,
+      index: true,
     },
     resetTokenExpires: {
-      type: Number,
+      type: Date,
       default: null,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      transform(_doc, ret) {
+        delete ret.password;
+        delete ret.resetToken;
+        delete ret.resetTokenExpires;
+        return ret;
+      },
+    },
+  }
 );
 
 export default mongoose.models.User || mongoose.model("User", userSchema);

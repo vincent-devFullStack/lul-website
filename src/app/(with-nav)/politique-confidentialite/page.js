@@ -7,15 +7,12 @@ export default function PolitiqueConfidentialite() {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsVisible(true);
-    }, 100);
-
+    const timer = setTimeout(() => setIsVisible(true), 100);
     return () => clearTimeout(timer);
   }, []);
 
   return (
-    <div
+    <main
       className={`politique-container ${
         isVisible ? "fade-in-up-active" : "fade-in-up-initial"
       }`}
@@ -23,8 +20,8 @@ export default function PolitiqueConfidentialite() {
       <div className="politique-content">
         <h1 className="politique-title">Politique de confidentialité</h1>
 
-        <section className="politique-section">
-          <h2>1. Introduction</h2>
+        <section className="politique-section" aria-labelledby="intro">
+          <h2 id="intro">1. Introduction</h2>
           <div className="politique-info">
             <p>
               La présente politique de confidentialité décrit comment
@@ -40,8 +37,8 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>2. Responsable du traitement</h2>
+        <section className="politique-section" aria-labelledby="responsable">
+          <h2 id="responsable">2. Responsable du traitement</h2>
           <div className="politique-info">
             <p>
               <strong>Responsable :</strong> Maud Bonnal
@@ -60,8 +57,8 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>3. Données collectées</h2>
+        <section className="politique-section" aria-labelledby="donnees">
+          <h2 id="donnees">3. Données collectées</h2>
           <div className="politique-info">
             <h3>3.1 Données collectées automatiquement</h3>
             <ul>
@@ -97,8 +94,8 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>4. Finalités du traitement</h2>
+        <section className="politique-section" aria-labelledby="finalites">
+          <h2 id="finalites">4. Finalités du traitement</h2>
           <div className="politique-info">
             <h3>4.1 Gestion du site web</h3>
             <ul>
@@ -124,8 +121,8 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>5. Base juridique du traitement</h2>
+        <section className="politique-section" aria-labelledby="bases">
+          <h2 id="bases">5. Base juridique du traitement</h2>
           <div className="politique-info">
             <p>Le traitement de vos données personnelles repose sur :</p>
             <ul>
@@ -149,8 +146,8 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>6. Durée de conservation</h2>
+        <section className="politique-section" aria-labelledby="duree">
+          <h2 id="duree">6. Durée de conservation</h2>
           <div className="politique-info">
             <ul>
               <li>
@@ -175,29 +172,29 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>7. Destinataires des données</h2>
+        <section className="politique-section" aria-labelledby="dest">
+          <h2 id="dest">7. Destinataires des données</h2>
           <div className="politique-info">
             <p>Vos données personnelles sont accessibles uniquement à :</p>
             <ul>
               <li>
-                <strong>L'équipe de L'Iconodule :</strong> Pour la gestion du
-                site et la communication
+                <strong>L'équipe de L'Iconodule :</strong> Gestion du site et
+                communication
               </li>
               <li>
-                <strong>Hébergeur (o2switch) :</strong> Dans le cadre strict de
+                <strong>Hébergeur (o2switch) :</strong> Cadre strict de
                 l'hébergement technique
               </li>
               <li>
-                <strong>Aucun tiers :</strong> Nous ne vendons, ne louons, ni ne
-                partageons vos données avec des tiers
+                <strong>Aucun tiers :</strong> Pas de vente, location ni partage
+                à des tiers
               </li>
             </ul>
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>8. Transferts internationaux</h2>
+        <section className="politique-section" aria-labelledby="transferts">
+          <h2 id="transferts">8. Transferts internationaux</h2>
           <div className="politique-info">
             <p>
               Vos données sont hébergées en France (o2switch, Clermont-Ferrand)
@@ -210,8 +207,8 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>9. Sécurité des données</h2>
+        <section className="politique-section" aria-labelledby="securite">
+          <h2 id="securite">9. Sécurité des données</h2>
           <div className="politique-info">
             <p>
               Nous mettons en œuvre des mesures techniques et organisationnelles
@@ -239,8 +236,8 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>10. Cookies et technologies similaires</h2>
+        <section className="politique-section" aria-labelledby="cookies">
+          <h2 id="cookies">10. Cookies et technologies similaires</h2>
           <div className="politique-info">
             <h3>10.1 Cookies utilisés</h3>
             <ul>
@@ -273,8 +270,8 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>11. Vos droits</h2>
+        <section className="politique-section" aria-labelledby="droits">
+          <h2 id="droits">11. Vos droits</h2>
           <div className="politique-info">
             <p>Conformément au RGPD, vous disposez des droits suivants :</p>
 
@@ -315,8 +312,8 @@ export default function PolitiqueConfidentialite() {
 
             <h3>11.7 Exercice de vos droits</h3>
             <p>
-              Pour exercer ces droits, contactez-nous à :
-              <a href="mailto:admin@iconodule.fr">admin@iconodule.fr</a>
+              Pour exercer ces droits, contactez-nous à :{" "}
+              <a href="mailto:contact@iconodule.fr">contact@iconodule.fr</a>
             </p>
             <p>
               Nous vous répondrons dans un délai maximum de{" "}
@@ -325,13 +322,12 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>12. Réclamation</h2>
+        <section className="politique-section" aria-labelledby="reclamation">
+          <h2 id="reclamation">12. Réclamation</h2>
           <div className="politique-info">
             <p>
               Si vous estimez que le traitement de vos données personnelles
-              constitue une violation du RGPD, vous avez le droit d'introduire
-              une réclamation auprès de la CNIL :
+              constitue une violation du RGPD, vous pouvez saisir la CNIL :
             </p>
             <p>
               <strong>
@@ -356,8 +352,8 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>13. Mineurs</h2>
+        <section className="politique-section" aria-labelledby="mineurs">
+          <h2 id="mineurs">13. Mineurs</h2>
           <div className="politique-info">
             <p>
               Notre site s'adresse à un public majeur. Nous ne collectons pas
@@ -371,8 +367,8 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>14. Modifications de la politique</h2>
+        <section className="politique-section" aria-labelledby="modifs">
+          <h2 id="modifs">14. Modifications de la politique</h2>
           <div className="politique-info">
             <p>
               Cette politique de confidentialité peut être modifiée
@@ -381,13 +377,13 @@ export default function PolitiqueConfidentialite() {
             </p>
             <p>
               Nous vous encourageons à consulter régulièrement cette page pour
-              rester informé de nos pratiques de confidentialité.
+              rester informé.
             </p>
           </div>
         </section>
 
-        <section className="politique-section">
-          <h2>15. Contact</h2>
+        <section className="politique-section" aria-labelledby="contact">
+          <h2 id="contact">15. Contact</h2>
           <div className="politique-info">
             <p>
               Pour toute question concernant cette politique de confidentialité
@@ -397,7 +393,8 @@ export default function PolitiqueConfidentialite() {
               <strong>Email :</strong>{" "}
               <a href="mailto:admin@iconodule.fr">admin@iconodule.fr</a>
               <br />
-              <strong>Objet :</strong> "Données personnelles - [Votre demande]"
+              <strong>Objet :</strong> &laquo; Données personnelles — [Votre
+              demande] &raquo;
             </p>
             <p>
               Nous nous engageons à vous répondre dans les meilleurs délais.
@@ -405,7 +402,7 @@ export default function PolitiqueConfidentialite() {
           </div>
         </section>
 
-        <div className="politique-footer">
+        <footer className="politique-footer">
           <p className="politique-last-update">
             Dernière mise à jour :{" "}
             {new Date().toLocaleDateString("fr-FR", {
@@ -415,8 +412,8 @@ export default function PolitiqueConfidentialite() {
             })}
           </p>
           <p className="politique-version">Version 1.0</p>
-        </div>
+        </footer>
       </div>
-    </div>
+    </main>
   );
 }

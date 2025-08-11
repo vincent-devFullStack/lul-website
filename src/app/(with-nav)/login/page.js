@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useCookieConsent } from "@/hooks/useCookieConsent";
@@ -8,13 +8,17 @@ import Link from "next/link";
 import styles from "@/styles/pages/login.module.css";
 
 export default function Login() {
+  const router = useRouter();
+  const { login, isAuthenticated, loading } = useAuth();
+  const { canUseAuth } = useCookieConsent();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
-  const { login, isAuthenticated, loading } = useAuth();
-  const { canUseAuth } = useCookieConsent();
+
+  // Mémo: état courant des cookies (évite de recalculer à chaque render)
+  const cookiesOk = useMemo(() => canUseAuth(), [canUseAuth]);
 
   useEffect(() => {
     if (!loading && isAuthenticated) {
@@ -26,7 +30,7 @@ export default function Login() {
     return (
       <div className={`${styles["login-container"]} rounded-lg`}>
         <div className="text-center">
-          <p>Vérification de l'authentification...</p>
+          <p>Vérification de l&apos;authentification...</p>
         </div>
       </div>
     );
@@ -49,7 +53,7 @@ export default function Login() {
     setIsSubmitting(true);
     setMessage(null);
 
-    if (!canUseAuth()) {
+    if (!cookiesOk) {
       setMessage(
         "❌ Vous devez accepter les cookies fonctionnels pour vous connecter."
       );
@@ -58,11 +62,12 @@ export default function Login() {
     }
 
     try {
+      const emailTrimmed = email.trim().toLowerCase();
       const res = await fetch("/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: emailTrimmed, password }),
         cache: "no-store",
       });
 
@@ -76,20 +81,18 @@ export default function Login() {
         return;
       }
 
-      let ok = await login(); // appelle /api/me
+      // Met à jour le contexte d'auth
+      let ok = await login();
       if (!ok) {
-        await new Promise((r) => setTimeout(r, 500));
+        // petit retry si le cookie vient juste d'être posé
+        await new Promise((r) => setTimeout(r, 400));
         ok = await login();
       }
       if (!ok) {
         setMessage(
-          "Connexion en cours, vous allez être redirigé vers la page d'accueil, sinon actualisez la page."
+          "Connexion en cours… si rien ne se passe, actualisez la page."
         );
-
-        // ⏳ Attendre 3s puis forcer un reload
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000);
+        setTimeout(() => window.location.reload(), 2500);
         return;
       }
 
@@ -113,65 +116,99 @@ export default function Login() {
         : "text-gray-600";
 
   return (
-    <div className={`${styles["login-container"]} rounded-lg`}>
+    <main className={`${styles["login-container"]} rounded-lg`}>
       <h1 className="text-2xl font-bold">Se connecter</h1>
 
-      {!canUseAuth() && (
+      {!cookiesOk && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
           <p className="text-yellow-800 text-sm">
-            ⚠️ <strong>Cookies requis :</strong> Vous devez accepter les cookies
-            fonctionnels pour utiliser l'authentification.
+            ⚠️ <strong>Cookies requis :</strong> vous devez accepter les cookies
+            fonctionnels pour utiliser l&apos;authentification.{" "}
             <button
+              type="button"
               onClick={() => window.location.reload()}
               className="underline ml-1"
             >
               Actualiser la page
-            </button>
-            pour configurer vos préférences.
+            </button>{" "}
+            après avoir modifié vos préférences.
           </p>
         </div>
       )}
 
-      <form className={styles["login-form"]} onSubmit={handleSubmit}>
-        <div className={styles["login-form-item"]}>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            disabled={isSubmitting}
-          />
+      <form
+        className={styles["login-form"]}
+        onSubmit={handleSubmit}
+        autoComplete="on"
+        aria-describedby="login-status"
+        noValidate
+      >
+        {/* Désactive tout le formulaire pendant l’envoi ou si cookies refusés */}
+        <fieldset
+          disabled={isSubmitting || !cookiesOk}
+          aria-busy={isSubmitting}
+        >
+          <div className={styles["login-form-item"]}>
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+              inputMode="email"
+              autoCapitalize="none"
+              autoCorrect="off"
+              spellCheck={false}
+              autoFocus
+            />
+          </div>
+
+          <div className={styles["login-form-item"]}>
+            <label htmlFor="password">Mot de passe</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Mot de passe"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+              enterKeyHint="go"
+            />
+          </div>
+
+          <button type="submit">
+            {isSubmitting ? "Connexion..." : "Se connecter"}
+          </button>
+        </fieldset>
+
+        <div
+          id="login-status"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className={`text-sm text-center mt-4 min-h-[1.25rem] ${msgClass}`}
+        >
+          {message}
         </div>
-        <div className={styles["login-form-item"]}>
-          <label htmlFor="password">Mot de passe</label>
-          <input
-            type="password"
-            placeholder="Mot de passe"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            disabled={isSubmitting}
-          />
-        </div>
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Connexion..." : "Se connecter"}
-        </button>
       </form>
 
-      {message && (
-        <p className={`text-sm text-center mt-4 ${msgClass}`}>{message}</p>
-      )}
-
-      <div className="text-[15px] text-gray-800 mt-2">
+      <nav
+        className="text-[15px] text-gray-800 mt-2 space-y-1"
+        aria-label="Liens annexes"
+      >
         <p>
           <Link href="/register">Créer un compte</Link>
         </p>
         <p>
           <Link href="/forgot-password">Mot de passe oublié ?</Link>
         </p>
-      </div>
-    </div>
+      </nav>
+    </main>
   );
 }

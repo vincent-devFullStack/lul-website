@@ -11,20 +11,10 @@ export default function Navigation() {
   const { isAuthenticated, logout } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-  };
+  const toggleMobileMenu = () => setMobileMenuOpen((v) => !v);
+  const closeMobileMenu = () => setMobileMenuOpen(false);
 
   const handleLogout = () => {
     logout();
@@ -40,13 +30,31 @@ export default function Navigation() {
 
   const isActive = (href) => pathname === href;
 
+  // Ferme le menu si l’URL change
+  useEffect(() => {
+    if (mobileMenuOpen) closeMobileMenu();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
+  // Empêche le scroll du body lorsque le menu mobile est ouvert
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      const original = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = original;
+      };
+    }
+  }, [mobileMenuOpen]);
+
   return (
     <>
       <nav className="header-menu sticky top-0 left-0 right-0 w-full shadow-lg z-50">
         <div className="w-full flex md:justify-between lg:justify-center px-4">
+          {/* Desktop */}
           <div className="hidden lg:flex flex-col items-center justify-center h-[120px]">
             <div className="flex justify-center mb-3">
-              <Link href="/" className="main-title" tabIndex="0">
+              <Link href="/" className="main-title">
                 L'iconodule
               </Link>
             </div>
@@ -61,13 +69,14 @@ export default function Navigation() {
                       ? "item-active"
                       : "hover:text-[var(--active-menu-item)]"
                   }`}
+                  aria-current={isActive(item.href) ? "page" : undefined}
                 >
                   {item.name}
                 </Link>
               ))}
             </div>
 
-            {isAuthenticated && (
+            {isAuthenticated ? (
               <div className="absolute top-5 right-5 flex items-center space-x-6">
                 <Link
                   href="/admin/salles"
@@ -81,15 +90,14 @@ export default function Navigation() {
                   />
                 </Link>
                 <button
+                  type="button"
                   onClick={handleLogout}
                   className="text-lg hover:text-[var(--active-menu-item)]"
                 >
                   Se déconnecter
                 </button>
               </div>
-            )}
-
-            {!isAuthenticated && (
+            ) : (
               <Link
                 href="/login"
                 className="absolute top-5 right-5 text-lg hover:text-[var(--active-menu-item)]"
@@ -99,22 +107,24 @@ export default function Navigation() {
             )}
           </div>
 
+          {/* Mobile header */}
           <div className="flex lg:hidden items-center h-16 md:h-20 w-full">
             <Link
               href="/"
               className="main-title text-xl sm:text-2xl md:text-3xl flex-shrink-0"
-              tabIndex="0"
             >
               L'iconodule
             </Link>
 
-            <div className="flex-grow"></div>
+            <div className="flex-grow" />
 
             <button
+              type="button"
               onClick={toggleMobileMenu}
               className="p-2 rounded-lg bg-[rgba(191,167,106,0.1)] hover:bg-[rgba(191,167,106,0.2)] transition-all duration-300 z-50 flex-shrink-0"
               aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
               aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-drawer"
             >
               {mobileMenuOpen ? (
                 <X className="h-6 w-6 text-[var(--foreground)]" />
@@ -126,6 +136,7 @@ export default function Navigation() {
         </div>
       </nav>
 
+      {/* Mobile drawer */}
       <div
         className={`lg:hidden fixed inset-0 z-40 transition-opacity duration-300 ${
           mobileMenuOpen
@@ -139,15 +150,20 @@ export default function Navigation() {
         />
 
         <div
+          id="mobile-drawer"
           className={`fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-gradient-to-b from-[var(--header-background)] via-white to-[var(--login-background)] shadow-xl transform transition-transform duration-300 ease-out ${
             mobileMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu"
         >
           <div className="flex items-center justify-between p-6 border-b border-[rgba(191,167,106,0.2)]">
             <span className="text-lg font-semibold text-[var(--foreground)]">
               Menu
             </span>
             <button
+              type="button"
               onClick={closeMobileMenu}
               className="p-2 rounded-lg hover:bg-[rgba(191,167,106,0.1)] transition-colors duration-200"
             >
@@ -166,6 +182,7 @@ export default function Navigation() {
                     ? "bg-[rgba(191,167,106,0.2)] text-[var(--active-menu-item)] font-semibold border-l-4 border-[var(--active-menu-item)]"
                     : "text-[var(--foreground)] hover:bg-[rgba(191,167,106,0.1)] hover:text-[var(--active-menu-item)]"
                 }`}
+                aria-current={isActive(item.href) ? "page" : undefined}
                 style={{
                   animationDelay: mobileMenuOpen ? `${index * 100}ms` : "0ms",
                 }}
@@ -175,10 +192,10 @@ export default function Navigation() {
             ))}
           </div>
 
-          <div className="mx-6 border-t border-[rgba(191,167,106,0.2)]"></div>
+          <div className="mx-6 border-t border-[rgba(191,167,106,0.2)]" />
 
           <div className="px-6 py-4 space-y-2">
-            {isAuthenticated ? (
+            {isAuthenticated && (
               <>
                 <Link
                   href="/admin/salles"
@@ -189,6 +206,7 @@ export default function Navigation() {
                   Administration
                 </Link>
                 <button
+                  type="button"
                   onClick={() => {
                     handleLogout();
                     closeMobileMenu();
@@ -198,12 +216,12 @@ export default function Navigation() {
                   Se déconnecter
                 </button>
               </>
-            ) : null}
+            )}
           </div>
 
           <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[rgba(191,167,106,0.1)] to-transparent">
             <p className="text-xs text-[var(--foreground)] opacity-70 text-center">
-              L'iconodule © 2025
+              L'iconodule © {new Date().getFullYear()}
             </p>
           </div>
         </div>

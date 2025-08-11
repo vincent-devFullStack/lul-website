@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap");
+/* Tailwind doit être importé en premier */
 @import "tailwindcss";
 @import "./token.css";
 
@@ -28,8 +28,16 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "EB Garamond", serif;
+  font-family: var(--font-sans);
   overflow-x: hidden;
+}
+
+/* utilitaires pour changer de famille */
+.font-serif {
+  font-family: var(--font-serif);
+}
+.font-sans {
+  font-family: var(--font-sans);
 }
 
 /* ========================================= */
@@ -219,7 +227,6 @@ main {
   word-break: break-word;
   overflow-wrap: anywhere;
 }
-
 .no-overflow {
   overflow-x: hidden;
 }
@@ -332,7 +339,7 @@ main {
   text-decoration: none;
   font-size: 1rem;
   font-weight: 600;
-  font-family: "EB Garamond", serif;
+  font-family: var(--font-serif);
   background: linear-gradient(
     135deg,
     rgba(235, 227, 204, 0.6) 0%,
@@ -442,12 +449,7 @@ main {
   }
 }
 
-@media (min-width: 40rem) {
-  .main-container {
-    padding-inline: calc(var(--spacing) * 6);
-  }
-}
-
+/* version unique (le doublon a été supprimé) */
 @media (min-width: 40rem) {
   .main-container {
     padding-inline: calc(var(--spacing) * 2);

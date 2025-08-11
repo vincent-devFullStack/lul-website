@@ -1,6 +1,24 @@
+// app/layout.tsx
+import { Metadata, Viewport } from "next";
 import { AuthProvider } from "@/context/AuthContext";
 import CookieConsent from "@/components/CookieConsent";
 import "@/styles/base/globals.css";
+import { Inter, Playfair_Display } from "next/font/google";
+
+// Polices via next/font → variables utilisées dans le CSS (font-sans / font-serif)
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-sans",
+  adjustFontFallback: true,
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-serif",
+  adjustFontFallback: true,
+});
 
 export const metadata = {
   metadataBase: new URL("https://www.iconodule.fr"),
@@ -37,19 +55,29 @@ export const metadata = {
   },
 };
 
+// Viewport/Theme — recommandé par Lighthouse
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#e3d4b4",
+  colorScheme: "light",
+};
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="fr">
+    <html lang="fr" className={`${inter.variable} ${playfair.variable}`}>
       <head>
-        {/* Pré-connexion / DNS-prefetch vers Cloudinary pour gagner ~100–200ms au 1er hit */}
+        {/* Aide le 1er hit Cloudinary */}
         <link
           rel="preconnect"
           href="https://res.cloudinary.com"
-          crossOrigin=""
+          crossOrigin="anonymous"
         />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
       </head>
-      <body className="flex flex-col min-h-screen bg-gray-50">
+
+      {/* font-sans = var(--font-sans) définie par next/font */}
+      <body className="flex min-h-screen flex-col bg-gray-50 font-sans">
         <AuthProvider>
           {children}
           <CookieConsent />

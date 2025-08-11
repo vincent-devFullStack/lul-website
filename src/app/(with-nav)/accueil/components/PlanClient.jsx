@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function AccueilPlanInteractif({ salles }) {
   const router = useRouter();
+
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [tooltip, setTooltip] = useState({
     show: false,
@@ -14,6 +15,10 @@ export default function AccueilPlanInteractif({ salles }) {
     y: 0,
   });
   const [isMobile, setIsMobile] = useState(false);
+
+  // NEW: overlay contrôlé (monté uniquement pendant la transition)
+  const [showOverlay, setShowOverlay] = useState(false);
+  const [overlayVisible, setOverlayVisible] = useState(false);
 
   // Détection mobile
   useEffect(() => {
@@ -37,7 +42,7 @@ export default function AccueilPlanInteractif({ salles }) {
     if (!salles?.length) return;
     const toPrefetch = salles
       .filter((s) => s?.slug && s.status !== "maintenance")
-      .slice(0, 10); // ← ajuste ce nombre si tu veux
+      .slice(0, 10);
 
     for (const s of toPrefetch) {
       router.prefetch(`/rooms/${s.slug}`);
@@ -67,13 +72,28 @@ export default function AccueilPlanInteractif({ salles }) {
   const handleRoomClick = useCallback(
     (e, slug) => {
       e.preventDefault();
+
+      // masque tooltip + lance transition
       setIsTransitioning(true);
       setTooltip({ show: false, content: "", x: 0, y: 0 });
 
+      // Monte l’overlay puis déclenche le fade au prochain tick
+      setShowOverlay(true);
+      requestAnimationFrame(() => setOverlayVisible(true));
+
+      // Laisse le temps au fondu puis navigue
       setTimeout(() => router.push(`/rooms/${slug}`), 600);
     },
     [router]
   );
+
+  // Cleanup au démontage (sécurité)
+  useEffect(() => {
+    return () => {
+      setOverlayVisible(false);
+      setShowOverlay(false);
+    };
+  }, []);
 
   // Liste mobile
   const MobileRoomsList = () => (
@@ -95,7 +115,7 @@ export default function AccueilPlanInteractif({ salles }) {
               <button
                 key={salle.slug || salle._id}
                 onClick={(e) => handleRoomClick(e, salle.slug)}
-                className="text-left bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-4 sm:p-6 cursor-pointer border border-[rgba(191,167,106,0.2)] hover:border-[var(--brown)] transform hover:scale-[1.02)] w-full"
+                className="text-left bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 p-4 sm:p-6 cursor-pointer border border-[rgba(191,167,106,0.2)] hover:border-[var(--brown)] transform hover:scale-[1.02] w-full"
               >
                 <div className="flex flex-col h-full">
                   <div className="flex-1">
@@ -173,12 +193,17 @@ export default function AccueilPlanInteractif({ salles }) {
   // Pas de "loading" ici : tout est pré-rendu serveur
   return (
     <>
-      <div
-        className={`fixed inset-0 transition-opacity duration-600 ease-in-out pointer-events-none ${
-          isTransitioning ? "opacity-100" : "opacity-0"
-        }`}
-        style={{ backgroundColor: "#e3d4b4", zIndex: 9999 }}
-      />
+      {/* Overlay: monté uniquement pendant la transition */}
+      {showOverlay && (
+        <div
+          role="presentation"
+          aria-hidden="true"
+          className={`fixed inset-0 transition-opacity duration-600 ease-in-out ${
+            overlayVisible ? "opacity-100" : "opacity-0"
+          }`}
+          style={{ backgroundColor: "#e3d4b4", zIndex: 9999 }}
+        />
+      )}
 
       {isMobile ? (
         <MobileRoomsList />

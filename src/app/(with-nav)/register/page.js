@@ -1,15 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import "../../../styles/pages/register.css";
-import "../../../styles/pages/forgot-password.css";
+import { useCookieConsent } from "@/hooks/useCookieConsent";
+import "@/styles/pages/register.css";
 
 export default function Register() {
   const router = useRouter();
   const { login } = useAuth();
+  const { canUseAuth } = useCookieConsent();
 
   const [email, setEmail] = useState("");
   const [pin, setPin] = useState("");
@@ -18,12 +19,27 @@ export default function Register() {
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const passwordsMatch = password === confirm;
+  const passwordStrongEnough = password.length >= 8;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isLoading) return;
     setMessage(null);
 
-    if (password !== confirm) {
-      setMessage("Les mots de passe ne correspondent pas.");
+    if (!canUseAuth()) {
+      setMessage(
+        "❌ Vous devez accepter les cookies fonctionnels pour vous inscrire."
+      );
+      return;
+    }
+
+    if (!passwordsMatch) {
+      setMessage("❌ Les mots de passe ne correspondent pas.");
+      return;
+    }
+    if (!passwordStrongEnough) {
+      setMessage("❌ Le mot de passe doit contenir au moins 8 caractères.");
       return;
     }
 
@@ -33,34 +49,56 @@ export default function Register() {
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
           email,
           password,
           confirmPassword: confirm,
           pin,
         }),
+        cache: "no-store",
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
-      if (res.ok) {
-        login();
-        router.push("/accueil");
-      } else {
-        setMessage(`${data.error || "Erreur inconnue"}`);
+      if (!res.ok) {
+        setMessage(`❌ ${data?.error || "Erreur inconnue"}`);
+        return;
       }
-    } catch (err) {
-      setMessage("Erreur réseau.");
+
+      // Tente de récupérer la session
+      await login();
+      setMessage("✅ Compte créé. Redirection...");
+      router.replace("/accueil");
+      router.refresh();
+    } catch {
+      setMessage("❌ Erreur réseau.");
     } finally {
       setIsLoading(false);
     }
   };
 
+  const msgClass = !message
+    ? ""
+    : message.startsWith("✅")
+      ? "text-green-600"
+      : "text-red-600";
+
   return (
     <div className="register-container rounded-lg">
-      <h1 className="text-2xl font-bold">S'inscrire</h1>
+      <h1 className="text-2xl font-bold">S&apos;inscrire</h1>
 
-      <form className="register-form" onSubmit={handleSubmit}>
+      {!canUseAuth() && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+          <p className="text-yellow-800 text-sm">
+            ⚠️ <strong>Cookies requis :</strong> vous devez accepter les cookies
+            fonctionnels pour créer un compte. Actualisez la page après avoir
+            fait votre choix dans la bannière de consentement.
+          </p>
+        </div>
+      )}
+
+      <form className="register-form" onSubmit={handleSubmit} noValidate>
         <div className="register-form-item">
           <label htmlFor="email">Adresse email</label>
           <input
@@ -70,6 +108,11 @@ export default function Register() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            autoComplete="email"
+            inputMode="email"
+            autoCapitalize="off"
+            autoCorrect="off"
+            disabled={isLoading}
           />
         </div>
 
@@ -82,6 +125,10 @@ export default function Register() {
             value={pin}
             onChange={(e) => setPin(e.target.value)}
             required
+            inputMode="numeric"
+            pattern="\d*"
+            autoComplete="one-time-code"
+            disabled={isLoading}
           />
         </div>
 
@@ -94,7 +141,14 @@ export default function Register() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            minLength={8}
+            autoComplete="new-password"
+            disabled={isLoading}
+            aria-invalid={!passwordStrongEnough}
           />
+          <small className="text-gray-600">
+            Au moins 8 caractères (recommandé : lettres, chiffres, symbole).
+          </small>
         </div>
 
         <div className="register-form-item">
@@ -106,23 +160,33 @@ export default function Register() {
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             required
+            minLength={8}
+            autoComplete="new-password"
+            disabled={isLoading}
+            aria-invalid={!passwordsMatch}
           />
         </div>
 
-        <button type="submit" disabled={isLoading}>
+        <button
+          type="submit"
+          disabled={
+            isLoading ||
+            !canUseAuth() ||
+            !passwordsMatch ||
+            !passwordStrongEnough
+          }
+        >
           {isLoading ? "Création..." : "S'inscrire"}
         </button>
-      </form>
 
-      {message && (
+        {/* Zone de feedback accessible */}
         <p
-          className={`text-sm text-center mt-4 ${
-            message.startsWith("✅") ? "text-green-600" : "text-red-600"
-          }`}
+          className={`text-sm text-center mt-4 ${msgClass}`}
+          aria-live="polite"
         >
           {message}
         </p>
-      )}
+      </form>
 
       <div className="register-links text-[15px] text-gray-800 mt-4">
         <p>

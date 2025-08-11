@@ -1,10 +1,12 @@
+// src/lib/mongodb.js
 import mongoose from "mongoose";
 import cloudinary from "@/lib/cloudinary";
 
 const uri = process.env.MONGODB_URI;
 if (!uri) throw new Error("Veuillez définir MONGODB_URI dans .env.local");
 
-let cached = global.mongoose || { conn: null, promise: null };
+// Cache de connexion pour éviter les multiples connexions en dev
+let cached = globalThis.__mongoose || { conn: null, promise: null };
 
 export async function connectToDatabase() {
   if (cached.conn) return cached.conn;
@@ -12,7 +14,7 @@ export async function connectToDatabase() {
     cached.promise = mongoose.connect(uri, { bufferCommands: false });
   }
   cached.conn = await cached.promise;
-  global.mongoose = cached;
+  globalThis.__mongoose = cached;
   return cached.conn;
 }
 
@@ -25,8 +27,9 @@ const ArtworkSchema = new mongoose.Schema(
     title: { type: String, required: true },
     description: { type: String, required: true },
     imageUrl: { type: String, required: true },
-    // Ajouté car tu le projetais déjà dans tes requêtes
     artist: { type: String, default: "" },
+    // facultatif mais utile si tu veux supprimer côté Cloudinary sans parser l’URL
+    publicId: { type: String, default: null },
   },
   { timestamps: true }
 );
@@ -55,7 +58,7 @@ const RoomSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["active", "restricted", "maintenance"],
+      enum: ["active", "maintenance"], // aligné avec tes routes API
       default: "active",
     },
     displayOrder: { type: Number, required: true },
@@ -126,8 +129,7 @@ export async function getRoomBySlug(slug) {
   await connectToDatabase();
   const Room = getRoomModel();
 
-  // On récupère les champs utiles, en lean() pour éviter les documents Mongoose,
-  // puis on sérialise pour convertir tous les ObjectId (dont artworks._id) en string.
+  // Inclut status (utilisé par l’API pour bloquer “maintenance”)
   const room = await Room.findOne(
     { slug },
     {
@@ -135,7 +137,9 @@ export async function getRoomBySlug(slug) {
       name: 1,
       title: 1,
       description: 1,
-      artworks: 1, // garde tout l'objet œuvres (title, description, imageUrl, artist, _id)
+      status: 1,
+      coordinates: 1,
+      artworks: 1,
     }
   ).lean();
 
@@ -175,6 +179,27 @@ export async function updateRoom(slug, updateData) {
 }
 
 /* =========================
+   Helpers Cloudinary
+========================= */
+
+// Extrait le public_id complet depuis une URL Cloudinary (avec dossier)
+// ex: https://res.cloudinary.com/.../upload/v1700000000/artworks/mon-image.webp
+// -> "artworks/mon-image"
+function extractCloudinaryPublicId(imageUrl = "") {
+  if (
+    !imageUrl ||
+    typeof imageUrl !== "string" ||
+    !imageUrl.includes("/upload/")
+  ) {
+    return null;
+  }
+  const m = imageUrl.match(
+    /\/upload\/(?:v\d+\/)?(.+?)\.(?:jpg|jpeg|png|webp|gif|bmp|tiff|heic|svg)(?:\?.*)?$/i
+  );
+  return m ? m[1] : null;
+}
+
+/* =========================
    ARTWORK CRUD
 ========================= */
 
@@ -203,20 +228,20 @@ export async function updateArtworkInRoom(slug, artworkId, updatedData) {
   const room = await Room.findOne({ slug });
   if (!room) throw new Error("Salle non trouvée");
 
-  const artworkIndex = room.artworks.findIndex(
-    (artwork) => artwork._id.toString() === artworkId
+  const idx = room.artworks.findIndex(
+    (art) => art._id.toString() === artworkId
   );
-  if (artworkIndex === -1) throw new Error("Œuvre non trouvée");
+  if (idx === -1) throw new Error("Œuvre non trouvée");
 
-  room.artworks[artworkIndex] = {
-    ...room.artworks[artworkIndex].toObject(),
+  room.artworks[idx] = {
+    ...room.artworks[idx].toObject(),
     ...updatedData,
     updatedAt: new Date(),
   };
 
   room.updatedAt = new Date();
   await room.save();
-  return serializeMongoObject(room.artworks[artworkIndex]);
+  return serializeMongoObject(room.artworks[idx]);
 }
 
 export async function deleteArtworkFromRoom(slug, artworkId) {
@@ -231,12 +256,17 @@ export async function deleteArtworkFromRoom(slug, artworkId) {
   if (index === -1) throw new Error("Œuvre non trouvée");
 
   const imageUrl = room.artworks[index].imageUrl;
-  if (imageUrl && imageUrl.includes("res.cloudinary.com")) {
-    const publicId = imageUrl.split("/").pop().split(".")[0];
+  const storedPublicId = room.artworks[index].publicId || null;
+
+  // On privilégie publicId si présent, sinon on parse l’URL
+  const publicId =
+    storedPublicId || extractCloudinaryPublicId(imageUrl) || null;
+
+  if (publicId) {
     try {
-      await cloudinary.uploader.destroy(`artworks/${publicId}`);
+      await cloudinary.uploader.destroy(publicId);
     } catch (e) {
-      console.warn("Erreur suppression Cloudinary :", e.message);
+      console.warn("Erreur suppression Cloudinary :", e?.message || e);
     }
   }
 

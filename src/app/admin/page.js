@@ -11,9 +11,9 @@ export default function AdminHomePage() {
   }, [router]);
 
   return (
-    <div className="admin-loading">
+    <div className="admin-loading" role="status" aria-live="polite">
       <div className="loading-spinner"></div>
-      <p>Redirection...</p>
+      <p>Redirection…</p>
     </div>
   );
 }

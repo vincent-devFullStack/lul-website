@@ -1,25 +1,32 @@
+// app/api/content/[type]/route.js
 import { NextResponse } from "next/server";
 import { getContentByType, createOrUpdateContent } from "@/lib/mongodb";
 import { withAuth } from "@/lib/auth";
 
-export async function GET(request, { params }) {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export async function GET(_request, context) {
   try {
-    const { type } = await params;
+    const { type } = (await context).params; // ✅ await context before using params
+
+    if (!type || typeof type !== "string") {
+      return NextResponse.json(
+        { error: "Paramètre 'type' manquant ou invalide." },
+        { status: 400 }
+      );
+    }
 
     const content = await getContentByType(type);
 
-    if (!content) {
-      const defaultContent = {
+    return NextResponse.json(
+      content ?? {
         type,
         title: "À propos de moi",
         content: "Contenu à définir...",
         imageUrl: null,
-      };
-
-      return NextResponse.json(defaultContent);
-    }
-
-    return NextResponse.json(content);
+      }
+    );
   } catch (error) {
     console.error("Erreur lors de la récupération du contenu:", error);
     return NextResponse.json(
@@ -29,35 +36,43 @@ export async function GET(request, { params }) {
   }
 }
 
-export const PUT = withAuth(async (request, { params }) => {
+export const PUT = withAuth(async (request, context) => {
   try {
-    const { type } = await params;
-    const updateData = await request.json();
+    const { type } = (await context).params; // ✅ await context before using params
 
-    const { title, content, imageUrl } = updateData;
+    if (!type || typeof type !== "string") {
+      return NextResponse.json(
+        { error: "Paramètre 'type' manquant ou invalide." },
+        { status: 400 }
+      );
+    }
 
-    if (!title || typeof title !== "string" || title.trim().length === 0) {
+    const body = await request.json().catch(() => null);
+    if (!body || typeof body !== "object") {
+      return NextResponse.json(
+        { error: "Corps de requête JSON invalide." },
+        { status: 400 }
+      );
+    }
+
+    const { title, content, imageUrl } = body;
+
+    if (!title || typeof title !== "string" || !title.trim()) {
       return NextResponse.json(
         { error: "Le titre est requis" },
         { status: 400 }
       );
     }
-
-    if (
-      !content ||
-      typeof content !== "string" ||
-      content.trim().length === 0
-    ) {
+    if (!content || typeof content !== "string" || !content.trim()) {
       return NextResponse.json(
         { error: "Le contenu est requis" },
         { status: 400 }
       );
     }
-
     if (content.length > 3000) {
       return NextResponse.json(
         {
-          error: `Contenu excessivement long (${content.length} caractères). Limite : 3000 caractères pour maintenir une bonne expérience utilisateur.`,
+          error: `Contenu excessivement long (${content.length} caractères). Limite : 3000.`,
           currentLength: content.length,
           recommendedMax: 2000,
         },

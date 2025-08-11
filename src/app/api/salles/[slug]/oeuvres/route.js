@@ -1,37 +1,52 @@
+// app/api/salles/[slug]/oeuvres/route.js
 import { NextResponse } from "next/server";
-import { 
-  getRoomWithArtworks, 
-  addArtworkToRoom, 
-  updateArtworkInRoom, 
-  deleteArtworkFromRoom 
+import {
+  getRoomWithArtworks,
+  addArtworkToRoom,
+  updateArtworkInRoom,
+  deleteArtworkFromRoom,
 } from "@/lib/mongodb";
-import { withAuth } from "@/lib/auth"; // ✅ SÉCURISATION IMPORTÉE
+import { withAuth } from "@/lib/auth";
+import { revalidatePath, revalidateTag } from "next/cache";
+
+export const revalidate = 0;
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+const noStore = { "Cache-Control": "no-store" };
+
+function sanitizeText(v) {
+  return typeof v === "string" ? v.trim() : "";
+}
 
 // GET /api/salles/[slug]/oeuvres - Récupérer les œuvres d'une salle
-export async function GET(request, { params }) {
+export async function GET(_request, { params }) {
   try {
-    const { slug } = await params;
+    const { slug } = params; // pas d'await
     const room = await getRoomWithArtworks(slug);
-    
+
     if (!room) {
       return NextResponse.json(
         { error: "Salle non trouvée" },
-        { status: 404 }
+        { status: 404, headers: noStore }
       );
     }
 
-    return NextResponse.json({
-      room: {
-        slug: room.slug,
-        title: room.title
+    return NextResponse.json(
+      {
+        room: {
+          slug: room.slug,
+          title: room.name || room.title || room.slug,
+        },
+        artworks: room.artworks || [],
       },
-      artworks: room.artworks || []
-    });
+      { headers: noStore }
+    );
   } catch (error) {
     console.error("Erreur lors de la récupération des œuvres:", error);
     return NextResponse.json(
       { error: "Erreur lors de la récupération des œuvres" },
-      { status: 500 }
+      { status: 500, headers: noStore }
     );
   }
 }
@@ -39,41 +54,49 @@ export async function GET(request, { params }) {
 // POST /api/salles/[slug]/oeuvres - Ajouter une œuvre à une salle
 export const POST = withAuth(async (request, { params }) => {
   try {
-    const { slug } = await params;
+    const { slug } = params;
     const body = await request.json();
-    
-    // Validation des données
-    if (!body.title || !body.description || !body.imageUrl) {
+
+    const title = sanitizeText(body.title);
+    const description = sanitizeText(body.description);
+    const imageUrl = sanitizeText(body.imageUrl);
+
+    if (!title || !description || !imageUrl) {
       return NextResponse.json(
         { error: "Titre, description et image sont requis" },
-        { status: 400 }
+        { status: 400, headers: noStore }
       );
     }
 
     const newArtwork = await addArtworkToRoom(slug, {
-      title: body.title.trim(),
-      description: body.description.trim(),
-      imageUrl: body.imageUrl.trim()
+      title,
+      description,
+      imageUrl,
     });
 
-    return NextResponse.json({
-      success: true,
-      artwork: newArtwork
-    }, { status: 201 });
+    // Invalidation ISR/CDN
+    revalidatePath("/accueil");
+    revalidatePath(`/rooms/${slug}`);
+    revalidateTag("rooms");
+    revalidateTag(`room:${slug}`);
 
+    return NextResponse.json(
+      { success: true, artwork: newArtwork },
+      { status: 201, headers: noStore }
+    );
   } catch (error) {
     console.error("Erreur lors de l'ajout de l'œuvre:", error);
-    
-    if (error.message === "Salle non trouvée") {
+
+    if (error?.message === "Salle non trouvée") {
       return NextResponse.json(
         { error: error.message },
-        { status: 404 }
+        { status: 404, headers: noStore }
       );
     }
-    
+
     return NextResponse.json(
       { error: "Erreur lors de l'ajout de l'œuvre" },
-      { status: 500 }
+      { status: 500, headers: noStore }
     );
   }
 });
@@ -81,41 +104,53 @@ export const POST = withAuth(async (request, { params }) => {
 // PUT /api/salles/[slug]/oeuvres - Modifier une œuvre
 export const PUT = withAuth(async (request, { params }) => {
   try {
-    const { slug } = await params;
+    const { slug } = params;
     const body = await request.json();
-    
-    // Validation des données
-    if (!body.artworkId || !body.title || !body.description || !body.imageUrl) {
+
+    const artworkId = sanitizeText(body.artworkId);
+    const title = sanitizeText(body.title);
+    const description = sanitizeText(body.description);
+    const imageUrl = sanitizeText(body.imageUrl);
+
+    if (!artworkId || !title || !description || !imageUrl) {
       return NextResponse.json(
         { error: "ID de l'œuvre, titre, description et image sont requis" },
-        { status: 400 }
+        { status: 400, headers: noStore }
       );
     }
 
-    const updatedArtwork = await updateArtworkInRoom(slug, body.artworkId, {
-      title: body.title.trim(),
-      description: body.description.trim(),
-      imageUrl: body.imageUrl.trim()
+    const updatedArtwork = await updateArtworkInRoom(slug, artworkId, {
+      title,
+      description,
+      imageUrl,
     });
 
-    return NextResponse.json({
-      success: true,
-      artwork: updatedArtwork
-    });
+    // Invalidation ISR/CDN
+    revalidatePath("/accueil");
+    revalidatePath(`/rooms/${slug}`);
+    revalidateTag("rooms");
+    revalidateTag(`room:${slug}`);
 
+    return NextResponse.json(
+      { success: true, artwork: updatedArtwork },
+      { headers: noStore }
+    );
   } catch (error) {
     console.error("Erreur lors de la modification de l'œuvre:", error);
-    
-    if (error.message === "Salle non trouvée" || error.message === "Œuvre non trouvée") {
+
+    if (
+      error?.message === "Salle non trouvée" ||
+      error?.message === "Œuvre non trouvée"
+    ) {
       return NextResponse.json(
         { error: error.message },
-        { status: 404 }
+        { status: 404, headers: noStore }
       );
     }
-    
+
     return NextResponse.json(
       { error: "Erreur lors de la modification de l'œuvre" },
-      { status: 500 }
+      { status: 500, headers: noStore }
     );
   }
 });
@@ -123,34 +158,54 @@ export const PUT = withAuth(async (request, { params }) => {
 // DELETE /api/salles/[slug]/oeuvres - Supprimer une œuvre
 export const DELETE = withAuth(async (request, { params }) => {
   try {
-    const { slug } = await params;
+    const { slug } = params;
+
+    // on tente d'abord querystring ?artworkId=...
     const { searchParams } = new URL(request.url);
-    const artworkId = searchParams.get('artworkId');
-    
+    let artworkId = sanitizeText(searchParams.get("artworkId"));
+
+    // fallback: dans le body JSON si besoin
+    if (!artworkId) {
+      try {
+        const body = await request.json();
+        artworkId = sanitizeText(body?.artworkId);
+      } catch {
+        // ignore si pas de body
+      }
+    }
+
     if (!artworkId) {
       return NextResponse.json(
         { error: "ID de l'œuvre requis" },
-        { status: 400 }
+        { status: 400, headers: noStore }
       );
     }
 
     const result = await deleteArtworkFromRoom(slug, artworkId);
 
-    return NextResponse.json(result);
+    // Invalidation ISR/CDN
+    revalidatePath("/accueil");
+    revalidatePath(`/rooms/${slug}`);
+    revalidateTag("rooms");
+    revalidateTag(`room:${slug}`);
 
+    return NextResponse.json(result, { headers: noStore });
   } catch (error) {
     console.error("Erreur lors de la suppression de l'œuvre:", error);
-    
-    if (error.message === "Salle non trouvée" || error.message === "Œuvre non trouvée") {
+
+    if (
+      error?.message === "Salle non trouvée" ||
+      error?.message === "Œuvre non trouvée"
+    ) {
       return NextResponse.json(
         { error: error.message },
-        { status: 404 }
+        { status: 404, headers: noStore }
       );
     }
-    
+
     return NextResponse.json(
       { error: "Erreur lors de la suppression de l'œuvre" },
-      { status: 500 }
+      { status: 500, headers: noStore }
     );
   }
-}); 
+});

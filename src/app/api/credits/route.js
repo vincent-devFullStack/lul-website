@@ -1,50 +1,64 @@
+// app/api/credits/route.js
 import { NextResponse } from "next/server";
 import { connectToDatabase, getMementoModel } from "@/lib/mongodb";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET() {
   try {
-    // ✅ Connexion correcte avec Mongoose
     await connectToDatabase();
     const Memento = getMementoModel();
 
-    // ✅ Récupérer tous les mementos avec Mongoose
-    const mementos = await Memento.find({}).sort({ createdAt: -1 }).lean();
+    // Ne charger que les champs utiles
+    const mementos = await Memento.find(
+      {},
+      "author role imageUrl quote link createdAt"
+    )
+      .sort({ createdAt: -1 })
+      .lean();
 
-    // ✅ Créer un Map pour éviter les doublons d'auteurs
+    // Regrouper par auteur (sans doublons, insensible à la casse/espaces)
     const creditsMap = new Map();
 
-    mementos.forEach((memento) => {
-      const authorKey = memento.author?.toLowerCase()?.trim();
+    for (const m of mementos) {
+      const authorKey = (m.author || "").toLowerCase().trim();
+      if (!authorKey) continue;
 
-      if (authorKey && !creditsMap.has(authorKey)) {
+      if (!creditsMap.has(authorKey)) {
         creditsMap.set(authorKey, {
-          _id: memento._id,
-          author: memento.author,
-          role: memento.role || "Artiste",
-          imageUrl: memento.imageUrl,
-          quote: memento.quote,
-          link: memento.link || null,
-          createdAt: memento.createdAt || new Date().toISOString(),
+          _id: m._id,
+          author: m.author,
+          role: m.role || "Artiste",
+          imageUrl: m.imageUrl || null,
+          quote: m.quote || "",
+          link: m.link || null,
+          createdAt: m.createdAt
+            ? new Date(m.createdAt).toISOString()
+            : new Date().toISOString(),
           quotesCount: 1,
         });
-      } else if (authorKey && creditsMap.has(authorKey)) {
-        // ✅ Incrémenter le compteur pour cet auteur
-        const existingCredit = creditsMap.get(authorKey);
-        existingCredit.quotesCount += 1;
+      } else {
+        const existing = creditsMap.get(authorKey);
+        existing.quotesCount += 1;
 
-        // ✅ Garder la citation la plus courte pour l'aperçu
-        if (memento.quote.length < existingCredit.quote.length) {
-          existingCredit.quote = memento.quote;
-          existingCredit.imageUrl = memento.imageUrl;
-          existingCredit.link = memento.link || existingCredit.link;
+        // Garder la citation la plus courte pour l'aperçu
+        if ((m.quote || "").length < (existing.quote || "").length) {
+          existing.quote = m.quote || existing.quote;
+          existing.imageUrl = m.imageUrl || existing.imageUrl;
+          existing.link = m.link || existing.link;
         }
       }
+    }
+
+    // Tableau final trié par nom d’auteur
+    const credits = Array.from(creditsMap.values()).sort((a, b) =>
+      a.author.localeCompare(b.author, "fr", { sensitivity: "base" })
+    );
+
+    return NextResponse.json(credits, {
+      headers: { "Cache-Control": "no-store" },
     });
-
-    // ✅ Convertir en array
-    const credits = Array.from(creditsMap.values());
-
-    return NextResponse.json(credits);
   } catch (error) {
     console.error("Erreur API crédits:", error);
     return NextResponse.json(

@@ -1,47 +1,69 @@
 // src/lib/consent.js
-export const CONSENT_KEY = "cookie-consent:v2";
+export const CONSENT_VERSION = 2;
+export const CONSENT_KEY = `cookie-consent:v${CONSENT_VERSION}`;
+const LEGACY_KEY = "cookie-consent";
+const PING_KEY = "cookie-consent:ping"; // force un storage event cross-tab
 
-// Lit le consentement (et migre l'ancienne clé si présente)
-export function readConsent() {
+function ls() {
   try {
-    const raw =
-      localStorage.getItem(CONSENT_KEY) ||
-      localStorage.getItem("cookie-consent"); // migration
-    if (!raw) return null;
-    const c = JSON.parse(raw);
-    const valid =
-      c && c.necessary === true && typeof c.functional === "boolean";
-    return valid ? c : null;
+    if (typeof window === "undefined") return null;
+    return window.localStorage ?? null;
   } catch {
     return null;
   }
 }
 
-// Ecrit le consentement (structure normalisée)
+// Lit le consentement (et migre l'ancienne clé si présente)
+export function readConsent() {
+  const storage = ls();
+  if (!storage) return null;
+
+  try {
+    const raw = storage.getItem(CONSENT_KEY) ?? storage.getItem(LEGACY_KEY);
+    if (!raw) return null;
+
+    const c = JSON.parse(raw);
+    // On ne garde que "functional" (necessary est toujours true dans notre modèle)
+    if (typeof c?.functional !== "boolean") return null;
+
+    return { necessary: true, functional: !!c.functional };
+  } catch {
+    return null;
+  }
+}
+
+// Écrit le consentement (structure normalisée)
 export function writeConsent(partial) {
+  const storage = ls();
+  if (!storage) return;
+
   const payload = {
     necessary: true,
-    functional: !!partial.functional,
+    functional: !!partial?.functional,
   };
-  localStorage.setItem(CONSENT_KEY, JSON.stringify(payload));
-  // Nettoie l'ancienne clé si elle existe
-  localStorage.removeItem("cookie-consent");
 
-  // Notifie les autres onglets éventuels
   try {
-    window.dispatchEvent(
-      new StorageEvent("storage", {
-        key: CONSENT_KEY,
-        newValue: JSON.stringify(payload),
-      })
-    );
-  } catch {}
+    storage.setItem(CONSENT_KEY, JSON.stringify(payload));
+    storage.removeItem(LEGACY_KEY);
+    // Notifie les autres onglets même si la valeur n'a pas changé
+    storage.setItem(PING_KEY, String(Date.now()));
+  } catch {
+    // quota exceeded / privacy mode — on ignore
+  }
+
+  return payload;
 }
 
 // Supprime le consentement
 export function clearConsent() {
-  localStorage.removeItem(CONSENT_KEY);
-  localStorage.removeItem("cookie-consent");
+  const storage = ls();
+  if (!storage) return;
+
+  try {
+    storage.removeItem(CONSENT_KEY);
+    storage.removeItem(LEGACY_KEY);
+    storage.setItem(PING_KEY, String(Date.now()));
+  } catch {}
 }
 
 // Renvoie true si on doit afficher le bandeau
