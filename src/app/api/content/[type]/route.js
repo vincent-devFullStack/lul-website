@@ -8,7 +8,8 @@ export const revalidate = 0;
 
 export async function GET(_request, context) {
   try {
-    const { type } = (await context).params; // ✅ await context before using params
+    const { params } = await context;
+    const { type } = params; // ✅ await context before using params
 
     if (!type || typeof type !== "string") {
       return NextResponse.json(
