@@ -58,7 +58,7 @@ export default function Home() {
         <button
           type="button"
           onClick={handleEnter}
-          className="group relative overflow-hidden rounded-full border border-[#aa9980]/60 bg-[#544a39]/30 px-8 py-3 text-sm font-light tracking-widest text-[#f0e9df] backdrop-blur-md transition-all duration-300 hover:border-[#cbb99e]/70 hover:bg-[#433a2d]/50 hover:shadow-[0_0_15px_rgba(170,153,128,0.3)] focus:outline-none focus:ring-2 focus:ring-[#cbb99e]/30 mt-80 sm:mt-0"
+          className="group relative overflow-hidden rounded-full border border-[#aa9980]/60 bg-[#544a39]/30 px-8 py-3 text-sm font-light tracking-widest text-[#f0e9df] backdrop-blur-md transition-all duration-300 hover:border-[#cbb99e]/70 hover:bg-[#433a2d]/50 hover:shadow-[0_0_15px_rgba(170,153,128,0.3)] focus:outline-none focus:ring-2 focus:ring-[#cbb99e]/30 mt-80 sm:mt-0 cursor-pointer"
           aria-label="Entrer dans le site"
         >
           Entrer

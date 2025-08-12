@@ -461,3 +461,9 @@ input:focus {
     transform: translateX(0) rotateY(0deg);
   }
 }
+
+button,
+.button,
+.logout-btn {
+  cursor: pointer;
+}
