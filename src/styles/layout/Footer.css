@@ -14,10 +14,12 @@
 .footer-nav {
   display: flex !important;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   gap: 6px 24px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .footer-nav-item {
@@ -27,6 +29,8 @@
   transition: color 0.3s ease-in-out;
   font-size: 0.8rem;
   padding: 0 5px;
+  justify-content: center;
+  align-items: center;
 }
 
 .footer-nav-item:hover {

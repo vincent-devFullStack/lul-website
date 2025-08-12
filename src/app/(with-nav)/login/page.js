@@ -116,99 +116,101 @@ export default function Login() {
         : "text-gray-600";
 
   return (
-    <main className={`${styles["login-container"]} rounded-lg`}>
-      <h1 className="text-2xl font-bold">Se connecter</h1>
+    <main>
+      <div className={`${styles["login-container"]} rounded-lg`}>
+        <h1 className="text-2xl font-bold">Se connecter</h1>
 
-      {!cookiesOk && (
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
-          <p className="text-yellow-800 text-sm">
-            ⚠️ <strong>Cookies requis :</strong> vous devez accepter les cookies
-            fonctionnels pour utiliser l&apos;authentification.{" "}
-            <button
-              type="button"
-              onClick={() => window.location.reload()}
-              className="underline ml-1"
-            >
-              Actualiser la page
-            </button>{" "}
-            après avoir modifié vos préférences.
+        {!cookiesOk && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+            <p className="text-yellow-800 text-sm">
+              ⚠️ <strong>Cookies requis :</strong> vous devez accepter les
+              cookies fonctionnels pour utiliser l&apos;authentification.{" "}
+              <button
+                type="button"
+                onClick={() => window.location.reload()}
+                className="underline ml-1"
+              >
+                Actualiser la page
+              </button>{" "}
+              après avoir modifié vos préférences.
+            </p>
+          </div>
+        )}
+
+        <form
+          className={styles["login-form"]}
+          onSubmit={handleSubmit}
+          autoComplete="on"
+          aria-describedby="login-status"
+          noValidate
+        >
+          {/* Désactive tout le formulaire pendant l’envoi ou si cookies refusés */}
+          <fieldset
+            disabled={isSubmitting || !cookiesOk}
+            aria-busy={isSubmitting}
+          >
+            <div className={styles["login-form-item"]}>
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+                inputMode="email"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
+                autoFocus
+              />
+            </div>
+
+            <div className={styles["login-form-item"]}>
+              <label htmlFor="password">Mot de passe</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="Mot de passe"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+                enterKeyHint="go"
+              />
+            </div>
+
+            <button type="submit">
+              {isSubmitting ? "Connexion..." : "Se connecter"}
+            </button>
+          </fieldset>
+
+          <div
+            id="login-status"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className={`text-sm text-center mt-4 min-h-[1.25rem] ${msgClass}`}
+          >
+            {message}
+          </div>
+        </form>
+
+        <nav
+          className="text-[15px] text-gray-800 mt-2 space-y-1"
+          aria-label="Liens annexes"
+        >
+          <p>
+            <Link href="/register">Créer un compte</Link>
           </p>
-        </div>
-      )}
-
-      <form
-        className={styles["login-form"]}
-        onSubmit={handleSubmit}
-        autoComplete="on"
-        aria-describedby="login-status"
-        noValidate
-      >
-        {/* Désactive tout le formulaire pendant l’envoi ou si cookies refusés */}
-        <fieldset
-          disabled={isSubmitting || !cookiesOk}
-          aria-busy={isSubmitting}
-        >
-          <div className={styles["login-form-item"]}>
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-              inputMode="email"
-              autoCapitalize="none"
-              autoCorrect="off"
-              spellCheck={false}
-              autoFocus
-            />
-          </div>
-
-          <div className={styles["login-form-item"]}>
-            <label htmlFor="password">Mot de passe</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              placeholder="Mot de passe"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-              enterKeyHint="go"
-            />
-          </div>
-
-          <button type="submit">
-            {isSubmitting ? "Connexion..." : "Se connecter"}
-          </button>
-        </fieldset>
-
-        <div
-          id="login-status"
-          role="status"
-          aria-live="polite"
-          aria-atomic="true"
-          className={`text-sm text-center mt-4 min-h-[1.25rem] ${msgClass}`}
-        >
-          {message}
-        </div>
-      </form>
-
-      <nav
-        className="text-[15px] text-gray-800 mt-2 space-y-1"
-        aria-label="Liens annexes"
-      >
-        <p>
-          <Link href="/register">Créer un compte</Link>
-        </p>
-        <p>
-          <Link href="/forgot-password">Mot de passe oublié ?</Link>
-        </p>
-      </nav>
+          <p>
+            <Link href="/forgot-password">Mot de passe oublié ?</Link>
+          </p>
+        </nav>
+      </div>
     </main>
   );
 }
