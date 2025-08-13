@@ -54,9 +54,7 @@ export default function AdminLayout({ children }) {
 
       <header className="admin-header">
         <div className="admin-header-left">
-          <h1 className="admin-header-title">
-            L&apos;iconodule – Administration
-          </h1>
+          <h1 className="admin-header-title">L'iconodule – Administration</h1>
         </div>
 
         <div className="admin-header-right">

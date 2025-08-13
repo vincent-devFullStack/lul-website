@@ -86,7 +86,7 @@ export default function Register() {
 
   return (
     <div className="register-container rounded-lg">
-      <h1 className="text-2xl font-bold">S&apos;inscrire</h1>
+      <h1 className="text-2xl font-bold">S'inscrire</h1>
 
       {!canUseAuth() && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">

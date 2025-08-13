@@ -121,6 +121,10 @@ export default function ArtworkSlider({ artworks = [] }) {
   const currentSrc = currentArtwork?._optUrl || "/fallback.webp";
   const isFirst = currentIndex === 0;
 
+  if (!currentArtwork?.imageUrl) {
+    return <div className="room-picture bg-transparent" />;
+  }
+
   return (
     <section
       aria-roledescription="carousel"

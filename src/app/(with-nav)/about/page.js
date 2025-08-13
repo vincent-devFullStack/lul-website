@@ -26,12 +26,12 @@ export default function About() {
   const [editContent, setEditContent] = useState("");
   const [editImageUrl, setEditImageUrl] = useState(null);
 
-  // Pour focus auto du 1er champ en mode édition
   const titleInputRef = useRef(null);
 
-  // Charger le contenu (client fetch -> pas de cache pour éviter le stale après édition)
+  // Charger le contenu
   useEffect(() => {
     const ac = new AbortController();
+
     (async () => {
       try {
         setLoading(true);
@@ -42,27 +42,33 @@ export default function About() {
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
+
+        if (ac.signal.aborted) return;
+
         setTitle(data.title || "À propos de moi");
         setFullText(data.content || "Contenu à définir...");
         setImageUrl(data.imageUrl || null);
       } catch (err) {
-        console.error("Erreur chargement about:", err);
+        if (err?.name !== "AbortError") {
+          console.error("Erreur chargement about:", err);
+        }
       } finally {
-        setLoading(false);
-        // petite animation d’entrée
-        setTimeout(() => setIsVisible(true), 100);
+        if (!ac.signal.aborted) {
+          setLoading(false);
+          setTimeout(() => setIsVisible(true), 100);
+        }
       }
     })();
-    return () => ac.abort();
-  }, [setImageUrl]);
 
-  // Passer en mode édition
+    return () => ac.abort();
+  }, []);
+
+  // Édition
   const startEditing = () => {
     setEditTitle(title);
     setEditContent(fullText);
     setEditImageUrl(imageUrl);
     setIsEditing(true);
-    // focus dès l’ouverture
     setTimeout(() => titleInputRef.current?.focus(), 0);
   };
 
@@ -71,7 +77,6 @@ export default function About() {
     setMessage(null);
   };
 
-  // Sauvegarder
   const handleSave = async () => {
     if (!editTitle.trim()) {
       setMessage({ type: "error", text: "Le titre est requis" });
@@ -100,26 +105,22 @@ export default function About() {
       if (!res.ok)
         throw new Error(data?.error || "Erreur lors de la sauvegarde");
 
-      // Mettre à jour l’affichage
       setTitle(editTitle.trim());
       setFullText(editContent.trim());
       setImageUrl(editImageUrl);
 
       setMessage({ type: "success", text: "Contenu mis à jour avec succès !" });
-      // Fermer après un court délai
       setTimeout(() => {
         setIsEditing(false);
         setMessage(null);
       }, 1200);
     } catch (err) {
-      console.error("Erreur save:", err);
       setMessage({ type: "error", text: err?.message || "Erreur réseau." });
     } finally {
       setSaving(false);
     }
   };
 
-  // Compteur/état du texte (simple feedback)
   const getTextStatus = (text) => {
     const length = text.length;
     if (length === 0) return { type: "empty", message: "Ajoutez du contenu" };
@@ -140,15 +141,6 @@ export default function About() {
 
   return (
     <div className="edit-container">
-      {isAuthenticated && !isEditing && (
-        <div className="edit-button-wrapper">
-          <button onClick={startEditing} className="edit-button">
-            Modifier le contenu de la page
-          </button>
-        </div>
-      )}
-
-      {/* Modal d’édition */}
       {isEditing && (
         <div
           className="edit-modal-overlay"
@@ -243,13 +235,18 @@ export default function About() {
         </div>
       )}
 
-      {/* Affichage public */}
       <div
         className={`about-modern-container ${isVisible ? "fade-in-up-active" : "fade-in-up-initial"}`}
       >
         <div className="about-hero-section">
           <h1 className="about-title">{title}</h1>
-
+          {isAuthenticated && !isEditing && (
+            <div className="edit-button-wrapper">
+              <button onClick={startEditing} className="edit-button">
+                Editer
+              </button>
+            </div>
+          )}
           <div className="about-image-container">
             {imageUrl ? (
               <Image

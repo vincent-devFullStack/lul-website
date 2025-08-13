@@ -64,12 +64,6 @@ export default async function RoomPage({ params }) {
 
   return (
     <div className="container mx-auto px-2">
-      <div className="back-button-container mb-3">
-        <Link href="/accueil" className="back-button text-sm sm:text-base">
-          <span className="back-arrow">←</span> Retour à l&apos;accueil
-        </Link>
-      </div>
-
       <div className="text-center mb-1">
         <h1 className="room-page-title text-5xl sm:text-6xl md:text-7xl font-serif font-semibold text-gray-800 mb-2">
           {room.name || room.title || slug}
@@ -99,6 +93,12 @@ export default async function RoomPage({ params }) {
           }),
         }}
       />
+
+      <div className="back-button-container">
+        <Link href="/accueil" className="back-button">
+          Retour à l'accueil
+        </Link>
+      </div>
     </div>
   );
 }

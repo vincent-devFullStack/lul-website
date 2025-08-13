@@ -30,7 +30,7 @@ export default function Login() {
     return (
       <div className={`${styles["login-container"]} rounded-lg`}>
         <div className="text-center">
-          <p>Vérification de l&apos;authentification...</p>
+          <p>Vérification de l'authentification...</p>
         </div>
       </div>
     );
@@ -124,7 +124,7 @@ export default function Login() {
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
             <p className="text-yellow-800 text-sm">
               ⚠️ <strong>Cookies requis :</strong> vous devez accepter les
-              cookies fonctionnels pour utiliser l&apos;authentification.{" "}
+              cookies fonctionnels pour utiliser l'authentification.{" "}
               <button
                 type="button"
                 onClick={() => window.location.reload()}

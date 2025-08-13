@@ -14,6 +14,7 @@
   touch-action: pan-y; /* scroll vertical ok, swipe horizontal custom */
   cursor: grab;
   box-sizing: border-box; /* évite que le padding fasse déborder */
+  background: transparent; /* ou background: var(--login-background); */
 }
 
 /* Le wrapper Next/Image doit rester sous les cadres décoratifs */
@@ -413,86 +414,62 @@
 }
 
 @media (max-width: 767px) {
-  .previous-button,
-  .next-button {
-    display: none;
+  .room-page-title {
+    font-size: 2.5rem;
+  }
+
+  .artwork-info {
+    padding: 1rem;
+    max-width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   .room-picture {
-    width: 100%;
-    height: 350px !important;
-    aspect-ratio: 3 / 4;
+    width: 100vw;
+    height: 100vw; /* adapte selon le ratio de ton image, ex: 3/4 => 75vw */
+    max-width: 100vw;
+    max-height: 100vw;
+    aspect-ratio: unset;
     padding: 0;
-    border-radius: 12px;
+    border-radius: 0;
     overflow: hidden;
+    background: transparent;
+    box-shadow: none !important;
+    border: none !important;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -3.5rem;
+    margin-bottom: -2.5rem;
+  }
+
+  .room-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain !important; /* ✅ image entière, jamais rognée */
+    border-radius: 0 !important;
+    background: transparent !important;
+    display: block;
+    border: none !important;
+    display: block;
   }
 
   .room-picture::before,
   .room-picture::after {
-    top: 12px;
-    left: 12px;
-    right: 12px;
-    bottom: 12px;
-    border-radius: 12px;
-  }
-
-  .room-picture img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: contain !important;
-    display: block;
-  }
-
-  /* Typo du bloc d’infos sous l’image */
-  .artwork-title {
-    font-size: 1.25rem;
-    line-height: 1.3;
-  }
-  .artwork-description {
-    font-size: 1rem;
-    line-height: 1.6;
-  }
-
-  @media (max-width: 768px) {
-    .artwork-title {
-      font-size: 1.05rem;
-    }
-    .artwork-description {
-      font-size: 0.95rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .artwork-title {
-      font-size: 1rem;
-    }
-    .artwork-description {
-      font-size: 0.95rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .artwork-title {
-      font-size: 1rem;
-    }
-    .artwork-description {
-      font-size: 0.9rem;
-    }
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    background: none !important;
+    box-shadow: none !important;
   }
 }
 
 @media (max-width: 480px) {
-  .previous-button,
-  .next-button {
-    display: none;
+  .artwork-title {
+    font-size: 1rem;
   }
-
-  .room-picture {
-    padding: 12px;
-    aspect-ratio: 3 / 4;
-  }
-
-  .room-picture img {
-    border-radius: 12px !important;
+  .artwork-description {
+    font-size: 0.9rem;
   }
 }

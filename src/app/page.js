@@ -49,7 +49,7 @@ export default function Home() {
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center">
         <h1 id="home-title" className="sr-only">
-          L&apos;Iconodule – Galerie
+          L'Iconodule – Galerie
         </h1>
 
         {/* Espace sous le haut de page (valeur Tailwind valide) */}
@@ -58,8 +58,8 @@ export default function Home() {
         <button
           type="button"
           onClick={handleEnter}
-          className="group relative overflow-hidden rounded-full border border-[#aa9980]/60 bg-[#544a39]/30 px-8 py-3 text-sm font-light tracking-widest text-[#f0e9df] backdrop-blur-md transition-all duration-300 hover:border-[#cbb99e]/70 hover:bg-[#433a2d]/50 hover:shadow-[0_0_15px_rgba(170,153,128,0.3)] focus:outline-none focus:ring-2 focus:ring-[#cbb99e]/30 mt-80 sm:mt-0 cursor-pointer"
-          aria-label="Entrer dans le site"
+          className="enter-btn group relative rounded-full px-8 py-3 text-base font-semibold tracking-widest text-white bg-transparent border-none shadow-none transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#aa9980] focus:ring-offset-2 mt-80 sm:mt-0 cursor-pointer"
+          aria-label="Entrer sur le site L'Iconodule"
         >
           Entrer
         </button>

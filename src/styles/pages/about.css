@@ -6,12 +6,9 @@
 
 .about-modern-container {
   background: #efebda;
+  border: 0.1px solid var(--brown);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.1),
-    0 8px 16px rgba(0, 0, 0, 0.05);
-  backdrop-filter: blur(10px);
   transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
 }
@@ -372,66 +369,73 @@
   display: flex;
   justify-content: center;
   position: relative;
+  margin-bottom: 20px;
   z-index: 1;
 }
 
 .edit-button {
-  background-color: var(--brown);
-  color: var(--color-amber-50);
-  border: 0.75px solid var(--border-brown);
-  padding: 16px 32px;
-  border-radius: 15px;
+  background: linear-gradient(90deg, var(--brown) 0%, var(--border-brown) 100%);
+  color: #fff;
+  border: none;
+  padding: 16px 40px;
+  border-radius: 20px;
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 1.1rem;
+  font-weight: 600;
   font-family: "EB Garamond", serif;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  letter-spacing: 0.02em;
+  letter-spacing: 0.03em;
+  box-shadow:
+    0 4px 16px rgba(191, 167, 106, 0.18),
+    0 1.5px 6px rgba(0, 0, 0, 0.07);
   position: relative;
   overflow: hidden;
+  transition:
+    background 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .edit-button::before {
   content: "";
   position: absolute;
+  left: -60%;
   top: 0;
-  left: -100%;
-  width: 100%;
+  width: 120%;
   height: 100%;
   background: linear-gradient(
     90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.4) 50%,
-    transparent 100%
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0.05) 100%
   );
-  transition: left 0.6s ease;
+  opacity: 0.7;
+  transition: left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  pointer-events: none;
+  border-radius: 20px;
   z-index: 1;
+}
+
+.edit-button:hover {
+  background: linear-gradient(90deg, var(--border-brown) 0%, var(--brown) 100%);
+  box-shadow:
+    0 8px 24px rgba(191, 167, 106, 0.28),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px) scale(1.04);
 }
 
 .edit-button:hover::before {
   left: 100%;
 }
 
-.edit-button:hover {
-  background: var(--brown-hover);
-  border: 0.75px solid var(--border-brown-hover);
-  color: var(--color-amber-50);
-}
-
 .edit-button:focus {
   outline: none;
   box-shadow:
-    0 0 0 3px rgba(191, 167, 106, 0.4),
-    0 4px 15px rgba(191, 167, 106, 0.2),
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    0 0 0 3px rgba(191, 167, 106, 0.25),
+    0 8px 24px rgba(191, 167, 106, 0.18);
 }
 
 .edit-button:active {
-  box-shadow:
-    0 4px 15px rgba(191, 167, 106, 0.25),
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: scale(0.98);
+  box-shadow: 0 2px 8px rgba(191, 167, 106, 0.18);
 }
 
 @keyframes buttonPulse {

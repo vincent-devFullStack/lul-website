@@ -6,11 +6,12 @@ const Slider = dynamic(() => import("./ArtworkSlider"), {
   ssr: false,
   loading: () => (
     <div
-      className="animate-pulse bg-gray-100"
+      className="animate-pulse"
       style={{
         width: "min(90vw, 900px)",
         aspectRatio: "3 / 4",
         borderRadius: 8,
+        background: "transparent", // ou background: "#e3d3b2" selon ta couleur
       }}
       role="status"
       aria-live="polite"

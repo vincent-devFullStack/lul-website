@@ -88,8 +88,7 @@ export default function Memento() {
         <div className="memento-empty-state">
           <h2 className="memento-empty-title">Aucun memento disponible</h2>
           <p className="memento-empty-description">
-            Les citations et pensées d&apos;artistes apparaîtront ici
-            prochainement.
+            Les citations et pensées d'artistes apparaîtront ici prochainement.
           </p>
         </div>
       ) : (
