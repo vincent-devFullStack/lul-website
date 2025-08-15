@@ -1,4 +1,3 @@
-// app/api/content/[type]/route.js
 import { NextResponse } from "next/server";
 import { getContentByType, createOrUpdateContent } from "@/lib/mongodb";
 import { withAuth } from "@/lib/auth";
@@ -6,10 +5,9 @@ import { withAuth } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export async function GET(_request, context) {
+export async function GET(_request, { params }) {
   try {
-    const { params } = await context;
-    const { type } = params; // ✅ await context before using params
+    const { type } = await params;
 
     if (!type || typeof type !== "string") {
       return NextResponse.json(
@@ -37,9 +35,9 @@ export async function GET(_request, context) {
   }
 }
 
-export const PUT = withAuth(async (request, context) => {
+export const PUT = withAuth(async (request, { params }) => {
   try {
-    const { type } = (await context).params; // ✅ await context before using params
+    const { type } = await params;
 
     if (!type || typeof type !== "string") {
       return NextResponse.json(

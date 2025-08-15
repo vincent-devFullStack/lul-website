@@ -13,7 +13,9 @@ export default function MementoModal({ memento, onClose }) {
   const author = memento?.author || "Auteur inconnu";
   const role = memento?.role || "";
   const quote = memento?.quote || "";
-  const imgSrc = memento?.imageUrl || "/assets/placeholder.webp";
+  const imgSrc = memento?.imageUrl
+    ? memento.imageUrl.replace("/upload/", "/upload/w_600,h_400,c_fill/")
+    : "/assets/placeholder.webp";
 
   // Échap + mémorise/restaure le focus
   useEffect(() => {

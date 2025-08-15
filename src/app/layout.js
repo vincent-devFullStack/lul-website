@@ -1,5 +1,4 @@
-// app/layout.tsx
-import { Metadata, Viewport } from "next";
+// app/layout.js
 import { AuthProvider } from "@/context/AuthContext";
 import CookieConsent from "@/components/CookieConsent";
 import "@/styles/base/globals.css";
@@ -65,7 +64,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="fr" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="fr">
       <head>
         {/* Aide le 1er hit Cloudinary */}
         <link
@@ -74,12 +73,34 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
         />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+        {/* Next.js gère le <title> et <meta> via metadata.js */}
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
       </head>
 
       {/* font-sans = var(--font-sans) définie par next/font */}
       <body className="flex min-h-screen flex-col bg-gray-50 font-sans">
+        {/* Skip link pour clavier/lecteurs d'écran */}
+        <a href="#main" className="skip-link">
+          Aller au contenu
+        </a>
+
         <AuthProvider>
-          {children}
+          {/* Cible du skip link ; tabIndex=-1 permet de recevoir le focus */}
+          <div id="main" tabIndex={-1} className="flex-1 flex flex-col">
+            {children}
+          </div>
+
           <CookieConsent />
         </AuthProvider>
       </body>

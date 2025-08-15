@@ -203,9 +203,9 @@ export default function Login() {
           className="text-[15px] text-gray-800 mt-2 space-y-1"
           aria-label="Liens annexes"
         >
-          <p>
+          {/* <p>
             <Link href="/register">Créer un compte</Link>
-          </p>
+          </p> */}
           <p>
             <Link href="/forgot-password">Mot de passe oublié ?</Link>
           </p>

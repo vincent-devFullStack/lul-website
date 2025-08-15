@@ -4,7 +4,7 @@ import { jwtVerify } from "jose";
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "");
 
 export async function GET(request) {
-  const token = request.cookies.get("token")?.value; // works, no await needed
+  const token = request.cookies.get("token")?.value;
 
   if (!token) {
     return NextResponse.json(

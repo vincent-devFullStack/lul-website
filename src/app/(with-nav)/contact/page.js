@@ -268,12 +268,14 @@ export default function Contact() {
 
           <div className="contact-image-wrapper">
             <Image
-              src="/assets/enveloppe.webp"
+              src="/assets/enveloppe.avif"
               alt="Contactez-nous"
               width={300}
               height={300}
               className="contact-image"
               priority
+              sizes="(max-width: 600px) 100vw, 300px"
+              style={{ objectFit: "cover" }}
             />
           </div>
         </div>

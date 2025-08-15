@@ -58,10 +58,12 @@ export default function Home() {
         <button
           type="button"
           onClick={handleEnter}
-          className="enter-btn group relative rounded-full px-8 py-3 text-base font-semibold tracking-widest text-white bg-transparent border-none shadow-none transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[#aa9980] focus:ring-offset-2 mt-80 sm:mt-0 cursor-pointer"
+          className="enter-btn group relative rounded-full px-8 py-3 text-base font-semibold tracking-widest text-white bg-transparent border-none shadow-none focus:outline-none focus:ring-2 focus:ring-[#aa9980] focus:ring-offset-2 mt-80 sm:mt-0 cursor-pointer"
           aria-label="Entrer sur le site L'Iconodule"
         >
-          Entrer
+          <span className="transition-transform duration-300 group-hover:scale-120 block">
+            Entrez
+          </span>
         </button>
       </div>
     </main>

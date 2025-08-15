@@ -103,11 +103,18 @@ export default function Memento() {
               <article className="memento-card" key={m?._id || m?.author}>
                 <div className="memento-img-wrapper">
                   <Image
-                    src={m?.imageUrl || "/assets/placeholder-memento.jpg"}
+                    src={
+                      m?.imageUrl
+                        ? m.imageUrl.replace(
+                            "/upload/",
+                            "/upload/w_400,h_349,c_fill/"
+                          )
+                        : "/assets/placeholder-memento.jpg"
+                    }
                     alt={imgAlt}
-                    width={300}
-                    height={180}
-                    sizes="(max-width: 640px) 100vw, 300px"
+                    width={400}
+                    height={349}
+                    sizes="(max-width: 640px) 100vw, 400px"
                     className="memento-img"
                   />
                 </div>

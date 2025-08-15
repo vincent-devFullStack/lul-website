@@ -94,7 +94,7 @@
 }
 
 .typewriter-text em {
-  color: #a89478;
+  color: #584b38;
   font-style: italic;
   font-size: 0.9em;
   opacity: 0.8;
@@ -141,7 +141,7 @@ textarea {
   border: 1.5px solid var(--login-form-input-border);
   border-radius: 4px;
   padding: 8px;
-  color: #6a6a6a;
+  color: var(--foreground);
   transition: all 0.2s ease;
 }
 
@@ -159,7 +159,7 @@ textarea:focus {
 }
 
 .contact-form button {
-  background-color: var(--brown);
+  background-color: var(--login-form-button-background);
   border: 1.5px solid var(--login-form-button-border);
   border-radius: 4px;
   padding: 8px;
@@ -169,8 +169,8 @@ textarea:focus {
 }
 
 .contact-form button:hover {
-  background-color: #ae9b79;
-  transform: translateY(-2px);
+  background-color: var(--login-form-button-background-hover);
+  transform: translateY(0.5px);
   box-shadow: 0 4px 12px rgba(191, 167, 106, 0.3);
 }
 
