@@ -3,7 +3,7 @@ export const metadata = {
   description:
     "Découvrez notre mémento d'art contemporain : réflexions et analyses sur les courants artistiques modernes.",
   alternates: {
-    canonical: "/memento",
+    canonical: "https://www.iconodule.fr/memento",
   },
   robots: {
     index: true,
@@ -12,7 +12,7 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "fr_FR",
-    url: "/memento",
+    url: "https://www.iconodule.fr/memento",
     siteName: "L'iconodule",
     title: "Mémento | L'iconodule",
     description:
@@ -31,6 +31,6 @@ export const metadata = {
     title: "Mémento | L'iconodule",
     description:
       "Découvrez notre mémento d'art contemporain : réflexions et analyses sur les courants artistiques modernes.",
-    images: ["/assets/hero.webp"], // idem
+    images: ["/assets/hero.webp"],
   },
 };

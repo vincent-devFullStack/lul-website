@@ -1,5 +1,4 @@
 export const revalidate = 3600;
-
 import { unstable_cache } from "next/cache";
 import { getAllRooms } from "@/lib/mongodb";
 import AccueilPlanInteractif from "./components/PlanClient";
@@ -36,13 +35,6 @@ const getAllRoomsCached = unstable_cache(
   ["rooms:list"],
   { revalidate: 3600, tags: ["rooms"] }
 );
-
-export const metadata = {
-  title: "Plan interactif des salles",
-  description:
-    "Explorez les salles du musée virtuel via le plan interactif et accédez aux collections.",
-  alternates: { canonical: "https://www.iconodule.fr/accueil" },
-};
 
 export default async function AccueilPage() {
   const salles = await getAllRoomsCached();

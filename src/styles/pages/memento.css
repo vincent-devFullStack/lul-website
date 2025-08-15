@@ -342,7 +342,7 @@
 
 /* Emoji amélioré */
 .memento-link .memento-author-link::after {
-  content: "🔗";
+  content: "";
   font-size: 1rem;
   transition: transform 0.3s ease;
   position: relative;
@@ -480,11 +480,12 @@
   font-weight: 500;
   transition: all 0.3s ease;
   border-bottom: 1px solid transparent;
-  padding-bottom: 2px;
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .memento-link .memento-author-link:hover {
   color: #bfa76a;
   border-bottom-color: #bfa76a;
-  transform: translateY(-1px);
 }

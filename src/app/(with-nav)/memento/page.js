@@ -153,7 +153,7 @@ export default function Memento() {
                         rel="noopener noreferrer"
                         className="memento-author-link"
                       >
-                        🔗 Lien vers le site
+                        Lien vers le site
                       </a>
                     </div>
                   )}

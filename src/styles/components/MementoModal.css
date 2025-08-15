@@ -194,7 +194,7 @@
 }
 
 .modal-link-button::after {
-  content: "🔗";
+  content: "";
   font-size: 1rem;
   position: relative;
   z-index: 2;

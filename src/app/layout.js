@@ -86,6 +86,7 @@ export default function RootLayout({ children }) {
           sizes="16x16"
           href="/favicon-16x16.png"
         />
+        <link rel="canonical" href="https://www.iconodule.fr/" />
       </head>
 
       {/* font-sans = var(--font-sans) définie par next/font */}
