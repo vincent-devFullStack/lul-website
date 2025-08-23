@@ -231,7 +231,7 @@ export default function AdminMementos() {
               </div>
 
               <div className="memento-content">
-                <blockquote className="memento-quote">“{m.quote}”</blockquote>
+                <blockquote className="memento-quote">{m.quote}</blockquote>
                 <div className="memento-author">{m.author}</div>
                 <div className="memento-role">{m.role}</div>
                 {m.link && (
