@@ -22,7 +22,7 @@ const playfair = Playfair_Display({
 export const metadata = {
   metadataBase: new URL("https://www.iconodule.fr"),
   title: {
-    default: "L'iconodule | Musée d'art virtuel",
+    default: "L'iconodule | Musée de lul",
     template: "%s | L'iconodule",
   },
   description:
@@ -41,14 +41,14 @@ export const metadata = {
     locale: "fr_FR",
     url: "https://www.iconodule.fr",
     siteName: "L'iconodule",
-    title: "L'iconodule | Musée d'art virtuel",
+    title: "L'iconodule | Musée de lul",
     description: "Explorez notre collection unique d'œuvres d'art contemporain",
     images: [
       {
         url: "https://www.iconodule.fr/assets/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "L'iconodule - Musée virtuel",
+        alt: "L'iconodule - Musée de lul",
       },
     ],
   },

@@ -1,4 +1,3 @@
-// app/rooms/[slug]/page.js
 export const revalidate = 900;
 
 import { unstable_cache } from "next/cache";
@@ -63,42 +62,44 @@ export default async function RoomPage({ params }) {
   }));
 
   return (
-    <div className="container mx-auto px-2">
-      <div className="text-center mb-1">
-        <h1 className="room-page-title text-5xl sm:text-6xl md:text-7xl font-serif font-semibold text-gray-800 mb-2">
-          {room.name || room.title || slug}
-        </h1>
-      </div>
+    <main className="room-bg min-h-[100svh]">
+      <div className="container mx-auto px-2">
+        <div className="text-center mb-1">
+          <h1 className="room-page-title text-5xl sm:text-6xl md:text-7xl font-serif font-semibold text-gray-800 mb-2">
+            {room.name || room.title || slug}
+          </h1>
+        </div>
 
-      {/* Client wrapper qui charge le slider côté client */}
-      <ArtworkSliderClient artworks={artworks} />
+        {/* Client wrapper qui charge le slider côté client */}
+        <ArtworkSliderClient artworks={artworks} />
 
-      {/* JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            name: room.name || slug,
-            description: room.description || "Salle du musée virtuel",
-            mainEntity: artworks[0] && {
-              "@type": "VisualArtwork",
-              name: artworks[0].title,
-              creator: {
-                "@type": "Person",
-                name: artworks[0].artist || "Artiste",
+        {/* JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "CollectionPage",
+              name: room.name || slug,
+              description: room.description || "Salle du musée virtuel",
+              mainEntity: artworks[0] && {
+                "@type": "VisualArtwork",
+                name: artworks[0].title,
+                creator: {
+                  "@type": "Person",
+                  name: artworks[0].artist || "Artiste",
+                },
               },
-            },
-          }),
-        }}
-      />
+            }),
+          }}
+        />
 
-      <div className="back-button-container">
-        <Link href="/accueil" className="back-button">
-          Retour à l'accueil
-        </Link>
+        <div className="back-button-container">
+          <Link href="/accueil" className="back-button">
+            Retour à l'accueil
+          </Link>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

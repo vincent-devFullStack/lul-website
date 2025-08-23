@@ -1,10 +1,16 @@
 .memento-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(320px, 1fr)
+  ); /* auto-fill marche mieux ici */
   gap: 2.5rem;
+  width: 100%;
   max-width: 1400px;
   margin: 3rem auto;
   padding: 0 2rem;
+  grid-auto-flow: row;
+  min-width: 0; /* clé pour autoriser la contraction */
 }
 
 /* ✅ Carte embelli avec effets sophistiqués */
@@ -24,7 +30,7 @@
     0 0 0 1px rgba(191, 167, 106, 0.1);
   width: 100%;
   max-width: 400px;
-  margin: 0 auto;
+  min-width: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;

@@ -81,7 +81,7 @@ function MobileRoomsListBase({ salles = [], handleRoomClick }) {
                   </div>
 
                   {!!salle?.artworks?.length && (
-                    <div className="mt-4 pt-4 border-t border-[rgba(191,167,106,0.2)]">
+                    <div className="mt-4 pt-4 border-t border-[rgba(255, 183, 3, 0.2)]">
                       <div className="flex items-center text-xs text-[var(--brown)]">
                         <div className="w-2 h-2 bg-[var(--brown)] rounded-full mr-2 flex-shrink-0" />
                         <span className="break-words">

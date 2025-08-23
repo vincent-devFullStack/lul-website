@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Contact | Lul Iconodule",
+  title: "Contact | lul Iconodule",
   description:
-    "Contactez l’équipe de Lul Iconodule pour toute question ou demande d’information.",
+    "Contactez l’équipe de lul Iconodule pour toute question ou demande d’information.",
   alternates: { canonical: "https://www.iconodule.fr/contact" },
 };

@@ -19,11 +19,12 @@ export default function Home() {
     return () => mq.removeEventListener?.("change", apply);
   }, [router]);
 
+  // Toute la page est cliquable
   const handleEnter = (e) => {
-    e.preventDefault();
+    if (isTransitioning) return;
     if (reducedMotion) return router.push("/accueil");
     setIsTransitioning(true);
-    setTimeout(() => router.push("/accueil"), 700); // durée Tailwind valide
+    setTimeout(() => router.push("/accueil"), 700);
   };
 
   return (
@@ -32,6 +33,14 @@ export default function Home() {
       className={`relative min-h-screen sm:h-dvh transition-opacity duration-700 ease-out ${
         isTransitioning ? "opacity-0" : "opacity-100"
       }`}
+      onClick={handleEnter}
+      style={{ cursor: "pointer" }}
+      tabIndex={0}
+      role="button"
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") handleEnter();
+      }}
+      aria-label="Entrer sur le site L'Iconodule"
     >
       {/* Image de fond décorative */}
       <Image
@@ -42,29 +51,17 @@ export default function Home() {
         priority
         fetchPriority="high"
         sizes="100vw"
-        className="object-cover"
+        className="object-contain object-center"
       />
 
-      <div className="absolute inset-0 bg-black/10" aria-hidden="true" />
+      <div className="absolute inset-0 bg-black/1" aria-hidden="true" />
 
       <div className="relative z-10 flex h-full flex-col items-center justify-center">
         <h1 id="home-title" className="sr-only">
-          L'Iconodule – Galerie
+          L'Iconodule – Musée de lul
         </h1>
-
-        {/* Espace sous le haut de page (valeur Tailwind valide) */}
         <div className="mt-32 sm:mt-48" aria-hidden="true" />
-
-        <button
-          type="button"
-          onClick={handleEnter}
-          className="enter-btn group relative rounded-full px-8 py-3 text-base font-semibold tracking-widest text-white bg-transparent border-none shadow-none focus:outline-none focus:ring-2 focus:ring-[#aa9980] focus:ring-offset-2 mt-80 sm:mt-0 cursor-pointer"
-          aria-label="Entrer sur le site L'Iconodule"
-        >
-          <span className="transition-transform duration-300 group-hover:scale-120 block">
-            Entrez
-          </span>
-        </button>
+        <span className="text-white text-lg font-semibold bg-transparent px-8 py-3 rounded-full pointer-events-none select-none"></span>
       </div>
     </main>
   );

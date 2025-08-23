@@ -5,7 +5,7 @@
 :root {
   --background: #e3d4b4;
   --foreground: #3b3b3b;
-  --active-menu-item: #6b522c;
+  --active-menu-item: #000000;
   --brown: #b3a279;
   --brown-hover: #5a513d;
   --border-brown-hover: #aa9a73;
@@ -33,6 +33,11 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
   overflow-x: hidden;
+}
+
+body:has(.room-surface) {
+  background-image: none !important;
+  background-color: #be9c75; /* ta couleur unie */
 }
 
 /* utilitaires pour changer de famille */
@@ -278,7 +283,7 @@ body {
 .room-label {
   position: absolute;
   text-align: center;
-  color: #2a231a;
+  color: #1b1610;
   padding: 0 0;
   transition:
     font-size 0.1s ease-in-out,
@@ -334,109 +339,39 @@ body {
   z-index: 1;
 }
 
-/* Style du bouton de retour */
+/* Style du bouton de retour - version plus discrète */
 .back-button {
-  background: linear-gradient(90deg, var(--brown) 0%, var(--border-brown) 100%);
-  color: #fff;
-  border: none;
-  padding: 16px 40px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 1.1rem;
-  font-weight: 600;
+  background: #f5ecd6; /* beige très clair */
+  color: #645a42; /* brun doux */
+  border: 1px solid #e3d4b4;
+  padding: 10px 24px;
+  border-radius: 16px;
+  font-size: 1rem;
+  font-weight: 500;
   font-family: "EB Garamond", serif;
-  letter-spacing: 0.03em;
-  box-shadow:
-    0 4px 16px rgba(191, 167, 106, 0.18),
-    0 1.5px 6px rgba(0, 0, 0, 0.07);
-  position: relative;
-  overflow: hidden;
+  box-shadow: none;
+  opacity: 0.85;
   transition:
-    background 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-    transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    background 0.2s,
+    color 0.2s,
+    border 0.2s,
+    opacity 0.2s;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.3rem;
   text-decoration: none;
 }
 
-.back-button::before {
-  content: "";
-  position: absolute;
-  left: -60%;
-  top: 0;
-  width: 120%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.18) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  opacity: 0.7;
-  transition: left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  pointer-events: none;
-  border-radius: 20px;
-  z-index: 1;
-}
-
-.back-button:hover {
-  background: linear-gradient(90deg, var(--border-brown) 0%, var(--brown) 100%);
-  box-shadow:
-    0 8px 24px rgba(191, 167, 106, 0.28),
-    0 2px 8px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px) scale(1.04);
-  color: #fff;
-}
-
-.back-button:hover::before {
-  left: 100%;
-}
-
+.back-button:hover,
 .back-button:focus {
-  outline: none;
-  box-shadow:
-    0 0 0 3px rgba(191, 167, 106, 0.25),
-    0 8px 24px rgba(191, 167, 106, 0.18);
-  animation: buttonPulse 2s ease-in-out infinite;
+  background: #ede6d3;
+  color: #484131;
+  border-color: #b3a279;
+  opacity: 1;
+  box-shadow: none;
 }
 
-.back-button:active {
-  transform: scale(0.98);
-  box-shadow: 0 2px 8px rgba(191, 167, 106, 0.18);
-}
-
-@media (max-width: 768px) {
-  .back-button {
-    padding: 14px 28px;
-    font-size: 15px;
-    border-radius: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .back-button {
-    padding: 12px 24px;
-    font-size: 14px;
-    border-radius: 18px;
-  }
-}
-
-@keyframes buttonPulse {
-  0%,
-  100% {
-    box-shadow:
-      0 4px 15px rgba(191, 167, 106, 0.2),
-      0 2px 8px rgba(0, 0, 0, 0.1),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  }
-  50% {
-    box-shadow:
-      0 6px 20px rgba(191, 167, 106, 0.25),
-      0 3px 12px rgba(0, 0, 0, 0.12),
-      inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  }
-}
+/* ...existing code... */
 
 /* version unique (le doublon a été supprimé) */
 @media (min-width: 40rem) {

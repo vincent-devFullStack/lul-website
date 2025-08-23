@@ -171,7 +171,7 @@ L'équipe L'iconodule
 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
   <div style="text-align: center; margin-bottom: 30px;">
     <h1 style="color: #2a231a; font-size: 24px;">L'iconodule</h1>
-    <p style="color: #666; font-size: 16px;">Musée d'art virtuel</p>
+    <p style="color: #666; font-size: 16px;">Musée de lul</p>
   </div>
 
   <div style="background: #f9f9f9; padding: 30px; border-radius: 8px; margin-bottom: 20px;">
@@ -204,7 +204,7 @@ L'équipe L'iconodule
 
   <div style="text-align: center; color: #999; font-size: 12px;">
     <p>Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.</p>
-    <p>© L'iconodule - Musée d'art virtuel</p>
+    <p>© L'iconodule - Musée de lul</p>
   </div>
 </div>
       `.trim(),

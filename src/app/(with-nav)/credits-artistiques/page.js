@@ -11,11 +11,11 @@ export default function CreditsArtistiques() {
   const [isVisible, setIsVisible] = useState(false);
   const abortRef = useRef(null);
 
-  // Crédit par défaut pour Lul
+  // Crédit par défaut pour lul
   const defaultCredit = useMemo(
     () => ({
       _id: "default-lul-credit",
-      author: "Lul",
+      author: "lul",
       role: "Gestionnaire du site et créateur",
       quote:
         "Bienvenue dans L'Iconodule, votre galerie virtuelle dédiée à l'art contemporain.",
@@ -47,7 +47,7 @@ export default function CreditsArtistiques() {
           }
         }
 
-        // Combine + dédoublonne par auteur (garde Lul par défaut en priorité)
+        // Combine + dédoublonne par auteur (garde lul par défaut en priorité)
         const combined = [defaultCredit, ...(Array.isArray(data) ? data : [])];
         const uniqueByAuthor = Object.values(
           combined.reduce((acc, c) => {
@@ -57,7 +57,7 @@ export default function CreditsArtistiques() {
           }, {})
         );
 
-        // Tri : Lul (isDefault) en premier, puis alphabétique
+        // Tri : lul (isDefault) en premier, puis alphabétique
         const sorted = [...uniqueByAuthor].sort((a, b) => {
           if (a.isDefault) return -1;
           if (b.isDefault) return 1;

@@ -1,6 +1,6 @@
 export const metadata = {
-  title: "Connexion | Lul Iconodule",
+  title: "Connexion | lul Iconodule",
   description:
-    "Connectez-vous à Lul Iconodule pour accéder à votre espace personnel.",
+    "Connectez-vous à lul Iconodule pour accéder à votre espace personnel.",
   alternates: { canonical: "https://www.iconodule.fr/login" },
 };

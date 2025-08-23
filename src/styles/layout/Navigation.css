@@ -312,20 +312,12 @@ input:focus {
 .main-title {
   font-size: 2.8rem;
   font-weight: 700;
-  color: #3a342a;
+  color: #000000;
   font-family: "EB Garamond", serif;
   text-align: center;
   position: relative;
   letter-spacing: -0.02em;
-  background: linear-gradient(
-    135deg,
-    #3a342a 0%,
-    #5d5249 20%,
-    #6b5d4f 40%,
-    #3a342a 60%,
-    #4a3d2f 80%,
-    #3a342a 100%
-  );
+  background: #130f0c;
   background-size: 300% 300%;
   background-clip: text;
   -webkit-background-clip: text;

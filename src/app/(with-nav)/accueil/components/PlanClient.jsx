@@ -251,7 +251,7 @@ export default function AccueilPlanInteractif({ salles }) {
                     tabIndex={-1}
                   >
                     {displayText && (
-                      <span className="room-label text-center text-[#2a231a] px-2 py-1">
+                      <span className="room-label text-center text-[#1b1610] px-2 py-1">
                         {displayText}
                       </span>
                     )}
@@ -273,7 +273,7 @@ export default function AccueilPlanInteractif({ salles }) {
                   }}
                 >
                   {displayText && (
-                    <span className="room-label text-center text-[#2a231a] px-2 py-1">
+                    <span className="room-label text-center text-[#1b1610] px-2 py-1">
                       {displayText}
                     </span>
                   )}
@@ -289,17 +289,17 @@ export default function AccueilPlanInteractif({ salles }) {
               style={{
                 left: `${tooltip.x}px`,
                 top: `${tooltip.y - 25}px`,
-                transform: "translateY(-50%)",
+                transform: "translateY(-25%)",
               }}
             >
               <div className="font-semibold text-sm mb-1">
                 {tooltip.content.name}
               </div>
-              <div className="text-xs text-gray-300">
+              <div className="text-xs text-gray-100">
                 {tooltip.content.description}
               </div>
               {tooltip.content.status === "maintenance" && (
-                <div className="text-xs text-orange-400 mt-1">
+                <div className="text-xs text-orange-400 mt-2">
                   🛠️ Salle en maintenance
                 </div>
               )}

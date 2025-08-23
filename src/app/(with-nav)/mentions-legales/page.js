@@ -27,7 +27,7 @@ export default function MentionsLegales() {
               <strong>Nom du site :</strong> L'Iconodule
             </p>
             <p>
-              <strong>Propriétaire :</strong> Maud Bonnal
+              <strong>Propriétaire :</strong> lul
             </p>
             <p>
               <strong>Statut :</strong> Projet artistique

@@ -11,7 +11,7 @@ const Slider = dynamic(() => import("./ArtworkSlider"), {
         width: "min(90vw, 900px)",
         aspectRatio: "3 / 4",
         borderRadius: 8,
-        background: "transparent", // ou background: "#e3d3b2" selon ta couleur
+        background: "transparent",
       }}
       role="status"
       aria-live="polite"

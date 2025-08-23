@@ -454,7 +454,9 @@ export default function AdminOeuvresPage() {
                 />
                 <div className="artwork-info">
                   <h4 className="artwork-title">{artwork.title}</h4>
-                  <p className="artwork-description">{artwork.description}</p>
+                  <p className="artwork-description whitespace-pre-line">
+                    {artwork.description}
+                  </p>
                 </div>
                 <div className="artwork-actions">
                   <button

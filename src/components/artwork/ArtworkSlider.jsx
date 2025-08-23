@@ -98,7 +98,7 @@ export default function ArtworkSlider({ artworks = [] }) {
 
   const onPointerMove = (e) => {
     if (!isDragging) return;
-    if (Math.abs(e.clientY - startY) > Math.abs(e.clientX - startX)) return; // scroll vertical => ignore
+    if (Math.abs(e.clientY - startY) > Math.abs(e.clientX - startX)) return;
     const dx = Math.max(Math.min(e.clientX - startX, MAX_DRAG), -MAX_DRAG);
     setDragX(dx);
   };
@@ -147,16 +147,6 @@ export default function ArtworkSlider({ artworks = [] }) {
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUpOrCancel}
           onPointerCancel={onPointerUpOrCancel}
-          style={{
-            transform: isDragging ? `translate3d(${dragX}px, 0, 0)` : undefined,
-            transition: isDragging ? "none" : undefined,
-            touchAction: "pan-y",
-            width: "min(90vw, 900px)",
-            aspectRatio: "3 / 4",
-            position: "relative",
-            userSelect: "none",
-            willChange: "transform",
-          }}
         >
           <Image
             key={currentIndex}
