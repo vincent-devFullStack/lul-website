@@ -37,7 +37,7 @@ body {
 
 body:has(.room-surface) {
   background-image: none !important;
-  background-color: #be9c75; /* ta couleur unie */
+  background-color: #a27d50; /* ta couleur unie */
 }
 
 /* utilitaires pour changer de famille */
