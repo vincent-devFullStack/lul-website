@@ -253,7 +253,7 @@ textarea:focus {
 
   .typewriter-container {
     min-height: 400px;
-    min-width: 100%;
+    min-width: 10rem;
     padding: 1.2rem;
   }
 

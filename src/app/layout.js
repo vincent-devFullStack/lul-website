@@ -1,6 +1,7 @@
 // app/layout.js
 import { AuthProvider } from "@/context/AuthContext";
 import CookieConsent from "@/components/CookieConsent";
+import DisableRightClick from "@/components/DisableRightClick"; // ⬅️ ajout
 import "@/styles/base/globals.css";
 import { Inter, Playfair_Display } from "next/font/google";
 
@@ -64,7 +65,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="fr">
+    <html lang="fr" className={`${inter.variable} ${playfair.variable}`}>
       <head>
         {/* Aide le 1er hit Cloudinary */}
         <link
@@ -97,10 +98,13 @@ export default function RootLayout({ children }) {
         </a>
 
         <AuthProvider>
-          {/* Cible du skip link ; tabIndex=-1 permet de recevoir le focus */}
-          <div id="main" tabIndex={-1} className="flex-1 flex flex-col">
-            {children}
-          </div>
+          {/* Bloque le clic droit sur tout le site (sauf champs de saisie) */}
+          <DisableRightClick>
+            {/* Cible du skip link ; tabIndex=-1 permet de recevoir le focus */}
+            <div id="main" tabIndex={-1} className="flex-1 flex flex-col">
+              {children}
+            </div>
+          </DisableRightClick>
 
           <CookieConsent />
         </AuthProvider>
