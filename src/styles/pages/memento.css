@@ -1,19 +1,16 @@
 .memento-grid {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(320px, 1fr)
-  ); /* auto-fill marche mieux ici */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2.5rem;
   width: 100%;
   max-width: 1400px;
   margin: 3rem auto;
-  padding: 0 0rem;
+  padding: 0 2rem;
   grid-auto-flow: row;
-  min-width: 0; /* clé pour autoriser la contraction */
+  min-width: 0;
 }
 
-/* ✅ Carte embelli avec effets sophistiqués */
+/* --- CARD --- */
 .memento-card {
   background: linear-gradient(
     145deg,
@@ -21,26 +18,24 @@
     rgba(255, 255, 255, 0.95) 100%
   );
   color: var(--foreground);
-  border-radius: 24px;
-  /* ✅ Ombres multicouches sophistiquées */
+  border-radius: 12px;
   box-shadow:
     0 8px 32px rgba(42, 35, 26, 0.12),
     0 4px 16px rgba(191, 167, 106, 0.08),
     0 1px 0 rgba(255, 255, 255, 0.2) inset,
     0 0 0 1px rgba(191, 167, 106, 0.1);
-  width: 90%;
+  width: 100%;
   max-width: 400px;
   min-width: 0;
-  overflow: hidden;
+  height: 100%;
   display: flex;
   flex-direction: column;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
-  /* ✅ Backdrop blur pour effet moderne */
   backdrop-filter: blur(8px);
+  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-/* ✅ Effet hover sophistiqué */
 .memento-card:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow:
@@ -50,18 +45,15 @@
     0 0 0 2px rgba(191, 167, 106, 0.2);
 }
 
-/* ✅ Wrapper d'image embelli */
+/* --- IMAGE --- */
 .memento-img-wrapper {
-  width: 100%;
-  height: 320px;
+  height: 250px;
+  min-height: 250px;
   overflow: hidden;
-  background: linear-gradient(135deg, #e7dfc6 0%, #f2ead6 50%, #d4c9a8 100%);
   position: relative;
-  /* ✅ Bordure subtile */
-  border-bottom: 1px solid rgba(191, 167, 106, 0.1);
+  border-radius: 12px 12px 0 0;
 }
 
-/* ✅ Image avec effet sophistiqué */
 .memento-img {
   width: 100%;
   height: 100%;
@@ -70,20 +62,15 @@
   transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   filter: contrast(1.05) brightness(1.02);
 }
-
 .memento-card:hover .memento-img {
-  transform: scale(1.01);
+  transform: scale(1.1);
   filter: contrast(1.1) brightness(1.05) saturate(1.1);
 }
 
-/* ✅ Overlay décoratif sur l'image */
 .memento-img-wrapper::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background: linear-gradient(
     180deg,
     transparent 0%,
@@ -93,19 +80,17 @@
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
-
 .memento-card:hover .memento-img-wrapper::after {
   opacity: 0.7;
 }
 
-/* ✅ Contenu embelli */
+/* --- CONTENT --- */
 .memento-content {
-  padding: 1rem;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  position: relative;
-  z-index: 2;
-  /* ✅ Background subtil */
+  gap: 0.6rem;
+  padding: 1rem;
   background: linear-gradient(
     180deg,
     rgba(255, 255, 255, 0.05) 0%,
@@ -113,7 +98,6 @@
   );
 }
 
-/* ✅ Citation embelli */
 .memento-quote {
   position: relative;
   font-size: 1.15rem;
@@ -122,78 +106,51 @@
   color: var(--active-menu-item);
   margin: 0;
   padding-left: 1.5rem;
-  transition: all 0.3s ease;
-  /* ✅ Ombre subtile sur le texte */
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
 }
-
-/* ✅ Guillemets sophistiqués */
 .memento-quote::before {
-  content: "";
+  content: '"';
   position: absolute;
   left: 0;
   top: -0.2rem;
   font-size: 2.5rem;
-  line-height: 1;
   color: #bfa76a;
   opacity: 0.4;
   font-family: "EB Garamond", serif;
-  /* ✅ Effet de profondeur */
   text-shadow: 0 2px 4px rgba(191, 167, 106, 0.2);
 }
 
-.memento-card:hover .memento-quote::before {
-  opacity: 0.6;
-  transform: scale(1.1);
-  transition: all 0.3s ease;
-}
-
-/* ✅ Auteur embelli ET CENTRÉ */
 .memento-author {
   font-weight: 600;
   color: var(--foreground);
-  margin-top: 0.8rem;
   font-size: 1.1rem;
-  /* ✅ Effet de profondeur */
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  /* ✅ CENTRÉ */
   text-align: center;
 }
-
-/* ✅ Lien auteur sophistiqué */
-.memento-author-link {
-  color: #8a7c5b;
-  text-decoration: none;
-  border-bottom: 2px solid transparent;
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  font-weight: 600;
-  position: relative;
-  padding-bottom: 2px;
-  /* ✅ CENTRÉ dans son conteneur */
-  display: inline-block;
-}
-
-/* ✅ Rôle embelli ET CENTRÉ */
 .memento-role {
   font-size: 0.95rem;
   color: #8a7c5b;
   font-style: italic;
   opacity: 0.9;
-  /* ✅ Espacement harmonieux */
-  margin-top: 0.3rem;
-  /* ✅ CENTRÉ */
   text-align: center;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
 }
 
-/* ✅ Conteneur pour centrer le bouton "Voir plus" */
+/* --- EXPAND BUTTON --- */
 .expand-button-container {
-  text-align: center;
-  margin-top: 1rem;
+  margin-top: auto;
 }
-
-/* ✅ Bouton "Voir plus" sophistiqué */
 .expand-button {
   display: inline-block;
+  align-self: center;
   background: linear-gradient(
     135deg,
     rgba(191, 167, 106, 0.15) 0%,
@@ -202,169 +159,45 @@
   );
   border: 1px solid rgba(191, 167, 106, 0.3);
   color: #8b6e4e;
-  font-size: 0.9rem;
-  font-style: normal;
   font-weight: 600;
   padding: 0.6rem 1.5rem;
+  border-radius: 25px;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  margin-left: 0;
-  border-radius: 25px; /* ✅ Plus arrondi */
-  /* ✅ Ombres plus sophistiquées */
-  box-shadow:
-    0 4px 15px rgba(191, 167, 106, 0.2),
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  /* ✅ Texte avec ombre */
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
-  position: relative;
-  overflow: hidden;
+  transition: all 0.4s ease;
 }
 
-/* ✅ Effet de brillance interne au hover */
-.expand-button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.4) 50%,
-    transparent 100%
-  );
-  transition: left 0.6s ease;
-  z-index: 1;
-}
-
-.expand-button:hover::before {
-  left: 100%;
-}
-
-.expand-button:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(191, 167, 106, 0.25) 0%,
-    rgba(212, 196, 168, 0.2) 50%,
-    rgba(191, 167, 106, 0.15) 100%
-  );
-  color: #6b5d4f;
-  box-shadow:
-    0 8px 25px rgba(191, 167, 106, 0.3),
-    0 4px 15px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  border-color: rgba(191, 167, 106, 0.5);
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
-}
-
-/* ✅ Effet actif/pressed */
-.expand-button:active {
-  box-shadow:
-    0 4px 15px rgba(191, 167, 106, 0.25),
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-/* ✅ Lien externe embelli */
+/* --- FOOTER LINK --- */
 .memento-link {
-  text-align: center;
-  margin-top: 1.5rem;
+  margin-top: auto;
+  padding: 1rem 1.25rem 1.25rem;
+  display: flex;
+  justify-content: center;
 }
-
 .memento-link .memento-author-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #8a7c5b;
-  text-decoration: none;
-  font-size: 0.95rem;
   font-weight: 600;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  border: 2px solid rgba(138, 124, 91, 0.2);
+  padding: 0.6rem 1.4rem;
+  border: 1px solid rgba(138, 124, 91, 0.25);
+  border-radius: 24px;
   background: linear-gradient(
     135deg,
-    rgba(138, 124, 91, 0.08) 0%,
-    rgba(191, 167, 106, 0.05) 100%
+    rgba(138, 124, 91, 0.08),
+    rgba(191, 167, 106, 0.06)
   );
-  padding: 0.5rem 1.2rem;
-  border-radius: 20px;
-  /* ✅ Ombres sophistiquées */
-  box-shadow:
-    0 3px 12px rgba(138, 124, 91, 0.15),
-    0 1px 6px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
-  position: relative;
-  overflow: hidden;
+  transition: all 0.2s ease;
 }
 
-/* ✅ Effet de brillance sur le lien */
-.memento-link .memento-author-link::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.3) 50%,
-    transparent 100%
-  );
-  transition: left 0.6s ease;
-  z-index: 1;
-}
-
-.memento-link .memento-author-link:hover::before {
-  left: 100%;
-}
-
-/* Emoji amélioré */
-.memento-link .memento-author-link::after {
-  content: "";
-  font-size: 1rem;
-  transition: transform 0.3s ease;
-  position: relative;
-  z-index: 2;
-}
-
+/* Hover link */
 .memento-link .memento-author-link:hover {
+  transform: translateY(-1px);
+  border-color: rgba(138, 124, 91, 0.45);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   color: #6b5d4f;
-  background: linear-gradient(
-    135deg,
-    rgba(138, 124, 91, 0.15) 0%,
-    rgba(191, 167, 106, 0.1) 100%
-  );
-  border-color: rgba(138, 124, 91, 0.4);
-  box-shadow:
-    0 6px 20px rgba(138, 124, 91, 0.25),
-    0 3px 12px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
 }
 
-/* Effet actif sur le lien */
-.memento-link .memento-author-link:active {
-  box-shadow:
-    0 3px 12px rgba(138, 124, 91, 0.2),
-    0 1px 6px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-/* Focus accessibilité pour les deux */
-.expand-button:focus,
-.memento-link .memento-author-link:focus {
-  outline: none;
-  box-shadow:
-    0 0 0 3px rgba(191, 167, 106, 0.4),
-    0 4px 15px rgba(191, 167, 106, 0.2),
-    0 2px 8px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-}
-
+/* --- ANIMATION --- */
 @keyframes fadeInUp {
   0% {
     opacity: 0;
@@ -382,12 +215,6 @@
     filter: blur(0);
   }
 }
-
-.memento-card {
-  animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-/* Animation décalée pour chaque carte */
 .memento-card:nth-child(1) {
   animation-delay: 0.1s;
 }
@@ -407,67 +234,142 @@
   animation-delay: 0.6s;
 }
 
-/* Responsive embelli */
-@media (max-width: 768px) {
+/* --- RESPONSIVE --- */
+/* --- RESPONSIVE --- */
+
+/* grands laptops → on resserre un peu le grid */
+@media (max-width: 1200px) {
   .memento-grid {
-    grid-template-columns: 1fr;
+    max-width: 1100px;
     gap: 2rem;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
   }
-
   .memento-card {
-    max-width: 100%;
+    border-radius: 12px;
   }
+  .memento-img-wrapper {
+    height: 230px;
+  }
+}
 
+/* tablettes paysage / petits laptops */
+@media (max-width: 992px) {
+  .memento-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.75rem;
+    padding: 0 1.25rem;
+  }
   .memento-content {
-    padding: 1.5rem;
+    padding: 0.9rem;
   }
-
   .memento-quote {
     font-size: 1.05rem;
-    padding-left: 1.2rem;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
-
-  .memento-quote::before {
-    font-size: 2rem;
+  .memento-img-wrapper {
+    height: 220px;
+  }
+  .expand-button {
+    padding: 0.55rem 1.2rem;
   }
 }
 
-@media (max-width: 480px) {
+/* tablettes portrait / grands téléphones */
+@media (max-width: 768px) {
+  .memento-grid {
+    grid-template-columns: 1fr 1fr; /* 2 colonnes tant que possible */
+    gap: 1.25rem;
+    padding: 0 1rem;
+  }
+  .memento-card {
+    border-radius: 10px;
+  }
   .memento-img-wrapper {
-    height: 240px;
+    height: 200px;
+    border-radius: 10px 10px 0 0;
   }
-
   .memento-content {
-    padding: 1.2rem;
+    padding: 0.85rem;
+    gap: 0.5rem;
   }
-
   .memento-quote {
     font-size: 1rem;
-    line-height: 1.6;
+    line-height: 1.55;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+  .memento-author {
+    font-size: 1rem;
+  }
+  .memento-role {
+    font-size: 0.9rem;
+  }
+  .memento-link {
+    padding: 0.8rem 1rem 1rem;
+  }
+  .memento-link .memento-author-link {
+    padding: 0.55rem 1.1rem;
+    border-radius: 20px;
   }
 }
 
-/* Lien externe centré */
-.memento-link {
-  text-align: center;
-  margin-top: 1rem;
+/* téléphones normaux */
+@media (max-width: 600px) {
+  .memento-grid {
+    grid-template-columns: 1fr; /* 1 colonne pour plus de lisibilité */
+    gap: 1rem;
+    padding: 0 0.75rem;
+  }
+  .memento-img-wrapper {
+    height: 190px;
+  }
+  .memento-quote {
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  } /* un peu + de place en 1 colonne */
 }
 
-/* Style du lien externe */
-.memento-link .memento-author-link {
-  color: #8a7c5b;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  border-bottom: 1px solid transparent;
-  display: inline-block;
-  margin: 0 auto;
-  text-align: center;
+/* petits téléphones */
+@media (max-width: 400px) {
+  .memento-grid {
+    padding: 0 0.6rem;
+  }
+  .memento-img-wrapper {
+    height: 170px;
+  }
+  .memento-content {
+    padding: 0.75rem;
+  }
+  .memento-quote {
+    font-size: 0.95rem;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+  .memento-link {
+    padding: 0.7rem 0.8rem 0.9rem;
+  }
+  .memento-link .memento-author-link {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+  }
 }
 
-.memento-link .memento-author-link:hover {
-  color: #bfa76a;
-  border-bottom-color: #bfa76a;
+/* interaction tactile : on neutralise les gros effets hover/transform */
+@media (hover: none), (pointer: coarse) {
+  .memento-card:hover {
+    transform: none;
+    box-shadow: inherit;
+  }
+  .memento-card:hover .memento-img {
+    transform: none;
+    filter: contrast(1.05) brightness(1.02);
+  }
+  .memento-img-wrapper::after {
+    opacity: 0.5;
+  } /* subtil, sans animation */
+  .memento-link .memento-author-link:hover {
+    transform: none;
+    box-shadow: none;
+  }
 }

@@ -13,18 +13,20 @@ export default function MementoModal({ memento, onClose }) {
   const author = memento?.author || "Auteur inconnu";
   const role = memento?.role || "";
   const quote = memento?.quote || "";
+
+  // ⚠️ ICI: on ne recadre plus. Version HD, auto format/qualité.
+  // (Cloudinary) -> pas de h/c_fill : l’image garde ses proportions.
   const imgSrc = memento?.imageUrl
-    ? memento.imageUrl.replace("/upload/", "/upload/w_600,h_400,c_fill/")
+    ? memento.imageUrl.replace("/upload/", "/upload/f_auto,q_auto,w_1600/")
     : "/assets/placeholder.webp";
 
-  // Échap + mémorise/restaure le focus
+  // Échap + focus trap + restore focus
   useEffect(() => {
     openerRef.current = document.activeElement;
 
     const onKey = (e) => {
       if (e.key === "Escape") onClose?.();
       if (e.key === "Tab") {
-        // Focus trap
         const focusables = dialogRef.current?.querySelectorAll(
           'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
         );
@@ -43,13 +45,11 @@ export default function MementoModal({ memento, onClose }) {
     };
 
     document.addEventListener("keydown", onKey);
-    // Focus initial sur le bouton Fermer
     const t = setTimeout(() => closeBtnRef.current?.focus(), 0);
 
     return () => {
       clearTimeout(t);
       document.removeEventListener("keydown", onKey);
-      // Retour focus à l'opener
       if (openerRef.current && typeof openerRef.current.focus === "function") {
         openerRef.current.focus();
       }
@@ -79,20 +79,33 @@ export default function MementoModal({ memento, onClose }) {
           ref={closeBtnRef}
           className="modal-close"
           onClick={onClose}
-          aria-label="Fermer"
           type="button"
+          aria-label="Fermer la fenêtre"
         >
-          ×
+          <svg
+            className="modal-close-icon"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M6 6 L18 18 M18 6 L6 18" />
+          </svg>
         </button>
 
+        {/* IMAGE ENTIÈRE : wrapper proportionné + contain */}
         <div className="modal-image-wrapper">
           <Image
             src={imgSrc}
-            alt={author}
-            width={600}
-            height={400}
+            alt={
+              memento?.author
+                ? `Portrait de ${memento.author}${
+                    memento?.role ? `, ${memento.role}` : ""
+                  }`
+                : "Image du memento"
+            }
+            fill
+            sizes="(max-width: 768px) 95vw, 1200px"
             className="modal-image"
-            sizes="(max-width: 768px) 100vw, 600px"
             priority
           />
         </div>

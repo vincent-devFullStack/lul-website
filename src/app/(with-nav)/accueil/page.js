@@ -1,3 +1,4 @@
+export { metadata } from "./metadata";
 export const revalidate = 3600;
 import { unstable_cache } from "next/cache";
 import { getAllRooms } from "@/lib/mongodb";

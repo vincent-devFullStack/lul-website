@@ -1,5 +1,7 @@
+// app/(with-nav)/register/metadata.js
 export const metadata = {
-  title: "Inscription | lul Iconodule",
-  description: "Créez votre compte lul Iconodule et rejoignez la communauté.",
-  alternates: { canonical: "https://www.iconodule.fr/register" },
+  title: "Inscription | L’Iconodule",
+  description: "Créez votre compte L’Iconodule et rejoignez la communauté.",
+  robots: { index: false, follow: false, nocache: true },
+  alternates: { canonical: null },
 };

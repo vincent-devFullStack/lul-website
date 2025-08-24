@@ -6,47 +6,63 @@ import { notFound } from "next/navigation";
 import ArtworkSliderClient from "@/components/artwork/ArtworkSliderClient";
 import { getAllRoomSlugs, getRoomBySlug } from "@/lib/mongodb";
 
-// Cache par slug (ISR + tag pour revalidation à la demande via /api/revalidate-room)
+/** Cache par slug (ISR + tag pour revalidation ciblée via /api/revalidate-room) */
 const getRoomCached = (slug) =>
   unstable_cache(() => getRoomBySlug(slug), ["room", slug], {
-    revalidate: 900,
+    revalidate,
     tags: [`room:${slug}`],
   })();
 
+/** SSG de toutes les salles connues */
 export async function generateStaticParams() {
   const slugs = await getAllRoomSlugs();
-  return slugs.map((slug) => ({ slug }));
+  return (slugs || []).filter(Boolean).map((slug) => ({ slug: String(slug) }));
 }
 
+/** Metadata par salle (évite d’avoir un metadata.js séparé) */
 export async function generateMetadata({ params }) {
-  const { slug } = await params; // Next 15
+  const { slug } = params; // ✅ pas de await
   const room = await getRoomCached(slug);
 
-  const titleBase = room?.name ?? room?.title ?? slug;
-  const desc =
-    room?.description ?? "Explorez cette salle de notre musée virtuel";
-  const ogImage = room?.artworks?.[0]?.imageUrl ?? "/assets/default-room.jpg";
+  const titleBase = (room?.name || room?.title || slug || "Salle").trim();
+  const desc = (
+    room?.description ||
+    "Explorez cette salle de notre musée virtuel L’Iconodule."
+  ).slice(0, 300);
+
+  const ogImage = room?.artworks?.[0]?.imageUrl || "/assets/default-room.jpg";
+  const url = `/rooms/${encodeURIComponent(slug)}`;
 
   return {
-    title: `${titleBase} | L'iconodule`,
+    title: `${titleBase} | L’Iconodule`,
     description: desc,
+    alternates: { canonical: url },
+    robots: { index: true, follow: true },
     openGraph: {
-      title: titleBase,
+      title: `${titleBase} | L’Iconodule`,
       description: desc,
+      url,
+      type: "website",
       images: [
         {
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: `${titleBase} - L'iconodule`,
+          alt: `${titleBase} - L’Iconodule`,
         },
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${titleBase} | L’Iconodule`,
+      description: desc,
+      images: [ogImage],
     },
   };
 }
 
 export default async function RoomPage({ params }) {
-  const { slug } = await params; // Next 15
+  const { slug } = params; // ✅ pas de await
   const room = await getRoomCached(slug);
   if (!room) notFound();
 
@@ -61,12 +77,48 @@ export default async function RoomPage({ params }) {
     artist: a?.artist || "",
   }));
 
+  const title = room.name || room.title || slug;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: title,
+    description: room.description || "Salle du musée virtuel",
+    mainEntity: artworks[0]
+      ? {
+          "@type": "VisualArtwork",
+          name: artworks[0].title || "Œuvre",
+          creator: artworks[0].artist
+            ? { "@type": "Person", name: artworks[0].artist }
+            : undefined,
+          image: artworks[0].imageUrl || undefined,
+        }
+      : undefined,
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Accueil",
+          item: "/accueil",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: title,
+          item: `/rooms/${encodeURIComponent(slug)}`,
+        },
+      ],
+    },
+  };
+
   return (
     <main className="room-bg min-h-[100svh]">
       <div className="container mx-auto px-2">
         <div className="text-center mb-1">
           <h1 className="room-page-title text-5xl sm:text-6xl md:text-7xl font-serif font-semibold text-gray-800 mb-2">
-            {room.name || room.title || slug}
+            {title}
           </h1>
         </div>
 
@@ -76,27 +128,12 @@ export default async function RoomPage({ params }) {
         {/* JSON-LD */}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "CollectionPage",
-              name: room.name || slug,
-              description: room.description || "Salle du musée virtuel",
-              mainEntity: artworks[0] && {
-                "@type": "VisualArtwork",
-                name: artworks[0].title,
-                creator: {
-                  "@type": "Person",
-                  name: artworks[0].artist || "Artiste",
-                },
-              },
-            }),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
 
         <div className="back-button-container">
           <Link href="/accueil" className="back-button">
-            Retour à l'accueil
+            Retour à l&apos;accueil
           </Link>
         </div>
       </div>
