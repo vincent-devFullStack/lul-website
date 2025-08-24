@@ -252,16 +252,14 @@
   font-size: 1rem;
   line-height: 1.6;
   color: #3a342a;
-  text-align: center;
+  text-align: left;
   margin-bottom: 1.5rem;
   max-width: 700px;
   padding: 20px;
   padding-inline: 10% !important;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
   font-weight: 400;
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 12px;
-  border: 1px solid rgba(125, 113, 84, 0.3);
+  background: transparent;
   backdrop-filter: blur(5px);
   position: relative;
   z-index: 2;

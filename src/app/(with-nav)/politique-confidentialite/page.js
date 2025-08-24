@@ -41,7 +41,7 @@ export default function PolitiqueConfidentialite() {
           <h2 id="responsable">2. Responsable du traitement</h2>
           <div className="politique-info">
             <p>
-              <strong>Responsable :</strong> Maud Bonnal
+              <strong>Responsable :</strong> lul
             </p>
             <p>
               <strong>Site web :</strong> L'Iconodule
