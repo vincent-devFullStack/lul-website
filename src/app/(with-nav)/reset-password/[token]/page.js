@@ -1,6 +1,6 @@
 // app/(with-nav)/reset-password/[token]/page.js
 import ResetPasswordClient from "./ResetPasswordClient";
-export { metadata } from "../../metadata";
+export { metadata } from "./metadata";
 
 export default function Page({ params }) {
   const token = Array.isArray(params?.token)
