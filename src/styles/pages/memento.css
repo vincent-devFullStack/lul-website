@@ -1,11 +1,13 @@
 .memento-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  /* auto-fit évite les colonnes fantômes */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 2.5rem;
   width: 100%;
   max-width: 1400px;
-  margin: 3rem auto;
-  padding: 0 2rem;
+  margin: 1rem auto;
+  /* padding responsive pour éviter les “presque” débords */
+  padding-inline: clamp(1rem, 3vw, 2rem);
   grid-auto-flow: row;
   min-width: 0;
 }
@@ -25,19 +27,23 @@
     0 1px 0 rgba(255, 255, 255, 0.2) inset,
     0 0 0 1px rgba(191, 167, 106, 0.1);
   width: 100%;
-  max-width: 400px;
+  /* supprime le max-width pour que la card prenne toute la piste */
+  /* max-width: 400px;  ← à enlever */
   min-width: 0;
   height: 100%;
   display: flex;
   flex-direction: column;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
   position: relative;
   backdrop-filter: blur(8px);
   animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  transform-origin: center; /* hover plus “clean” en bord d’écran */
 }
 
 .memento-card:hover {
-  transform: translateY(-8px) scale(1.02);
+  transform: translateY(-6px) scale(1.015); /* un poil plus soft */
   box-shadow:
     0 20px 40px rgba(42, 35, 26, 0.2),
     0 8px 24px rgba(191, 167, 106, 0.15),
@@ -61,6 +67,7 @@
   object-position: center;
   transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   filter: contrast(1.05) brightness(1.02);
+  border-radius: 12px 12px 0 0;
 }
 .memento-card:hover .memento-img {
   transform: scale(1.1);
@@ -112,6 +119,7 @@
   -webkit-line-clamp: 3;
   line-clamp: 3;
   overflow: hidden;
+  max-height: calc(1.7em * 3); /* ✅ fallback si clamp non supporté */
 }
 .memento-quote::before {
   content: '"';
@@ -166,6 +174,20 @@
   transition: all 0.4s ease;
 }
 
+/* bouton qui entoure l’image — neutre et cliquable partout */
+.memento-img-button {
+  all: unset;
+  display: block;
+  width: 100%;
+  height: 250px;
+  cursor: zoom-in;
+}
+.memento-img-button:focus-visible {
+  outline: 2px solid rgba(191, 167, 106, 0.6);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
 /* --- FOOTER LINK --- */
 .memento-link {
   margin-top: auto;
@@ -188,8 +210,6 @@
   );
   transition: all 0.2s ease;
 }
-
-/* Hover link */
 .memento-link .memento-author-link:hover {
   transform: translateY(-1px);
   border-color: rgba(138, 124, 91, 0.45);
@@ -235,20 +255,18 @@
 }
 
 /* --- RESPONSIVE --- */
-/* --- RESPONSIVE --- */
 
-/* grands laptops → on resserre un peu le grid */
+@media (max-width: 1280px) {
+  .memento-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* grands laptops */
 @media (max-width: 1200px) {
   .memento-grid {
-    max-width: 1100px;
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
-    padding: 0 1.5rem;
-  }
-  .memento-card {
-    border-radius: 12px;
-  }
-  .memento-img-wrapper {
-    height: 230px;
   }
 }
 
@@ -259,65 +277,35 @@
     gap: 1.75rem;
     padding: 0 1.25rem;
   }
-  .memento-content {
-    padding: 0.9rem;
-  }
-  .memento-quote {
-    font-size: 1.05rem;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-  }
   .memento-img-wrapper {
     height: 220px;
   }
-  .expand-button {
-    padding: 0.55rem 1.2rem;
+  .memento-quote {
+    font-size: 1.05rem;
   }
 }
 
 /* tablettes portrait / grands téléphones */
 @media (max-width: 768px) {
   .memento-grid {
-    grid-template-columns: 1fr 1fr; /* 2 colonnes tant que possible */
+    grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
     padding: 0 1rem;
-  }
-  .memento-card {
-    border-radius: 10px;
   }
   .memento-img-wrapper {
     height: 200px;
     border-radius: 10px 10px 0 0;
   }
-  .memento-content {
-    padding: 0.85rem;
-    gap: 0.5rem;
-  }
   .memento-quote {
     font-size: 1rem;
     line-height: 1.55;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-  }
-  .memento-author {
-    font-size: 1rem;
-  }
-  .memento-role {
-    font-size: 0.9rem;
-  }
-  .memento-link {
-    padding: 0.8rem 1rem 1rem;
-  }
-  .memento-link .memento-author-link {
-    padding: 0.55rem 1.1rem;
-    border-radius: 20px;
   }
 }
 
 /* téléphones normaux */
 @media (max-width: 600px) {
   .memento-grid {
-    grid-template-columns: 1fr; /* 1 colonne pour plus de lisibilité */
+    grid-template-columns: 1fr;
     gap: 1rem;
     padding: 0 0.75rem;
   }
@@ -327,7 +315,8 @@
   .memento-quote {
     -webkit-line-clamp: 4;
     line-clamp: 4;
-  } /* un peu + de place en 1 colonne */
+    max-height: calc(1.7em * 4);
+  }
 }
 
 /* petits téléphones */
@@ -338,24 +327,12 @@
   .memento-img-wrapper {
     height: 170px;
   }
-  .memento-content {
-    padding: 0.75rem;
-  }
   .memento-quote {
-    font-size: 0.95rem;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
-  }
-  .memento-link {
-    padding: 0.7rem 0.8rem 0.9rem;
-  }
-  .memento-link .memento-author-link {
-    padding: 0.5rem 1rem;
     font-size: 0.95rem;
   }
 }
 
-/* interaction tactile : on neutralise les gros effets hover/transform */
+/* tactile → désactive hover et curseur zoom */
 @media (hover: none), (pointer: coarse) {
   .memento-card:hover {
     transform: none;
@@ -367,9 +344,12 @@
   }
   .memento-img-wrapper::after {
     opacity: 0.5;
-  } /* subtil, sans animation */
+  }
   .memento-link .memento-author-link:hover {
     transform: none;
     box-shadow: none;
   }
+  .memento-img-button {
+    cursor: default;
+  } /* ✅ pas de zoom en tactile */
 }

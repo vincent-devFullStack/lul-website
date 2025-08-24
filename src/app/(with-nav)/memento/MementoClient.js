@@ -39,20 +39,22 @@ export default function MementoClient() {
   const openModal = (memento, m = "quote") => {
     setSelectedMemento(memento);
     setMode(m);
+    // lock scroll
     document.body.style.overflow = "hidden";
   };
 
   const closeModal = () => {
     setSelectedMemento(null);
+    // restore scroll
     document.body.style.overflow = "";
   };
 
-  useEffect(
-    () => () => {
+  // Safety: si un unmount survient pendant la modale
+  useEffect(() => {
+    return () => {
       document.body.style.overflow = "";
-    },
-    []
-  );
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -82,7 +84,8 @@ export default function MementoClient() {
         <div className="memento-empty-state">
           <h2 className="memento-empty-title">Aucun memento disponible</h2>
           <p className="memento-empty-description">
-            Les citations et pensées d'artistes apparaîtront ici prochainement.
+            Les citations et pensées d&apos;artistes apparaîtront ici
+            prochainement.
           </p>
         </div>
       ) : (
@@ -93,7 +96,7 @@ export default function MementoClient() {
               ? `Portrait de ${m.author}${m?.role ? `, ${m.role}` : ""}`
               : "Image liée au memento";
 
-            // vignettes Cloudinary (rapides)
+            // vignette Cloudinary rapide
             const thumbSrc = m?.imageUrl
               ? m.imageUrl.replace("/upload/", "/upload/w_400,h_349,c_fill/")
               : "/assets/placeholder-memento.jpg";
@@ -167,7 +170,7 @@ export default function MementoClient() {
       {selectedMemento && (
         <MementoModal
           memento={selectedMemento}
-          mode={mode} // 👈 nouveau
+          mode={mode}
           onClose={closeModal}
         />
       )}
