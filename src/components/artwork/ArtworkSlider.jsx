@@ -178,7 +178,7 @@ export default function ArtworkSlider({ artworks = [] }) {
         />
       </div>
       <div
-        className="md:hidden flex justify-center mt-4 gap-2"
+        className="flex justify-center mt-4 gap-2"
         role="tablist"
         aria-label="Pagination des œuvres"
       >
@@ -192,7 +192,7 @@ export default function ArtworkSlider({ artworks = [] }) {
             aria-label={`Aller à l’œuvre ${i + 1}`}
             className={`w-2.5 h-2.5 rounded-full transition-opacity ${
               currentIndex === i
-                ? "opacity-100 bg-black dark:bg-white"
+                ? "opacity-60 bg-white dark:bg-white"
                 : "opacity-40 bg-black dark:bg-white"
             }`}
           />
