@@ -21,7 +21,7 @@ export async function generateStaticParams() {
 
 /** Metadata par salle (évite d’avoir un metadata.js séparé) */
 export async function generateMetadata({ params }) {
-  const { slug } = params; // ✅ pas de await
+  const { slug } = await params;
   const room = await getRoomCached(slug);
 
   const titleBase = (room?.name || room?.title || slug || "Salle").trim();
@@ -62,7 +62,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function RoomPage({ params }) {
-  const { slug } = params; // ✅ pas de await
+  const { slug } = await params;
   const room = await getRoomCached(slug);
   if (!room) notFound();
 

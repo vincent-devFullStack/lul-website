@@ -6,7 +6,8 @@ import "../../styles/components/Artworkslider.css"; // ← vérifie la casse exa
 
 /** Optimise une URL Cloudinary: format & qualité auto + limite largeur */
 function cldOptimize(url, w = 1600) {
-  if (!url || !url.includes("res.cloudinary.com")) return url ?? "";
+  if (!url || typeof url !== "string" || !url.includes("res.cloudinary.com"))
+    return url ?? "";
   return url.replace(
     "/image/upload/",
     `/image/upload/f_auto,q_auto,c_limit,w_${w}/`
@@ -30,7 +31,9 @@ export default function ArtworkSlider({ artworks = [] }) {
   const [startX, setStartX] = useState(0);
   const [startY, setStartY] = useState(0);
 
-  const animTimeoutRef = useRef(null);
+  const animTimeoutRef = useRef(
+    /** @type {ReturnType<typeof setTimeout> | null} */ (null)
+  );
 
   const optimizedArtworks = useMemo(
     () =>
@@ -42,7 +45,7 @@ export default function ArtworkSlider({ artworks = [] }) {
   // Si la liste change et que l'index sort de la plage, on le recale.
   useEffect(() => {
     if (len === 0) return;
-    setCurrentIndex((i) => (i >= len ? len - 1 : i));
+    setCurrentIndex((i) => (i >= len ? len - 1 : Math.max(0, i)));
   }, [len]);
 
   const endAnimation = useCallback(() => {
@@ -98,6 +101,7 @@ export default function ArtworkSlider({ artworks = [] }) {
 
   const onPointerMove = (e) => {
     if (!isDragging) return;
+    // bloque si le geste est plus vertical qu’horizontal (laisser scroller la page)
     if (Math.abs(e.clientY - startY) > Math.abs(e.clientX - startX)) return;
     const dx = Math.max(Math.min(e.clientX - startX, MAX_DRAG), -MAX_DRAG);
     setDragX(dx);
@@ -147,6 +151,10 @@ export default function ArtworkSlider({ artworks = [] }) {
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUpOrCancel}
           onPointerCancel={onPointerUpOrCancel}
+          // petit offset visuel pendant le drag (optionnel ; n’altère pas ton CSS)
+          style={
+            isDragging ? { transform: `translateX(${dragX}px)` } : undefined
+          }
         >
           <Image
             key={currentIndex}
@@ -169,7 +177,27 @@ export default function ArtworkSlider({ artworks = [] }) {
           type="button"
         />
       </div>
-
+      <div
+        className="md:hidden flex justify-center mt-4 gap-2"
+        role="tablist"
+        aria-label="Pagination des œuvres"
+      >
+        {optimizedArtworks.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => setCurrentIndex(i)}
+            role="tab"
+            aria-selected={currentIndex === i ? "true" : "false"}
+            aria-label={`Aller à l’œuvre ${i + 1}`}
+            className={`w-2.5 h-2.5 rounded-full transition-opacity ${
+              currentIndex === i
+                ? "opacity-100 bg-black dark:bg-white"
+                : "opacity-40 bg-black dark:bg-white"
+            }`}
+          />
+        ))}
+      </div>
       <div
         className={`artwork-info ${slideDirection}`}
         aria-live="polite"
