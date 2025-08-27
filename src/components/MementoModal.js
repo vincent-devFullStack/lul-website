@@ -115,7 +115,7 @@ export default function MementoModal({ memento, onClose }) {
             {author}
           </h2>
           <blockquote id="memento-modal-desc" className="modal-quote">
-            “{quote}”
+            {quote}
           </blockquote>
           <div className="modal-author">{author}</div>
           {role && <div className="modal-role">{role}</div>}

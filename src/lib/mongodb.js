@@ -24,10 +24,11 @@ export async function connectToDatabase() {
 
 const ArtworkSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    imageUrl: { type: String, required: true },
-    artist: { type: String, default: "" },
+    title: { type: String, required: true, trim: true },
+    // ✅ description optionnelle
+    description: { type: String, required: false, default: "", trim: true },
+    imageUrl: { type: String, required: true, trim: true },
+    artist: { type: String, default: "", trim: true },
     // facultatif mais utile si tu veux supprimer côté Cloudinary sans parser l’URL
     publicId: { type: String, default: null },
   },
@@ -36,8 +37,8 @@ const ArtworkSchema = new mongoose.Schema(
 
 const ContentSchema = new mongoose.Schema(
   {
-    type: { type: String, required: true, unique: true },
-    title: { type: String, required: true },
+    type: { type: String, required: true, unique: true, trim: true },
+    title: { type: String, required: true, trim: true },
     content: { type: String, required: true },
     imageUrl: { type: String, default: null },
   },
@@ -46,9 +47,9 @@ const ContentSchema = new mongoose.Schema(
 
 const RoomSchema = new mongoose.Schema(
   {
-    slug: { type: String, required: true, unique: true },
-    title: { type: String, required: true },
-    name: { type: String, required: true },
+    slug: { type: String, required: true, unique: true, trim: true },
+    title: { type: String, required: true, trim: true },
+    name: { type: String, required: true, trim: true },
     description: { type: String, required: true },
     coordinates: {
       top: { type: String, required: true },

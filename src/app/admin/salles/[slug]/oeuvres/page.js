@@ -218,7 +218,7 @@ export default function AdminOeuvresPage() {
       setUploading(true);
       const form = new FormData();
       form.append("image", imageFile);
-      form.append("folder", "artworks"); // optionnel: côté API, placer sous /artworks
+      form.append("folder", "artworks"); // optionnel
 
       const res = await fetch("/api/upload", {
         method: "POST",
@@ -246,9 +246,10 @@ export default function AdminOeuvresPage() {
       setMessage(null);
 
       const title = formData.title.trim();
-      const description = formData.description.trim();
-      if (!title || !description) {
-        throw new Error("Le titre et la description sont requis");
+      const description = (formData.description || "").trim(); // optionnelle
+
+      if (!title) {
+        throw new Error("Le titre est requis");
       }
 
       let imageUrl = formData.imageUrl?.trim();
@@ -501,7 +502,8 @@ export default function AdminOeuvresPage() {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="admin-form">
+            {/* noValidate pour couper la validation HTML5 native */}
+            <form onSubmit={handleSubmit} className="admin-form" noValidate>
               <div className="admin-form-group">
                 <label className="admin-form-label" htmlFor="art-title">
                   Titre de l'œuvre
@@ -527,7 +529,7 @@ export default function AdminOeuvresPage() {
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
-                  required
+                  /* description optionnelle → pas de required */
                   className="admin-form-textarea"
                   placeholder="Décrivez l'œuvre..."
                   rows={6}
@@ -544,6 +546,10 @@ export default function AdminOeuvresPage() {
                   accept="image/*"
                   onChange={handleImageChange}
                   className="admin-form-input"
+                  /* requis seulement en création si aucune image prête */
+                  required={
+                    modalMode === "add" && !formData.imageUrl && !imageFile
+                  }
                 />
                 {/* Affiche l’existant si pas de fichier choisi en édition */}
                 {!imagePreview && formData.imageUrl && (
@@ -581,7 +587,12 @@ export default function AdminOeuvresPage() {
                 <button
                   type="submit"
                   className="admin-btn"
-                  disabled={saving || uploading}
+                  disabled={
+                    saving ||
+                    uploading ||
+                    !formData.title.trim() ||
+                    (modalMode === "add" && !formData.imageUrl && !imageFile)
+                  }
                 >
                   {uploading
                     ? "Upload en cours..."

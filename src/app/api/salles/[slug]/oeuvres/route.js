@@ -22,7 +22,7 @@ function sanitizeText(v) {
 // GET /api/salles/[slug]/oeuvres - Récupérer les œuvres d'une salle
 export async function GET(_request, { params }) {
   try {
-    const { slug } = params; // pas d'await
+    const { slug } = await params;
     const room = await getRoomWithArtworks(slug);
 
     if (!room) {
@@ -54,16 +54,16 @@ export async function GET(_request, { params }) {
 // POST /api/salles/[slug]/oeuvres - Ajouter une œuvre à une salle
 export const POST = withAuth(async (request, { params }) => {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const body = await request.json();
 
     const title = sanitizeText(body.title);
-    const description = sanitizeText(body.description);
+    const description = sanitizeText(body.description) || ""; // optionnel
     const imageUrl = sanitizeText(body.imageUrl);
 
-    if (!title || !description || !imageUrl) {
+    if (!title || !imageUrl) {
       return NextResponse.json(
-        { error: "Titre, description et image sont requis" },
+        { error: "Titre et image sont requis" },
         { status: 400, headers: noStore }
       );
     }
@@ -104,17 +104,17 @@ export const POST = withAuth(async (request, { params }) => {
 // PUT /api/salles/[slug]/oeuvres - Modifier une œuvre
 export const PUT = withAuth(async (request, { params }) => {
   try {
-    const { slug } = params;
+    const { slug } = await params;
     const body = await request.json();
 
     const artworkId = sanitizeText(body.artworkId);
     const title = sanitizeText(body.title);
-    const description = sanitizeText(body.description);
+    const description = sanitizeText(body.description) || ""; // optionnel
     const imageUrl = sanitizeText(body.imageUrl);
 
-    if (!artworkId || !title || !description || !imageUrl) {
+    if (!artworkId || !title || !imageUrl) {
       return NextResponse.json(
-        { error: "ID de l'œuvre, titre, description et image sont requis" },
+        { error: "ID de l'œuvre, titre et image sont requis" },
         { status: 400, headers: noStore }
       );
     }
@@ -158,7 +158,7 @@ export const PUT = withAuth(async (request, { params }) => {
 // DELETE /api/salles/[slug]/oeuvres - Supprimer une œuvre
 export const DELETE = withAuth(async (request, { params }) => {
   try {
-    const { slug } = params;
+    const { slug } = await params;
 
     // on tente d'abord querystring ?artworkId=...
     const { searchParams } = new URL(request.url);
