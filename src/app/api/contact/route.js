@@ -1,10 +1,8 @@
 // src/app/api/contact/route.js
 import { NextResponse } from "next/server";
-import { headers } from "next/headers";
 import nodemailer from "nodemailer";
 
 export const runtime = "nodejs";
-export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 // --- Anti-spam basique (rate-limit par IP, best-effort, non distribué)
@@ -29,13 +27,9 @@ const esc = (s = "") =>
   s.replace(
     /[&<>"']/g,
     (c) =>
-      ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;",
-      })[c]
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[
+        c
+      ]
   );
 
 function getEnvOrThrow(name, fallback = undefined) {
@@ -47,12 +41,16 @@ function getEnvOrThrow(name, fallback = undefined) {
 }
 
 export async function POST(request) {
-  // Rate-limit
-  const h = headers();
+  // --- IP depuis les entêtes de la requête (pas d'API dynamique)
+  const h = request.headers;
   const ip =
     h.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     h.get("x-real-ip") ||
+    h.get("cf-connecting-ip") ||
+    h.get("x-vercel-forwarded-for") ||
+    h.get("fly-client-ip") ||
     "unknown";
+
   if (!allow(ip)) {
     return NextResponse.json(
       { error: "Trop de requêtes. Réessayez dans une minute." },
@@ -74,10 +72,10 @@ export async function POST(request) {
     societe = "",
     email = "",
     message = "",
-    website = "", // honeypot optionnel
+    website = "",
   } = payload || {};
 
-  // Honeypot: si rempli, on fait semblant d'accepter
+  // Honeypot
   if (website) return NextResponse.json({ ok: true });
 
   // Validation
@@ -105,7 +103,7 @@ export async function POST(request) {
     name: esc(name.trim()),
     prenom: esc(prenom.trim()),
     societe: esc(societe.trim()),
-    email: email.trim(), // déjà validé
+    email: email.trim(),
     message: esc(message.trim()),
   };
 
