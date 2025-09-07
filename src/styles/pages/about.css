@@ -1,3 +1,15 @@
+/* — TYPO — */
+/* Toute la page About hérite d'EB Garamond (fallback si la variable n'existe pas) */
+.about-container {
+  font-family: var(--font-serif, "EB Garamond", serif);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ========================================= */
+/* LAYOUT & EFFETS */
+/* ========================================= */
+
 .about-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -5,7 +17,7 @@
 }
 
 .about-modern-container {
-  background: #efebda;
+  background: #efebda5a;
   border: 0.1px solid var(--brown);
   border-radius: 16px;
   overflow: hidden;
@@ -35,7 +47,6 @@
   opacity: 0;
   transform: translateY(40px);
 }
-
 .fade-in-up-active {
   opacity: 1;
   transform: translateY(0);
@@ -51,7 +62,6 @@
     transform: translateY(0);
   }
 }
-
 .about-modern-container.fade-in-up-active {
   animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
@@ -64,11 +74,10 @@
   );
   padding: 40px 50px;
   text-align: center;
-  border-bottom: 2px solid rgba(191, 167, 106, 0.4);
+  border-bottom: 1px solid rgba(191, 167, 106, 0.4);
   position: relative;
   transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s;
 }
-
 .about-hero-section::before {
   content: "";
   position: absolute;
@@ -95,24 +104,25 @@
   opacity: 0;
   transform: translateY(30px);
 }
-
 .fade-in-up-active .about-hero-section,
 .fade-in-up-active .about-content-section {
   opacity: 1;
   transform: translateY(0);
 }
 
+/* ========================================= */
+/* TITRE */
+/* ========================================= */
+
 .about-title {
   font-size: 2.8rem;
   font-weight: 600;
   color: #3a342a;
   margin-bottom: 40px;
-  font-family: "EB Garamond", serif;
   letter-spacing: -0.02em;
   text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
   position: relative;
 }
-
 .about-title::after {
   content: "";
   position: absolute;
@@ -130,10 +140,13 @@
   border-radius: 2px;
 }
 
+/* ========================================= */
+/* IMAGE */
+/* ========================================= */
+
 .about-image-container {
   display: flex;
   justify-content: center;
-
   position: relative;
   width: 100%;
 }
@@ -142,19 +155,15 @@
   width: auto;
   height: auto;
   object-fit: contain;
-  border-radius: 50px;
+  border-radius: 10px;
   box-shadow:
     0 25px 50px rgba(0, 0, 0, 0.18),
     0 12px 25px rgba(0, 0, 0, 0.12),
     0 4px 12px rgba(125, 113, 84, 0.25);
-  border: 5px solid #efebda;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   z-index: 2;
-  background: #efebda;
-  padding: 12px;
 }
-
 .about-image::before {
   content: "";
   position: absolute;
@@ -170,7 +179,6 @@
   border-radius: 16px 16px 0 0;
   pointer-events: none;
 }
-
 .about-image:hover {
   transform: scale(1.02) translateY(-10px) rotate(0.5deg);
   box-shadow:
@@ -193,7 +201,6 @@
     filter: blur(0);
   }
 }
-
 .about-image {
   animation: imageReveal 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
 }
@@ -226,7 +233,6 @@
     0 6px 16px rgba(191, 167, 106, 0.12);
   font-size: 1.1rem;
 }
-
 .about-image-placeholder::before {
   content: "";
   position: absolute;
@@ -251,7 +257,6 @@
     10px 10px;
   pointer-events: none;
 }
-
 .about-image-placeholder:hover {
   background: linear-gradient(
     135deg,
@@ -266,12 +271,12 @@
     0 8px 20px rgba(191, 167, 106, 0.2);
 }
 
-@media (max-width: 1200px) {
-  .about-image {
-    max-width: 600px;
-    max-height: 600px;
-  }
+/* ========================================= */
+/* RESPONSIVE */
+/* ========================================= */
 
+@media (max-width: 1200px) {
+  .about-image,
   .about-image-placeholder {
     max-width: 600px;
     max-height: 600px;
@@ -303,7 +308,6 @@
     border-radius: 16px;
     padding: 8px 8px 20px 8px;
   }
-
   .about-image:hover {
     transform: scale(1.01) translateY(-5px);
   }
@@ -315,7 +319,6 @@
     bottom: 15px;
     border-radius: 16px;
   }
-
   .about-image-container::after {
     top: 8px;
     left: 8px;
@@ -341,15 +344,12 @@
     max-height: 350px;
     border-radius: 12px;
   }
-
   .about-image-container {
     padding: 15px;
   }
-
   .about-title {
     font-size: 1.75rem;
   }
-
   .about-text {
     font-size: 1rem;
     line-height: 1.25;
@@ -357,12 +357,12 @@
 }
 
 /* ========================================= */
-/* ÉDITION - MODAL ET BOUTONS HARMONISÉS */
+/* ÉDITION — MODAL & BOUTONS */
 /* ========================================= */
 
 .edit-container {
   position: relative;
-  width: 100%;
+  width: 90%;
 }
 
 .edit-button-wrapper {
@@ -382,7 +382,7 @@
   cursor: pointer;
   font-size: 1.1rem;
   font-weight: 600;
-  font-family: "EB Garamond", serif;
+  font-family: inherit; /* hérite d'EB Garamond */
   letter-spacing: 0.03em;
   box-shadow:
     0 4px 16px rgba(191, 167, 106, 0.18),
@@ -394,7 +394,6 @@
     box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
     transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
-
 .edit-button::before {
   content: "";
   position: absolute;
@@ -413,7 +412,6 @@
   border-radius: 20px;
   z-index: 1;
 }
-
 .edit-button:hover {
   background: linear-gradient(90deg, var(--border-brown) 0%, var(--brown) 100%);
   box-shadow:
@@ -421,18 +419,16 @@
     0 2px 8px rgba(0, 0, 0, 0.1);
   transform: translateY(-2px) scale(1.04);
 }
-
 .edit-button:hover::before {
   left: 100%;
 }
-
 .edit-button:focus {
   outline: none;
   box-shadow:
     0 0 0 3px rgba(191, 167, 106, 0.25),
     0 8px 24px rgba(191, 167, 106, 0.18);
+  animation: buttonPulse 2s ease-in-out infinite;
 }
-
 .edit-button:active {
   transform: scale(0.98);
   box-shadow: 0 2px 8px rgba(191, 167, 106, 0.18);
@@ -454,10 +450,6 @@
   }
 }
 
-.edit-button:focus {
-  animation: buttonPulse 2s ease-in-out infinite;
-}
-
 @media (max-width: 768px) {
   .edit-button {
     padding: 14px 28px;
@@ -465,7 +457,6 @@
     border-radius: 20px;
   }
 }
-
 @media (max-width: 480px) {
   .edit-button {
     padding: 12px 24px;
@@ -476,10 +467,7 @@
 
 .edit-modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   background-color: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(8px);
   z-index: 100;
@@ -489,7 +477,6 @@
   padding: 20px;
   animation: fadeIn 0.3s ease-out;
 }
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -521,7 +508,6 @@
   animation: slideIn 0.4s ease-out;
   backdrop-filter: blur(10px);
 }
-
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -538,7 +524,6 @@
   color: #3a342a;
   font-size: 1.8rem;
   font-weight: 600;
-  font-family: "EB Garamond", serif;
   text-align: center;
   position: relative;
   padding-bottom: 15px;
@@ -570,7 +555,6 @@
   margin-bottom: 8px;
   font-weight: 600;
   color: #3a342a;
-  font-family: "EB Garamond", serif;
   font-size: 1.1rem;
 }
 
@@ -581,13 +565,12 @@
   border: 2px solid rgba(125, 113, 84, 0.4);
   border-radius: 8px;
   font-size: 16px;
-  font-family: "EB Garamond", serif;
+  font-family: inherit; /* hérite d'EB Garamond */
   color: #3a342a;
   background: rgba(255, 255, 255, 0.9);
   transition: all 0.3s ease;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
-
 .edit-form-input:focus,
 .edit-form-textarea:focus {
   outline: none;
@@ -597,7 +580,6 @@
     inset 0 2px 4px rgba(0, 0, 0, 0.05);
   background: rgba(255, 255, 255, 1);
 }
-
 .edit-form-textarea {
   resize: vertical;
   min-height: 120px;
@@ -620,18 +602,16 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  font-family: "EB Garamond", serif;
+  font-family: inherit; /* hérite d'EB Garamond */
   font-weight: 600;
   transition: all 0.3s ease;
 }
-
 .edit-button-cancel:hover {
   background: var(--brown);
   color: white;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(191, 167, 106, 0.3);
 }
-
 .edit-button-cancel:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -650,17 +630,15 @@
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
-  font-family: "EB Garamond", serif;
+  font-family: inherit; /* hérite d'EB Garamond */
   font-weight: 600;
   transition: all 0.3s ease;
   box-shadow: 0 4px 8px rgba(191, 167, 106, 0.3);
 }
-
 .edit-button-save:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(191, 167, 106, 0.4);
 }
-
 .edit-button-save:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -675,7 +653,6 @@
   font-weight: 500;
   border: 1px solid;
   animation: slideIn 0.3s ease-out;
-  font-family: "EB Garamond", serif;
   backdrop-filter: blur(5px);
 }
 
@@ -689,7 +666,6 @@
   border-color: #c3e6cb;
   box-shadow: 0 4px 8px rgba(21, 87, 36, 0.1);
 }
-
 .edit-message-error {
   background: linear-gradient(
     135deg,
@@ -700,7 +676,6 @@
   border-color: #f5c6cb;
   box-shadow: 0 4px 8px rgba(114, 28, 36, 0.1);
 }
-
 .edit-message-info {
   background: linear-gradient(
     135deg,
@@ -729,25 +704,19 @@
   font-size: 13px;
   font-weight: 600;
   margin-bottom: 6px;
-  font-family: "EB Garamond", serif;
 }
-
 .char-counter-empty {
   color: #6c757d;
 }
-
 .char-counter-short {
   color: #0d6efd;
 }
-
 .char-counter-optimal {
   color: #198754;
 }
-
 .char-counter-warning {
   color: #fd7e14;
 }
-
 .char-counter-info {
   color: var(--brown);
 }
@@ -756,11 +725,13 @@
   font-size: 11px;
   color: #6c757d;
   margin-top: 6px;
-  font-family: "EB Garamond", serif;
   font-style: italic;
 }
 
 .header {
   position: relative;
   z-index: 10;
+}
+.about-text br {
+  line-height: 1.8;
 }

@@ -27,6 +27,7 @@ export default function AboutClient() {
   const [editImageUrl, setEditImageUrl] = useState(null);
 
   const titleInputRef = useRef(null);
+  const aboutTextRef = useRef(null);
 
   // Charger le contenu
   useEffect(() => {
@@ -61,7 +62,40 @@ export default function AboutClient() {
     })();
 
     return () => ac.abort();
-  }, []);
+  }, []); // pas besoin de setImageUrl ici
+
+  // Ajoute un <br> en fin de phrase dans .about-text (évite quelques abréviations)
+  useEffect(() => {
+    const root = aboutTextRef.current;
+    if (!root) return;
+
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    let n;
+    while ((n = walker.nextNode())) nodes.push(n);
+
+    const EXCEPTIONS = /\b(?:M|Mme|Mlle|Dr|Pr|St|Ste|vs|etc|cf|env)\.$/i;
+
+    nodes.forEach((node) => {
+      let s = node.textContent || "";
+
+      s = s.replace(
+        /(\S)([.!?…]+)(["')\]]?)(\s+|$)/g,
+        (_m, a, punct, close, space) => {
+          const before = String(a) + String(punct);
+          if (EXCEPTIONS.test(before))
+            return `${a}${punct}${close}${space || ""}`;
+          return `${a}${punct}${close}<br>${space || ""}`;
+        }
+      );
+
+      if (s !== node.textContent) {
+        const span = document.createElement("span");
+        span.innerHTML = s;
+        node.replaceWith(...Array.from(span.childNodes));
+      }
+    });
+  }, [fullText]); // ref stable, inutile dans les deps
 
   // Édition
   const startEditing = () => {
@@ -236,9 +270,7 @@ export default function AboutClient() {
       )}
 
       <div
-        className={`about-modern-container ${
-          isVisible ? "fade-in-up-active" : "fade-in-up-initial"
-        }`}
+        className={`about-modern-container ${isVisible ? "fade-in-up-active" : "fade-in-up-initial"}`}
       >
         <div className="about-hero-section">
           <h1 className="about-title">{title}</h1>
@@ -277,7 +309,7 @@ export default function AboutClient() {
         </div>
 
         <div className="about-content-section">
-          <div className="about-text">
+          <div className="about-text" ref={aboutTextRef}>
             {fullText || "Votre présentation apparaîtra ici..."}
           </div>
         </div>

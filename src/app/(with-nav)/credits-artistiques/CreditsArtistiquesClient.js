@@ -125,9 +125,8 @@ export default function CreditsArtistiquesClient() {
 
         <div className="credits-intro">
           <p>
-            Cette page recense les artistes et créateurs dont les œuvres et
-            citations sont présentées dans notre galerie virtuelle. Nous les
-            remercions pour leur contribution.
+            Cette page recense les artistes et les créateurs avec lesquels lul a
+            collaboré.
           </p>
           {loadError && (
             <p className="credits-error" role="alert">
@@ -161,17 +160,6 @@ export default function CreditsArtistiquesClient() {
                   <p>
                     <strong>Statut :</strong> {credit.role}
                   </p>
-                )}
-
-                {credit.quote && (
-                  <div className="credit-quote-section">
-                    <p>
-                      <strong>Citation :</strong>
-                    </p>
-                    <blockquote className="credit-quote-text">
-                      “{credit.quote}”
-                    </blockquote>
-                  </div>
                 )}
 
                 {credit.link && (
