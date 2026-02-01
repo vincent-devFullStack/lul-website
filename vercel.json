@@ -37,6 +37,9 @@
     }
   ],
   "crons": [
-    { "path": "/api/heartbeat", "schedule": "0 3 1,15 * *" }
+    {
+      "path": "/api/heartbeat?token=d9ed2f3e768455f287fa81065ea7557ab6f8fdf006c5c9e66084562613aaa571",
+      "schedule": "0 3 1,15 * *"
+    }
   ]
 }

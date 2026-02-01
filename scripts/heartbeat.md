@@ -49,4 +49,4 @@ Créer un endpoint `/api/heartbeat` et ajouter dans `vercel.json` :
 ```
 
 Sécurité optionnelle : définir `HEARTBEAT_TOKEN` et appeler
-`/api/heartbeat?token=...` ou envoyer l'en-tête `x-heartbeat-token`.
+`/api/heartbeat?token=...` (Vercel Cron ne peut pas envoyer d'en-tête).
