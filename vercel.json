@@ -35,5 +35,8 @@
       "destination": "https://www.iconodule.fr/:path*",
       "permanent": true
     }
+  ],
+  "crons": [
+    { "path": "/api/heartbeat", "schedule": "0 3 1,15 * *" }
   ]
 }
